@@ -1,0 +1,344 @@
+openapi: 3.0.0
+info:
+  title: RealEstate
+  version: '1.0'
+  description: This is the API of the Real-estate portal web application.
+  contact:
+    name: Nagy-Gyorgy Kristof
+    email: nagygyorgykristof@gmail.com
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /realestates:
+    get:
+      summary: Get real-estates
+      tags:
+        - REAL-ESTATE
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RealEstate'
+        '500':
+          description: Internal Server Error
+      description: Get all real-estates. There is possibilities for sort the result by the query params.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: name
+        - schema:
+            type: string
+            enum:
+              - FLAT
+              - PANEL
+              - DETACHED_HOUSE
+              - LUXORY_HOUSE
+              - COUNTRY_HOUSE
+          in: query
+          name: catergory
+        - schema:
+            type: string
+          in: query
+          name: locationName
+    post:
+      summary: Create new real-estate
+      responses:
+        '201':
+          description: Created
+        '500':
+          description: Internal Server Error
+      description: Create a new real-estate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRealEstate'
+      tags:
+        - REAL-ESTATE
+  '/realestates/{realEstateId}':
+    get:
+      summary: Get real-estates
+      tags:
+        - REAL-ESTATE
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RealEstateDetails'
+        '500':
+          description: Internal Server Error
+      description: Get the details of a real-estate
+    parameters:
+      - schema:
+          type: string
+        name: realEstateId
+        in: path
+        required: true
+    put:
+      summary: Update realEstate
+      responses:
+        '200':
+          description: OK
+      description: Update an existing real-estate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRealEstate'
+      tags:
+        - REAL-ESTATE
+    delete:
+      summary: Delete a real-estate
+      responses:
+        '200':
+          description: OK
+        '500':
+          description: Internal Server Error
+      description: Delete a real-estate
+      tags:
+        - REAL-ESTATE
+  '/realestates/{realEstateId}/reservations/{reservationId}':
+    parameters:
+      - schema:
+          type: string
+        name: realEstateId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: reservationId
+        in: path
+        required: true
+    put:
+      summary: update a reservation
+      responses:
+        '200':
+          description: OK
+        '500':
+          description: Internal Server Error
+      description: Update an old reservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationDetails'
+      tags:
+        - RESERVATION
+    delete:
+      summary: Delete a reservation
+      responses:
+        '200':
+          description: OK
+        '500':
+          description: Internal Server Error
+      description: Deleten en existing reservation
+      tags:
+        - RESERVATION
+    get:
+      summary: Get reservation details
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationDetails'
+        '500':
+          description: Internal Server Error
+      description: Get reservation details
+      tags:
+        - RESERVATION
+  '/realestates/{realEstateId}/reservations':
+    post:
+      summary: Create a new reservation
+      tags:
+        - RESERVATION
+      responses:
+        '201':
+          description: Created
+        '500':
+          description: Internal Server Error
+      description: Create a new reservation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationDetails'
+    parameters:
+      - schema:
+          type: string
+        name: realEstateId
+        in: path
+        required: true
+    get:
+      summary: Get all reservation
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reservation'
+        '500':
+          description: Internal Server Error
+      description: Get all reservation
+      tags:
+        - RESERVATION
+components:
+  schemas:
+    NewRealEstate:
+      title: NewRealEstate
+      type: object
+      properties:
+        name:
+          type: string
+        availableReservationTimes:
+          type: array
+          items:
+            $ref: '#/components/schemas/availableReservationTime'
+        category:
+          type: string
+          enum:
+            - FLAT
+            - PANEL
+            - COUNTRY_HOUSE
+            - LUXORY_HOUSE
+            - DETACHED_HOUSE
+        location:
+          $ref: '#/components/schemas/Location'
+        description:
+          type: string
+      required:
+        - name
+        - availableReservationTimes
+        - category
+        - location
+        - description
+    ReservationDetails:
+      title: ReservationDetails
+      type: object
+      properties:
+        from:
+          type: string
+          format: date-time
+          description: The start of the reservation interval.
+        to:
+          type: string
+          format: date-time
+          description: The end of the reservation interval.
+        emailAddress:
+          type: string
+          format: email
+        phoneNumber:
+          type: string
+        message:
+          type: string
+        userName:
+          type: string
+      required:
+        - from
+        - to
+        - emailAddress
+        - phoneNumber
+        - userName
+    Location:
+      title: Location
+      type: object
+      properties:
+        lat:
+          type: number
+        lon:
+          type: number
+        locationName:
+          type: string
+    RealEstate:
+      title: RealEstate
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        location:
+          $ref: '#/components/schemas/Location'
+        spectatorsCount:
+          type: string
+      required:
+        - id
+        - name
+        - location
+        - spectatorsCount
+    availableReservationTime:
+      title: availableReservationTime
+      type: object
+      properties:
+        'from ':
+          type: string
+          description: The start of the available interval.
+        to:
+          type: string
+          description: The start of the available interval.
+      required:
+        - 'from '
+        - to
+    RealEstateDetails:
+      title: RealEstateDetails
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        location:
+          $ref: '#/components/schemas/Location'
+        category:
+          type: string
+          enum:
+            - FLAT
+            - DETACHED_HOUSE
+            - LUXORY_HOUSE
+            - COUNTRY_HOUSE
+            - PANEL
+        spectatorsCount:
+          type: integer
+          format: int64
+        availableReservationTimes:
+          type: array
+          items:
+            $ref: '#/components/schemas/availableReservationTime'
+      required:
+        - name
+        - description
+        - location
+        - category
+        - spectatorsCount
+        - availableReservationTimes
+    Reservation:
+      title: Reservation
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        from:
+          type: string
+          format: date-time
+          description: The start of the reservation interval.
+        to:
+          type: string
+          format: date-time
+          description: The end of the reservation interval.
+      required:
+        - id
+        - from
+        - to
