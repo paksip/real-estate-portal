@@ -6,12 +6,11 @@
 Bootstrap tweaks
 ===============================================================*/
 
-body,
-h1,
-h2,
-h3,
-h4 {
+html,
+body {
   font-weight: 300;
+  height: 100%;
+  width: 100%;
 }
 
 /* Increase contrast of links to get 100% on Lighthouse Accessability Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
