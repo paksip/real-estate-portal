@@ -6,6 +6,7 @@ import { JhiEventManager } from 'ng-jhipster';
 import { LoginModalService } from 'app/core/login/login-modal.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
+import { REALESTATEService } from '../../../../../target/generated-sources/openapi/src/main/webapp';
 
 @Component({
   selector: 'jhi-home',
@@ -16,11 +17,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   account: Account;
   authSubscription: Subscription;
   modalRef: NgbModalRef;
+  realEstates: any;
 
   constructor(
     private accountService: AccountService,
     private loginModalService: LoginModalService,
-    private eventManager: JhiEventManager
+    private eventManager: JhiEventManager,
+    private realEstateService: REALESTATEService
   ) {}
 
   ngOnInit() {
@@ -28,6 +31,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.account = account;
     });
     this.registerAuthenticationSuccess();
+    this.realEstateService.realestatesGet().subscribe(result => {
+      this.realEstates = result;
+    });
   }
 
   registerAuthenticationSuccess() {

@@ -1,12 +1,13 @@
-<header class="menu-navbar">
-    <router-outlet name="navbar"></router-outlet>
-</header>
-<div class="container-fluid d-flex flex-column h-100">
-    <div class="card jh-card content">
+<div class="d-flex flex-column h-100">
+    <header class="menu-navbar">
+        <router-outlet name="navbar"></router-outlet>
+    </header>
+    <div class="content">
         <router-outlet></router-outlet>
         <router-outlet name="popup"></router-outlet>
     </div>
+    <footer class="footer">
+        <jhi-footer></jhi-footer>
+    </footer>
+
 </div>
-<footer class="footer">
-    <jhi-footer></jhi-footer>
-</footer>

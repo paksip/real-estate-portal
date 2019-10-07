@@ -1,10 +1,15 @@
-.container-fluid {
-  display: flex;
-  height: 100%;
+.menu-navbar {
+  z-index: 1000;
+  position: sticky;
+  width: 100%;
+  top: 0;
+}
 
-  .content {
-    height: 100%;
-  }
+.content {
+  background-color: white;
+  height: 100%;
+  width: 100%;
+  padding: 2rem;
 }
 
 .footer {
@@ -14,11 +19,4 @@
   position: sticky;
   width: 100%;
   bottom: 0;
-}
-
-.menu-navbar {
-  z-index: 1000;
-  position: sticky;
-  width: 100%;
-  top: 0;
 }
