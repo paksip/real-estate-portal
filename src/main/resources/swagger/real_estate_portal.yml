@@ -45,6 +45,7 @@ paths:
             type: string
           in: query
           name: locationName
+      operationId: getAllRealEstates
     post:
       summary: Create new real-estate
       responses:
@@ -60,6 +61,7 @@ paths:
               $ref: '#/components/schemas/NewRealEstate'
       tags:
         - REAL-ESTATE
+      operationId: createNewRealEstate
   '/realestates/{realEstateId}':
     get:
       summary: Get real-estates
@@ -75,6 +77,7 @@ paths:
         '500':
           description: Internal Server Error
       description: Get the details of a real-estate
+      operationId: getRealEstateById
     parameters:
       - schema:
           type: string
@@ -94,6 +97,7 @@ paths:
               $ref: '#/components/schemas/NewRealEstate'
       tags:
         - REAL-ESTATE
+      operationId: updateRealEstate
     delete:
       summary: Delete a real-estate
       responses:
@@ -104,6 +108,7 @@ paths:
       description: Delete a real-estate
       tags:
         - REAL-ESTATE
+      operationId: deleteRealEstate
   '/realestates/{realEstateId}/reservations/{reservationId}':
     parameters:
       - schema:
@@ -131,6 +136,7 @@ paths:
               $ref: '#/components/schemas/ReservationDetails'
       tags:
         - RESERVATION
+      operationId: updateReservation
     delete:
       summary: Delete a reservation
       responses:
@@ -141,6 +147,7 @@ paths:
       description: Deleten en existing reservation
       tags:
         - RESERVATION
+      operationId: deleteReservation
     get:
       summary: Get reservation details
       responses:
@@ -155,6 +162,7 @@ paths:
       description: Get reservation details
       tags:
         - RESERVATION
+      operationId: getReservationDetails
   '/realestates/{realEstateId}/reservations':
     post:
       summary: Create a new reservation
@@ -171,6 +179,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ReservationDetails'
+      operationId: createNewReservation
     parameters:
       - schema:
           type: string
@@ -193,6 +202,7 @@ paths:
       description: Get all reservation
       tags:
         - RESERVATION
+      operationId: getAllReservation
 components:
   schemas:
     NewRealEstate:
