@@ -111,6 +111,7 @@
     "build": "npm run webpack:prod",
     "test": "npm run lint && jest --coverage --logHeapUsage -w=2 --config src/test/javascript/jest.conf.js",
     "test:watch": "npm run test -- --watch",
+    "swagger-generate": "openapi-generator generate -i src/main/resources/swagger/api.yml -g typescript-angular -o target/generated-sources/openapi/src/main/webapp --additional-properties=\"ngVersion=8.2.4\"",
     "webpack:dev": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --env.stats=minimal",
     "webpack:dev-verbose": "npm run webpack-dev-server -- --config webpack/webpack.dev.js --inline --hot --port=9060 --watch-content-base --profile --progress --env.stats=normal",
     "webpack:build:main": "npm run webpack -- --config webpack/webpack.dev.js --env.stats=minimal",
