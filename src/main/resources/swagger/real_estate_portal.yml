@@ -29,22 +29,9 @@ paths:
       parameters:
         - schema:
             type: string
+            pattern: "(\\w+?)(:|<|>)(\\w+?),"
           in: query
-          name: name
-        - schema:
-            type: string
-            enum:
-              - FLAT
-              - PANEL
-              - DETACHED_HOUSE
-              - LUXORY_HOUSE
-              - COUNTRY_HOUSE
-          in: query
-          name: catergory
-        - schema:
-            type: string
-          in: query
-          name: locationName
+          name: search
       operationId: getAllRealEstates
     post:
       summary: Create new real-estate
@@ -227,12 +214,30 @@ components:
           $ref: '#/components/schemas/Location'
         description:
           type: string
+        squareMeter:
+          type: integer
+          format: int32
+        price:
+          type: integer
+          format: int32
+        numberOfRooms:
+          type: integer
+          format: int32
+        hasBalncony:
+          type: boolean
+        hasAirCondition:
+          type: boolean
       required:
         - name
         - availableReservationTimes
         - category
         - location
         - description
+        - squareMeter
+        - price
+        - numberOfRooms
+        - hasBalncony
+        - hasAirCondition
     ReservationDetails:
       title: ReservationDetails
       type: object
@@ -279,15 +284,24 @@ components:
           format: int64
         name:
           type: string
-        location:
-          $ref: '#/components/schemas/Location'
         spectatorsCount:
           type: string
+        price:
+          type: integer
+          format: int32
+        squareMeter:
+          type: integer
+          format: int32
+        numberOfRooms:
+          type: integer
+          format: int32
       required:
         - id
         - name
-        - location
         - spectatorsCount
+        - price
+        - squareMeter
+        - numberOfRooms
     availableReservationTime:
       title: availableReservationTime
       type: object
@@ -326,6 +340,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/availableReservationTime'
+        squareMeter:
+          type: integer
+          format: int32
+        price:
+          type: integer
+          format: int32
+        numberOfRooms:
+          type: integer
+          format: int32
+        hasBalncony:
+          type: boolean
+        hasAirCondition:
+          type: boolean
       required:
         - name
         - description
@@ -333,6 +360,11 @@ components:
         - category
         - spectatorsCount
         - availableReservationTimes
+        - squareMeter
+        - price
+        - numberOfRooms
+        - hasBalncony
+        - hasAirCondition
     Reservation:
       title: Reservation
       type: object
@@ -352,3 +384,4 @@ components:
         - id
         - from
         - to
+  securitySchemes: {}
