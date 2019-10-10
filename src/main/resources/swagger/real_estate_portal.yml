@@ -227,6 +227,8 @@ components:
           type: boolean
         hasAirCondition:
           type: boolean
+        ownerPhoneNumber:
+          type: string
       required:
         - name
         - availableReservationTimes
@@ -238,6 +240,7 @@ components:
         - numberOfRooms
         - hasBalncony
         - hasAirCondition
+        - ownerPhoneNumber
     ReservationDetails:
       title: ReservationDetails
       type: object
@@ -295,6 +298,10 @@ components:
         numberOfRooms:
           type: integer
           format: int32
+        filePaths:
+          type: array
+          items:
+            type: string
       required:
         - id
         - name
@@ -353,6 +360,12 @@ components:
           type: boolean
         hasAirCondition:
           type: boolean
+        ownerPhoneNumber:
+          type: string
+        filePaths:
+          type: array
+          items:
+            type: string
       required:
         - name
         - description
@@ -365,6 +378,7 @@ components:
         - numberOfRooms
         - hasBalncony
         - hasAirCondition
+        - ownerPhoneNumber
     Reservation:
       title: Reservation
       type: object
@@ -384,4 +398,3 @@ components:
         - id
         - from
         - to
-  securitySchemes: {}
