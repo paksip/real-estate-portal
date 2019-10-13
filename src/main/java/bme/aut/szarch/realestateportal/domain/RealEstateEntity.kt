@@ -29,7 +29,7 @@ data class RealEstateEntity(
     val spectatorsCount: Long = 0,
 
     @ElementCollection
-    val availableReservationTimeEntities: MutableList<AvailableReservationTimeEntity>,
+    val availableReservationTimeEntities: List<AvailableReservationTimeEntity>,
 
     val squareMeter: Int,
 
@@ -45,7 +45,7 @@ data class RealEstateEntity(
     val ownerPhoneNumber: String,
 
     @OneToMany(mappedBy = "realEstate")
-    val reservations: MutableList<ReservationEntity> = mutableListOf(),
+    val reservations: List<ReservationEntity> = emptyList(),
 
     @ManyToOne
     @JoinColumn(name = "user_id")
