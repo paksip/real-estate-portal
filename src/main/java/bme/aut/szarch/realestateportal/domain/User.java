@@ -3,10 +3,12 @@ package bme.aut.szarch.realestateportal.domain;
 import bme.aut.szarch.realestateportal.config.Constants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.*;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -94,6 +96,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private Set<Authority> authorities = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
+    @Cascade(CascadeType.DELETE)
     private List<RealEstateEntity> realEstateEntities;
 
     public Long getId() {

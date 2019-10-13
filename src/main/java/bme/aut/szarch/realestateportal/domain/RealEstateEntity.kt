@@ -1,6 +1,8 @@
 package bme.aut.szarch.realestateportal.domain
 
 import bme.aut.szarch.realestateportal.service.dto.RealEstateDetails.CategoryEnum
+import org.hibernate.annotations.Cascade
+import org.hibernate.annotations.CascadeType
 import javax.persistence.*
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
@@ -29,7 +31,7 @@ data class RealEstateEntity(
     val spectatorsCount: Long = 0,
 
     @ElementCollection
-    val availableReservationTimeEntities: List<AvailableReservationTimeEntity>,
+    val availableReservationTimeEntities: MutableCollection<AvailableReservationTimeEntity>,
 
     val squareMeter: Int,
 
@@ -45,6 +47,7 @@ data class RealEstateEntity(
     val ownerPhoneNumber: String,
 
     @OneToMany(mappedBy = "realEstate")
+    @Cascade(CascadeType.DELETE)
     val reservations: List<ReservationEntity> = emptyList(),
 
     @ManyToOne

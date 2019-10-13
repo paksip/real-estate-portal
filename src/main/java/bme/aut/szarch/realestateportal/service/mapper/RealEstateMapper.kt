@@ -1,9 +1,6 @@
 package bme.aut.szarch.realestateportal.service.mapper
 
-import bme.aut.szarch.realestateportal.domain.AvailableReservationTimeEntity
-import bme.aut.szarch.realestateportal.domain.LocationEntity
-import bme.aut.szarch.realestateportal.domain.RealEstateEntity
-import bme.aut.szarch.realestateportal.domain.ReservationEntity
+import bme.aut.szarch.realestateportal.domain.*
 import bme.aut.szarch.realestateportal.service.dto.*
 
 
@@ -42,7 +39,7 @@ fun RealEstateEntity.toRealEstateDetailsDTO(filPaths: List<String>): RealEstateD
 }
 
 
-fun NewRealEstate.toRealEstateEntity(): RealEstateEntity {
+fun NewRealEstate.toRealEstateEntity(user: User): RealEstateEntity {
     return RealEstateEntity(
         name = this.name,
         description = this.description,
@@ -56,7 +53,8 @@ fun NewRealEstate.toRealEstateEntity(): RealEstateEntity {
         numberOfRooms = this.numberOfRooms,
         hasBalcony = this.hasBalncony,
         hasAircondition = this.hasAirCondition,
-        ownerPhoneNumber = this.ownerPhoneNumber
+        ownerPhoneNumber = this.ownerPhoneNumber,
+        user = user
     )
 }
 //endregion

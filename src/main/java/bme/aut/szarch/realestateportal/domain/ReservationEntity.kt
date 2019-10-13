@@ -35,6 +35,6 @@ data class ReservationEntity(
     val userName: String,
 
     @ManyToOne
-    @JoinColumn(name = "real_estate_id")
+    @JoinColumn(name = "real_estate_id", nullable = false)
     val realEstate: RealEstateEntity
 )
