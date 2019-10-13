@@ -26,6 +26,7 @@ data class RealEstateEntity(
     val location: LocationEntity,
 
     @Enumerated(EnumType.STRING)
+    //TODO(may be @CollectionTable is required!!!)
     val category: CategoryEnum,
 
     val spectatorsCount: Long = 0,
