@@ -7,7 +7,7 @@ info:
     name: Nagy-Gyorgy Kristof
     email: nagygyorgykristof@gmail.com
 servers:
-  - url: 'http://localhost:8080'
+  - url: 'http://localhost:3000'
 paths:
   /realestates:
     get:
@@ -67,7 +67,7 @@ paths:
       operationId: getRealEstateById
     parameters:
       - schema:
-          type: string
+          type: integer
         name: realEstateId
         in: path
         required: true
@@ -99,12 +99,12 @@ paths:
   '/realestates/{realEstateId}/reservations/{reservationId}':
     parameters:
       - schema:
-          type: string
+          type: integer
         name: realEstateId
         in: path
         required: true
       - schema:
-          type: string
+          type: integer
         name: reservationId
         in: path
         required: true
@@ -169,7 +169,7 @@ paths:
       operationId: createNewReservation
     parameters:
       - schema:
-          type: string
+          type: integer
         name: realEstateId
         in: path
         required: true
@@ -288,7 +288,8 @@ components:
         name:
           type: string
         spectatorsCount:
-          type: string
+          type: integer
+          format: int64
         price:
           type: integer
           format: int32
@@ -316,9 +317,11 @@ components:
         'from ':
           type: string
           description: The start of the available interval.
+          format: date-time
         to:
           type: string
           description: The start of the available interval.
+          format: date-time
       required:
         - 'from '
         - to
@@ -366,6 +369,10 @@ components:
           type: array
           items:
             type: string
+        reservations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reservation'
       required:
         - name
         - description
@@ -379,6 +386,8 @@ components:
         - hasBalncony
         - hasAirCondition
         - ownerPhoneNumber
+        - filePaths
+        - reservations
     Reservation:
       title: Reservation
       type: object

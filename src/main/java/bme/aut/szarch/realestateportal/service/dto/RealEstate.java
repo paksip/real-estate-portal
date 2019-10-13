@@ -1,4 +1,4 @@
-package bme.aut.szarch.realestateportal.web.rest.vm.model;
+package bme.aut.szarch.realestateportal.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * RealEstate
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-11T19:25:26.219837100+02:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-13T16:27:14.871602200+02:00[Europe/Berlin]")
 
 public class RealEstate {
     @JsonProperty("id")
@@ -22,7 +22,7 @@ public class RealEstate {
     private String name;
 
     @JsonProperty("spectatorsCount")
-    private String spectatorsCount;
+    private Long spectatorsCount;
 
     @JsonProperty("price")
     private Integer price;
@@ -81,7 +81,7 @@ public class RealEstate {
         this.name = name;
     }
 
-    public RealEstate spectatorsCount(String spectatorsCount) {
+    public RealEstate spectatorsCount(Long spectatorsCount) {
         this.spectatorsCount = spectatorsCount;
         return this;
     }
@@ -95,11 +95,11 @@ public class RealEstate {
     @NotNull
 
 
-    public String getSpectatorsCount() {
+    public Long getSpectatorsCount() {
         return spectatorsCount;
     }
 
-    public void setSpectatorsCount(String spectatorsCount) {
+    public void setSpectatorsCount(Long spectatorsCount) {
         this.spectatorsCount = spectatorsCount;
     }
 

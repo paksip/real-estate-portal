@@ -1,4 +1,4 @@
-package bme.aut.szarch.realestateportal.web.rest.vm.model;
+package bme.aut.szarch.realestateportal.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * Reservation
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-11T19:25:26.219837100+02:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-13T16:27:14.871602200+02:00[Europe/Berlin]")
 
 public class Reservation {
     @JsonProperty("id")

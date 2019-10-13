@@ -1,4 +1,4 @@
-package bme.aut.szarch.realestateportal.web.rest.vm.model;
+package bme.aut.szarch.realestateportal.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * RealEstateDetails
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-11T19:25:26.219837100+02:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-13T16:27:14.871602200+02:00[Europe/Berlin]")
 
 public class RealEstateDetails {
     @JsonProperty("name")
@@ -93,7 +93,11 @@ public class RealEstateDetails {
 
     @JsonProperty("filePaths")
     @Valid
-    private List<String> filePaths = null;
+    private List<String> filePaths = new ArrayList<>();
+
+    @JsonProperty("reservations")
+    @Valid
+    private List<Reservation> reservations = new ArrayList<>();
 
     public RealEstateDetails name(String name) {
         this.name = name;
@@ -372,9 +376,6 @@ public class RealEstateDetails {
     }
 
     public RealEstateDetails addFilePathsItem(String filePathsItem) {
-        if (this.filePaths == null) {
-            this.filePaths = new ArrayList<>();
-        }
         this.filePaths.add(filePathsItem);
         return this;
     }
@@ -384,7 +385,8 @@ public class RealEstateDetails {
      *
      * @return filePaths
      */
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(required = true, value = "")
+    @NotNull
 
 
     public List<String> getFilePaths() {
@@ -393,6 +395,34 @@ public class RealEstateDetails {
 
     public void setFilePaths(List<String> filePaths) {
         this.filePaths = filePaths;
+    }
+
+    public RealEstateDetails reservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+        return this;
+    }
+
+    public RealEstateDetails addReservationsItem(Reservation reservationsItem) {
+        this.reservations.add(reservationsItem);
+        return this;
+    }
+
+    /**
+     * Get reservations
+     *
+     * @return reservations
+     */
+    @ApiModelProperty(required = true, value = "")
+    @NotNull
+
+    @Valid
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 
 
@@ -417,12 +447,13 @@ public class RealEstateDetails {
             Objects.equals(this.hasBalncony, realEstateDetails.hasBalncony) &&
             Objects.equals(this.hasAirCondition, realEstateDetails.hasAirCondition) &&
             Objects.equals(this.ownerPhoneNumber, realEstateDetails.ownerPhoneNumber) &&
-            Objects.equals(this.filePaths, realEstateDetails.filePaths);
+            Objects.equals(this.filePaths, realEstateDetails.filePaths) &&
+            Objects.equals(this.reservations, realEstateDetails.reservations);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, location, category, spectatorsCount, availableReservationTimes, squareMeter, price, numberOfRooms, hasBalncony, hasAirCondition, ownerPhoneNumber, filePaths);
+        return Objects.hash(name, description, location, category, spectatorsCount, availableReservationTimes, squareMeter, price, numberOfRooms, hasBalncony, hasAirCondition, ownerPhoneNumber, filePaths, reservations);
     }
 
     @Override
@@ -443,6 +474,7 @@ public class RealEstateDetails {
         sb.append("    hasAirCondition: ").append(toIndentedString(hasAirCondition)).append("\n");
         sb.append("    ownerPhoneNumber: ").append(toIndentedString(ownerPhoneNumber)).append("\n");
         sb.append("    filePaths: ").append(toIndentedString(filePaths)).append("\n");
+        sb.append("    reservations: ").append(toIndentedString(reservations)).append("\n");
         sb.append("}");
         return sb.toString();
     }

@@ -1,8 +1,7 @@
-package bme.aut.szarch.realestateportal.web.rest.vm.model;
+package bme.aut.szarch.realestateportal.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import bme.aut.szarch.realestateportal.service.dto.RealEstateDetails.CategoryEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.Valid;
@@ -14,7 +13,7 @@ import java.util.Objects;
 /**
  * NewRealEstate
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-11T19:25:26.219837100+02:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-13T16:27:14.871602200+02:00[Europe/Berlin]")
 
 public class NewRealEstate {
     @JsonProperty("name")
@@ -24,42 +23,6 @@ public class NewRealEstate {
     @Valid
     private List<AvailableReservationTime> availableReservationTimes = new ArrayList<>();
 
-    /**
-     * Gets or Sets category
-     */
-    public enum CategoryEnum {
-        FLAT("FLAT"),
-
-        PANEL("PANEL"),
-
-        COUNTRY_HOUSE("COUNTRY_HOUSE"),
-
-        LUXORY_HOUSE("LUXORY_HOUSE"),
-
-        DETACHED_HOUSE("DETACHED_HOUSE");
-
-        private String value;
-
-        CategoryEnum(String value) {
-            this.value = value;
-        }
-
-        @Override
-        @JsonValue
-        public String toString() {
-            return String.valueOf(value);
-        }
-
-        @JsonCreator
-        public static CategoryEnum fromValue(String value) {
-            for (CategoryEnum b : CategoryEnum.values()) {
-                if (b.value.equals(value)) {
-                    return b;
-                }
-            }
-            throw new IllegalArgumentException("Unexpected value '" + value + "'");
-        }
-    }
 
     @JsonProperty("category")
     private CategoryEnum category;

@@ -1,24 +1,26 @@
-package bme.aut.szarch.realestateportal.web.rest.vm.model;
+package bme.aut.szarch.realestateportal.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**
  * AvailableReservationTime
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-11T19:25:26.219837100+02:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-13T16:27:14.871602200+02:00[Europe/Berlin]")
 
 public class AvailableReservationTime {
     @JsonProperty("from ")
-    private String from;
+    private OffsetDateTime from;
 
     @JsonProperty("to")
-    private String to;
+    private OffsetDateTime to;
 
-    public AvailableReservationTime from(String from) {
+    public AvailableReservationTime from(OffsetDateTime from) {
         this.from = from;
         return this;
     }
@@ -31,16 +33,17 @@ public class AvailableReservationTime {
     @ApiModelProperty(required = true, value = "The start of the available interval.")
     @NotNull
 
+    @Valid
 
-    public String getFrom() {
+    public OffsetDateTime getFrom() {
         return from;
     }
 
-    public void setFrom(String from) {
+    public void setFrom(OffsetDateTime from) {
         this.from = from;
     }
 
-    public AvailableReservationTime to(String to) {
+    public AvailableReservationTime to(OffsetDateTime to) {
         this.to = to;
         return this;
     }
@@ -53,12 +56,13 @@ public class AvailableReservationTime {
     @ApiModelProperty(required = true, value = "The start of the available interval.")
     @NotNull
 
+    @Valid
 
-    public String getTo() {
+    public OffsetDateTime getTo() {
         return to;
     }
 
-    public void setTo(String to) {
+    public void setTo(OffsetDateTime to) {
         this.to = to;
     }
 

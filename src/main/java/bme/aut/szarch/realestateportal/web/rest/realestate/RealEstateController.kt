@@ -1,6 +1,6 @@
 package bme.aut.szarch.realestateportal.web.rest.realestate
 
-import bme.aut.szarch.realestateportal.web.api.model.*
+import bme.aut.szarch.realestateportal.service.dto.*
 import io.swagger.annotations.*
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
@@ -22,19 +22,19 @@ interface RealEstateController {
     @ApiOperation(value = "Create a new reservation", nickname = "createNewReservation", notes = "Create a new reservation", tags = ["RESERVATION"])
     @ApiResponses(value = [ApiResponse(code = 201, message = "Created"), ApiResponse(code = 500, message = "Internal Server Error")])
     @RequestMapping(value = ["/{realEstateId}/reservations"], consumes = ["application/json"], method = [RequestMethod.POST])
-    fun createNewReservation(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: String, @ApiParam(value = "") @Valid @RequestBody reservationDetails: ReservationDetails): ResponseEntity<Void>
+    fun createNewReservation(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long, @ApiParam(value = "") @Valid @RequestBody reservationDetails: ReservationDetails): ResponseEntity<Void>
 
 
     @ApiOperation(value = "Delete a real-estate", nickname = "deleteRealEstate", notes = "Delete a real-estate", tags = ["REAL-ESTATE"])
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK"), ApiResponse(code = 500, message = "Internal Server Error")])
     @RequestMapping(value = ["/{realEstateId}"], method = [RequestMethod.DELETE])
-    fun deleteRealEstate(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: String): ResponseEntity<Void>
+    fun deleteRealEstate(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long): ResponseEntity<Void>
 
 
     @ApiOperation(value = "Delete a reservation", nickname = "deleteReservation", notes = "Deleten en existing reservation", tags = ["RESERVATION"])
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK"), ApiResponse(code = 500, message = "Internal Server Error")])
     @RequestMapping(value = ["/{realEstateId}/reservations/{reservationId}"], method = [RequestMethod.DELETE])
-    fun deleteReservation(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: String, @ApiParam(value = "", required = true) @PathVariable("reservationId") reservationId: String): ResponseEntity<Void>
+    fun deleteReservation(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long, @ApiParam(value = "", required = true) @PathVariable("reservationId") reservationId: Long): ResponseEntity<Void>
 
 
     @ApiOperation(value = "Get real-estates", nickname = "getAllRealEstates", notes = "Get all real-estates. There is possibilities for sort the result by the query params.", response = RealEstate::class, responseContainer = "List", tags = ["REAL-ESTATE"])
@@ -46,29 +46,29 @@ interface RealEstateController {
     @ApiOperation(value = "Get all reservation", nickname = "getAllReservation", notes = "Get all reservation", response = Reservation::class, responseContainer = "List", tags = ["RESERVATION"])
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK", response = Reservation::class, responseContainer = "List"), ApiResponse(code = 500, message = "Internal Server Error")])
     @RequestMapping(value = ["/{realEstateId}/reservations"], produces = ["application/json"], method = [RequestMethod.GET])
-    fun getAllReservation(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: String): ResponseEntity<List<Reservation>>
+    fun getAllReservation(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long): ResponseEntity<List<Reservation>>
 
 
     @ApiOperation(value = "Get real-estates", nickname = "getRealEstateById", notes = "Get the details of a real-estate", response = RealEstateDetails::class, tags = ["REAL-ESTATE"])
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK", response = RealEstateDetails::class), ApiResponse(code = 500, message = "Internal Server Error")])
     @RequestMapping(value = ["/{realEstateId}"], produces = ["application/json"], method = [RequestMethod.GET])
-    fun getRealEstateById(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: String): ResponseEntity<RealEstateDetails>
+    fun getRealEstateById(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long): ResponseEntity<RealEstateDetails>
 
 
     @ApiOperation(value = "Get reservation details", nickname = "getReservationDetails", notes = "Get reservation details", response = ReservationDetails::class, tags = ["RESERVATION"])
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK", response = ReservationDetails::class), ApiResponse(code = 500, message = "Internal Server Error")])
     @RequestMapping(value = ["/{realEstateId}/reservations/{reservationId}"], produces = ["application/json"], method = [RequestMethod.GET])
-    fun getReservationDetails(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: String, @ApiParam(value = "", required = true) @PathVariable("reservationId") reservationId: String): ResponseEntity<ReservationDetails>
+    fun getReservationDetails(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long, @ApiParam(value = "", required = true) @PathVariable("reservationId") reservationId: Long): ResponseEntity<ReservationDetails>
 
 
     @ApiOperation(value = "Update realEstate", nickname = "updateRealEstate", notes = "Update an existing real-estate", tags = ["REAL-ESTATE"])
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK")])
     @RequestMapping(value = ["/{realEstateId}"], consumes = ["application/json"], method = [RequestMethod.PUT])
-    fun updateRealEstate(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: String, @ApiParam(value = "") @Valid @RequestBody newRealEstate: NewRealEstate): ResponseEntity<Void>
+    fun updateRealEstate(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long, @ApiParam(value = "") @Valid @RequestBody newRealEstate: NewRealEstate): ResponseEntity<Void>
 
 
     @ApiOperation(value = "update a reservation", nickname = "updateReservation", notes = "Update an old reservation", tags = ["RESERVATION"])
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK"), ApiResponse(code = 500, message = "Internal Server Error")])
     @RequestMapping(value = ["/{realEstateId}/reservations/{reservationId}"], consumes = ["application/json"], method = [RequestMethod.PUT])
-    fun updateReservation(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: String, @ApiParam(value = "", required = true) @PathVariable("reservationId") reservationId: String, @ApiParam(value = "") @Valid @RequestBody reservationDetails: ReservationDetails): ResponseEntity<Void>
+    fun updateReservation(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long, @ApiParam(value = "", required = true) @PathVariable("reservationId") reservationId: Long, @ApiParam(value = "") @Valid @RequestBody reservationDetails: ReservationDetails): ResponseEntity<Void>
 }
