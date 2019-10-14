@@ -28,7 +28,7 @@ class RealEstateControllerImp(
               return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    override fun getAllRealEstates(search: String, page: Int?, offset: Int?): ResponseEntity<List<RealEstate>> {
+    override fun getAllRealEstates(search: String?, page: Int, offset: Int): ResponseEntity<List<RealEstate>> {
               return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
@@ -60,4 +60,7 @@ class RealEstateControllerImp(
               return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
+    override fun getRealEstatesByUserId(page: Int, offset: Int): ResponseEntity<List<RealEstate>> {
+        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+    }
 }
