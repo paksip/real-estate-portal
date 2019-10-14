@@ -31,9 +31,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.account = account;
     });
     this.registerAuthenticationSuccess();
-    this.realEstateService.realestatesGet().subscribe(result => {
-      this.realEstates = result;
-    });
+    // this.realEstateService.realestatesGet().subscribe(result => {
+    //   this.realEstates = result;
+    // });
   }
 
   registerAuthenticationSuccess() {

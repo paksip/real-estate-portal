@@ -5,7 +5,6 @@ export const realEstateRoute: Route = {
   path: 'real-estate',
   component: RealEstateComponent,
   data: {
-    authorities: [],
-    pageTitle: ''
+    authorities: []
   }
 };
