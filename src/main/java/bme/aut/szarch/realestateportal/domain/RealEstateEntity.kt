@@ -26,13 +26,9 @@ data class RealEstateEntity(
     val location: LocationEntity,
 
     @Enumerated(EnumType.STRING)
-    //TODO(may be @CollectionTable is required!!!)
     val category: CategoryEnum,
 
     val spectatorsCount: Long = 0,
-
-    @ElementCollection
-    val availableReservationTimeEntities: MutableCollection<AvailableReservationTimeEntity>,
 
     val squareMeter: Int,
 
@@ -49,7 +45,7 @@ data class RealEstateEntity(
 
     @OneToMany(mappedBy = "realEstate")
     @Cascade(CascadeType.DELETE)
-    val reservations: List<ReservationEntity> = emptyList(),
+    val reservations: List<ReservationEntity>,
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -26,7 +26,6 @@ fun RealEstateEntity.toRealEstateDetailsDTO(filPaths: List<String>): RealEstateD
         realEstateDetailsDTO.location = this.location.toLocationDTO()
         realEstateDetailsDTO.category = this.category
         realEstateDetailsDTO.spectatorsCount = this.spectatorsCount
-        realEstateDetailsDTO.availableReservationTimes = this.availableReservationTimeEntities.map(AvailableReservationTimeEntity::toAvailableReservationTimeDTO)
         realEstateDetailsDTO.squareMeter = this.squareMeter
         realEstateDetailsDTO.price = this.price
         realEstateDetailsDTO.numberOfRooms = this.numberOfRooms
@@ -45,33 +44,14 @@ fun NewRealEstate.toRealEstateEntity(user: User): RealEstateEntity {
         description = this.description,
         location = this.location.toLocationEntity(),
         category = this.category,
-        availableReservationTimeEntities = this.availableReservationTimes
-            .map(AvailableReservationTime::toAvailableReservationTimeEntity)
-            .toMutableList(),
         squareMeter = this.squareMeter,
         price = this.price,
         numberOfRooms = this.numberOfRooms,
         hasBalcony = this.hasBalncony,
         hasAircondition = this.hasAirCondition,
         ownerPhoneNumber = this.ownerPhoneNumber,
+        reservations = emptyList(),
         user = user
-    )
-}
-//endregion
-
-
-//region AvailableReservationTime
-fun AvailableReservationTimeEntity.toAvailableReservationTimeDTO(): AvailableReservationTime {
-    return AvailableReservationTime().also { availableReservationTime ->
-        availableReservationTime.from = this.from
-        availableReservationTime.to = this.to
-    }
-}
-
-fun AvailableReservationTime.toAvailableReservationTimeEntity(): AvailableReservationTimeEntity {
-    return AvailableReservationTimeEntity(
-        from = this.from,
-        to = this.to
     )
 }
 //endregion
@@ -116,18 +96,32 @@ fun ReservationEntity.toReservationDetailsDTO(): ReservationDetails {
     }
 }
 
-fun ReservationDetails.toReservationEntity(realEstateEntity: RealEstateEntity): ReservationEntity {
+fun ReservationEntity.toUpdatedReservationEntity(
+    newReservation: NewReservation
+): ReservationEntity {
     return ReservationEntity(
         from = this.from,
         to = this.to,
-        emailAddress = this.emailAddress,
-        phoneNumber = this.phoneNumber,
-        message = this.message,
-        userName = this.userName,
-        realEstate = realEstateEntity
+        emailAddress = newReservation.email,
+        phoneNumber = newReservation.phoneNumber,
+        message = newReservation.message,
+        userName = newReservation.userName,
+        realEstate = this.realEstate
     )
 }
 
+fun AvailableReservationTime.toReservationEntity(realEstateEntity: RealEstateEntity): ReservationEntity {
+    return ReservationEntity(
+        from = this.from,
+        to = this.to,
+        emailAddress = null,
+        phoneNumber = null,
+        userName = null,
+        isFree = true,
+        message = null,
+        realEstate = realEstateEntity
+    )
+}
 
 //endregion
 

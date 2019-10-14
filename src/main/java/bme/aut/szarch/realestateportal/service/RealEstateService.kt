@@ -14,48 +14,51 @@ class RealEstateService(
     val realEstateRepository: RealEstateRepository,
     val reservationRepository: ReservationRepository
 ) {
-    fun getReservationDetails(realEstateId: Long, reservationId: Long): ResponseEntity<ReservationDetails> {
+     fun createNewRealEstate(newRealEstate: NewRealEstate): ResponseEntity<Void> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    fun updateRealEstate(realEstateId: Long, newRealEstate: NewRealEstate): ResponseEntity<Void> {
-        SecurityUtils.getCurrentUserLogin()
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
-
-    }
-
-    fun updateReservation(realEstateId: Long, reservationId: Long, reservationDetails: ReservationDetails): ResponseEntity<Void> {
-
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
-
-    }
-
-    fun createNewRealEstate(newRealEstate: NewRealEstate): ResponseEntity<Void> {
-
+     fun createNewReservation(realEstateId: Long, availableReservationTime: AvailableReservationTime): ResponseEntity<Void> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    fun createNewReservation(realEstateId: Long, reservationDetails: ReservationDetails): ResponseEntity<Void> {
+     fun deleteRealEstate(realEstateId: Long): ResponseEntity<Void> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    fun deleteRealEstate(realEstateId: Long): ResponseEntity<Void> {
+     fun deleteReservation(realEstateId: Long, reservationId: Long): ResponseEntity<Void> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    fun deleteReservation(realEstateId: Long, reservationId: Long): ResponseEntity<Void> {
+     fun getAllRealEstates(search: String, page: Int?, offset: Int?): ResponseEntity<List<RealEstate>> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    fun getAllRealEstates(search: String): ResponseEntity<List<RealEstate>> {
+     fun getAllReservation(realEstateId: Long): ResponseEntity<List<Reservation>> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    fun getAllReservation(realEstateId: Long): ResponseEntity<List<Reservation>> {
+     fun getRealEstateById(realEstateId: Long): ResponseEntity<RealEstateDetails> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
-    fun getRealEstateById(realEstateId: Long): ResponseEntity<RealEstateDetails> {
+     fun getReservationDetails(realEstateId: Long, reservationId: Long): ResponseEntity<ReservationDetails> {
+        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+    }
+
+     fun newReservation(realEstateId: Long, reservationId: Long, newReservation: NewReservation): ResponseEntity<Void> {
+        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+    }
+
+     fun updateRealEstate(realEstateId: Long, newRealEstate: NewRealEstate): ResponseEntity<Void> {
+        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+    }
+
+     fun updateReservation(realEstateId: Long, reservationId: Long, availableReservationTime: AvailableReservationTime): ResponseEntity<Void> {
+        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+    }
+
+     fun uploadFiles(realEstateId: Long): ResponseEntity<Void> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 }

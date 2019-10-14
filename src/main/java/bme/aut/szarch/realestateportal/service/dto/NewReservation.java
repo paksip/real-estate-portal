@@ -5,25 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.OffsetDateTime;
 import org.openapitools.jackson.nullable.JsonNullable;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * ReservationDetails
+ * NewReservation
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-14T16:48:21.594559600+02:00[Europe/Belgrade]")
 
-public class ReservationDetails   {
-  @JsonProperty("from")
-  private OffsetDateTime from;
-
-  @JsonProperty("to")
-  private OffsetDateTime to;
-
-  @JsonProperty("emailAddress")
-  private String emailAddress;
+public class NewReservation   {
+  @JsonProperty("email")
+  private String email;
 
   @JsonProperty("phoneNumber")
   private String phoneNumber;
@@ -34,72 +27,28 @@ public class ReservationDetails   {
   @JsonProperty("userName")
   private String userName;
 
-  public ReservationDetails from(OffsetDateTime from) {
-    this.from = from;
+  public NewReservation email(String email) {
+    this.email = email;
     return this;
   }
 
   /**
-   * The start of the reservation interval.
-   * @return from
-  */
-  @ApiModelProperty(required = true, value = "The start of the reservation interval.")
-  @NotNull
-
-  @Valid
-
-  public OffsetDateTime getFrom() {
-    return from;
-  }
-
-  public void setFrom(OffsetDateTime from) {
-    this.from = from;
-  }
-
-  public ReservationDetails to(OffsetDateTime to) {
-    this.to = to;
-    return this;
-  }
-
-  /**
-   * The end of the reservation interval.
-   * @return to
-  */
-  @ApiModelProperty(required = true, value = "The end of the reservation interval.")
-  @NotNull
-
-  @Valid
-
-  public OffsetDateTime getTo() {
-    return to;
-  }
-
-  public void setTo(OffsetDateTime to) {
-    this.to = to;
-  }
-
-  public ReservationDetails emailAddress(String emailAddress) {
-    this.emailAddress = emailAddress;
-    return this;
-  }
-
-  /**
-   * Get emailAddress
-   * @return emailAddress
+   * Get email
+   * @return email
   */
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public String getEmailAddress() {
-    return emailAddress;
+  public String getEmail() {
+    return email;
   }
 
-  public void setEmailAddress(String emailAddress) {
-    this.emailAddress = emailAddress;
+  public void setEmail(String email) {
+    this.email = email;
   }
 
-  public ReservationDetails phoneNumber(String phoneNumber) {
+  public NewReservation phoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
     return this;
   }
@@ -120,7 +69,7 @@ public class ReservationDetails   {
     this.phoneNumber = phoneNumber;
   }
 
-  public ReservationDetails message(String message) {
+  public NewReservation message(String message) {
     this.message = message;
     return this;
   }
@@ -140,7 +89,7 @@ public class ReservationDetails   {
     this.message = message;
   }
 
-  public ReservationDetails userName(String userName) {
+  public NewReservation userName(String userName) {
     this.userName = userName;
     return this;
   }
@@ -170,28 +119,24 @@ public class ReservationDetails   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ReservationDetails reservationDetails = (ReservationDetails) o;
-    return Objects.equals(this.from, reservationDetails.from) &&
-        Objects.equals(this.to, reservationDetails.to) &&
-        Objects.equals(this.emailAddress, reservationDetails.emailAddress) &&
-        Objects.equals(this.phoneNumber, reservationDetails.phoneNumber) &&
-        Objects.equals(this.message, reservationDetails.message) &&
-        Objects.equals(this.userName, reservationDetails.userName);
+    NewReservation newReservation = (NewReservation) o;
+    return Objects.equals(this.email, newReservation.email) &&
+        Objects.equals(this.phoneNumber, newReservation.phoneNumber) &&
+        Objects.equals(this.message, newReservation.message) &&
+        Objects.equals(this.userName, newReservation.userName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(from, to, emailAddress, phoneNumber, message, userName);
+    return Objects.hash(email, phoneNumber, message, userName);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ReservationDetails {\n");
+    sb.append("class NewReservation {\n");
 
-    sb.append("    from: ").append(toIndentedString(from)).append("\n");
-    sb.append("    to: ").append(toIndentedString(to)).append("\n");
-    sb.append("    emailAddress: ").append(toIndentedString(emailAddress)).append("\n");
+    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    phoneNumber: ").append(toIndentedString(phoneNumber)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("    userName: ").append(toIndentedString(userName)).append("\n");

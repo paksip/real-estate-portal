@@ -18,23 +18,19 @@ data class ReservationEntity(
 
     val to: OffsetDateTime,
 
-    @NotNull
-    @NotEmpty
     @Email
-    val emailAddress: String,
+    val emailAddress: String?,
 
-    @NotNull
-    @NotEmpty
     @Pattern(regexp = "(^$|[0-9]{10})")
-    val phoneNumber: String,
+    val phoneNumber: String?,
 
     val message: String?,
 
-    @NotNull
-    @NotEmpty
-    val userName: String,
+    val userName: String?,
 
     @ManyToOne
     @JoinColumn(name = "real_estate_id", nullable = false)
-    val realEstate: RealEstateEntity
+    val realEstate: RealEstateEntity,
+
+    val isFree: Boolean = true
 )

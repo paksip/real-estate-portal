@@ -216,17 +216,20 @@ paths:
       operationId: getAllReservation
   '/realestates/{realEstateId}/files':
     parameters:
-      - type: string
+      - schema:
+          type: string
         name: realEstateId
         in: path
         required: true
-        schema:
-          type: integer
     post:
       summary: Upload files
       tags:
         - REAL-ESTATE
-      responses: {}
+      responses:
+        '201':
+          description: Created
+        '500':
+          description: Internal Server Error
       operationId: uploadFiles
       description: Upload files
 components:
