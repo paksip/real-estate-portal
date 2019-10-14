@@ -36,10 +36,12 @@ paths:
             type: integer
           in: query
           name: page
+          required: true
         - schema:
             type: integer
           in: query
           name: offset
+          required: true
       operationId: getAllRealEstates
     post:
       summary: Create new real-estate
@@ -69,6 +71,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RealEstateDetails'
+        '404':
+          description: Not Found
         '500':
           description: Internal Server Error
       description: Get the details of a real-estate
@@ -156,6 +160,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReservationDetails'
+        '404':
+          description: Not Found
         '500':
           description: Internal Server Error
       description: Get reservation details
@@ -174,6 +180,8 @@ paths:
             schema:
               $ref: '#/components/schemas/NewReservation'
       operationId: newReservation
+      tags:
+        - REAL-ESTATE
   '/realestates/{realEstateId}/reservations':
     post:
       summary: Create a new reservation
@@ -208,6 +216,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Reservation'
+        '404':
+          description: Not Found
         '500':
           description: Internal Server Error
       description: Get all reservation
@@ -232,6 +242,37 @@ paths:
           description: Internal Server Error
       operationId: uploadFiles
       description: Upload files
+  /realestates/ownrealestates:
+    get:
+      summary: "Get the user's real-estates"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RealEstate'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: getRealEstatesByUserId
+      description: "Get user's real-estates"
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: page
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: offset
+          required: true
+      tags:
+        - REAL-ESTATE
 components:
   schemas:
     NewRealEstate:
@@ -406,9 +447,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Reservation'
-        userId:
-          type: integer
-          format: int64
       required:
         - name
         - description
@@ -423,7 +461,6 @@ components:
         - ownerPhoneNumber
         - filePaths
         - reservations
-        - userId
     Reservation:
       title: Reservation
       type: object
