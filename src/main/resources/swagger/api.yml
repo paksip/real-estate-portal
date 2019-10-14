@@ -7,7 +7,7 @@ info:
     name: Nagy-Gyorgy Kristof
     email: nagygyorgykristof@gmail.com
 servers:
-  - url: 'http://localhost:8080'
+  - url: 'http://localhost:3000'
 paths:
   /realestates:
     get:
@@ -29,22 +29,10 @@ paths:
       parameters:
         - schema:
             type: string
+            pattern: "(\\w+?)(:|<|>)(\\w+?),"
           in: query
-          name: name
-        - schema:
-            type: string
-            enum:
-              - FLAT
-              - PANEL
-              - DETACHED_HOUSE
-              - LUXORY_HOUSE
-              - COUNTRY_HOUSE
-          in: query
-          name: catergory
-        - schema:
-            type: string
-          in: query
-          name: locationName
+          name: search
+      operationId: getAllRealEstates
     post:
       summary: Create new real-estate
       responses:
@@ -60,6 +48,7 @@ paths:
               $ref: '#/components/schemas/NewRealEstate'
       tags:
         - REAL-ESTATE
+      operationId: createNewRealEstate
   '/realestates/{realEstateId}':
     get:
       summary: Get real-estates
@@ -75,9 +64,10 @@ paths:
         '500':
           description: Internal Server Error
       description: Get the details of a real-estate
+      operationId: getRealEstateById
     parameters:
       - schema:
-          type: string
+          type: integer
         name: realEstateId
         in: path
         required: true
@@ -94,6 +84,7 @@ paths:
               $ref: '#/components/schemas/NewRealEstate'
       tags:
         - REAL-ESTATE
+      operationId: updateRealEstate
     delete:
       summary: Delete a real-estate
       responses:
@@ -104,15 +95,16 @@ paths:
       description: Delete a real-estate
       tags:
         - REAL-ESTATE
+      operationId: deleteRealEstate
   '/realestates/{realEstateId}/reservations/{reservationId}':
     parameters:
       - schema:
-          type: string
+          type: integer
         name: realEstateId
         in: path
         required: true
       - schema:
-          type: string
+          type: integer
         name: reservationId
         in: path
         required: true
@@ -131,6 +123,7 @@ paths:
               $ref: '#/components/schemas/ReservationDetails'
       tags:
         - RESERVATION
+      operationId: updateReservation
     delete:
       summary: Delete a reservation
       responses:
@@ -141,6 +134,7 @@ paths:
       description: Deleten en existing reservation
       tags:
         - RESERVATION
+      operationId: deleteReservation
     get:
       summary: Get reservation details
       responses:
@@ -155,6 +149,7 @@ paths:
       description: Get reservation details
       tags:
         - RESERVATION
+      operationId: getReservationDetails
   '/realestates/{realEstateId}/reservations':
     post:
       summary: Create a new reservation
@@ -171,9 +166,10 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ReservationDetails'
+      operationId: createNewReservation
     parameters:
       - schema:
-          type: string
+          type: integer
         name: realEstateId
         in: path
         required: true
@@ -193,6 +189,7 @@ paths:
       description: Get all reservation
       tags:
         - RESERVATION
+      operationId: getAllReservation
 components:
   schemas:
     NewRealEstate:
@@ -217,12 +214,33 @@ components:
           $ref: '#/components/schemas/Location'
         description:
           type: string
+        squareMeter:
+          type: integer
+          format: int32
+        price:
+          type: integer
+          format: int32
+        numberOfRooms:
+          type: integer
+          format: int32
+        hasBalncony:
+          type: boolean
+        hasAirCondition:
+          type: boolean
+        ownerPhoneNumber:
+          type: string
       required:
         - name
         - availableReservationTimes
         - category
         - location
         - description
+        - squareMeter
+        - price
+        - numberOfRooms
+        - hasBalncony
+        - hasAirCondition
+        - ownerPhoneNumber
     ReservationDetails:
       title: ReservationDetails
       type: object
@@ -269,15 +287,29 @@ components:
           format: int64
         name:
           type: string
-        location:
-          $ref: '#/components/schemas/Location'
         spectatorsCount:
-          type: string
+          type: integer
+          format: int64
+        price:
+          type: integer
+          format: int32
+        squareMeter:
+          type: integer
+          format: int32
+        numberOfRooms:
+          type: integer
+          format: int32
+        filePaths:
+          type: array
+          items:
+            type: string
       required:
         - id
         - name
-        - location
         - spectatorsCount
+        - price
+        - squareMeter
+        - numberOfRooms
     availableReservationTime:
       title: availableReservationTime
       type: object
@@ -285,9 +317,11 @@ components:
         'from ':
           type: string
           description: The start of the available interval.
+          format: date-time
         to:
           type: string
           description: The start of the available interval.
+          format: date-time
       required:
         - 'from '
         - to
@@ -316,6 +350,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/availableReservationTime'
+        squareMeter:
+          type: integer
+          format: int32
+        price:
+          type: integer
+          format: int32
+        numberOfRooms:
+          type: integer
+          format: int32
+        hasBalncony:
+          type: boolean
+        hasAirCondition:
+          type: boolean
+        ownerPhoneNumber:
+          type: string
+        filePaths:
+          type: array
+          items:
+            type: string
+        reservations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reservation'
       required:
         - name
         - description
@@ -323,6 +380,14 @@ components:
         - category
         - spectatorsCount
         - availableReservationTimes
+        - squareMeter
+        - price
+        - numberOfRooms
+        - hasBalncony
+        - hasAirCondition
+        - ownerPhoneNumber
+        - filePaths
+        - reservations
     Reservation:
       title: Reservation
       type: object
