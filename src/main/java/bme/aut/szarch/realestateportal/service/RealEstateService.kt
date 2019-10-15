@@ -8,10 +8,12 @@ import bme.aut.szarch.realestateportal.service.mapper.toReservationEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 
 @Service
-class RealEstateService(
+@Transactional
+open class RealEstateService(
     private val realEstateRepository: RealEstateRepository,
     private val reservationRepository: ReservationRepository,
     private val userService: UserService
@@ -84,5 +86,28 @@ class RealEstateService(
 
     fun getRealEstatesByUserId(page: Int, offset: Int): ResponseEntity<List<RealEstate>> {
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+    }
+}
+
+sealed class ExternalDataTransferResult<out T : Any> {
+    data class Success<out T : Any>(val successType: SuccessType, val result: T) : ExternalDataTransferResult<T>()
+    data class ClientFailure(val reason: ClientFailureReason, val message: String) : ExternalDataTransferResult<Nothing>()
+    data class ServerFailure(val reason: ServerFailureReason, val message: String) : ExternalDataTransferResult<Nothing>()
+
+    enum class SuccessType {
+        OK,
+        CREATED
+    }
+
+    enum class ClientFailureReason {
+        NOT_FOUND,
+        NOT_AUTHORIZE,
+        UNAUTHORIZED,
+        BAD_REQUEST,
+        FORBIDDEN
+    }
+
+    enum class ServerFailureReason {
+        INTERNAL_SERVER_ERROR,
     }
 }

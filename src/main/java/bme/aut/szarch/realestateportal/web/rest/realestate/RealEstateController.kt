@@ -42,7 +42,7 @@ interface RealEstateController {
     @ApiOperation(value = "Get real-estates", nickname = "getAllRealEstates", notes = "Get all real-estates. There is possibilities for sort the result by the query params.", response = RealEstate::class, responseContainer = "List", tags = ["REAL-ESTATE"])
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK", response = RealEstate::class, responseContainer = "List"), ApiResponse(code = 500, message = "Internal Server Error"), ApiResponse(code = 404, message = "Not Found")])
     @RequestMapping(value = "/", produces = ["application/json"], method = [RequestMethod.GET])
-    fun getAllRealEstates(@Pattern(regexp = "(\\w+?)(:|<|>)(\\w+?),") @ApiParam(value = "") @Valid @RequestParam(value = "search", required = false) search: String?, @ApiParam(value = "") @Valid @RequestParam(value = "page", required = false) page: Int, @ApiParam(value = "") @Valid @RequestParam(value = "offset", required = false) offset: Int): ResponseEntity<List<RealEstate>>
+    fun getAllRealEstates(@Pattern(regexp = "(\\w+?)(:|<|>)(\\w+?),") @ApiParam(value = "") @Valid @RequestParam(value = "search", required = false) search: String?, @ApiParam(value = "") @Valid @RequestParam(value = "page", required = false) page: Int    , @ApiParam(value = "") @Valid @RequestParam(value = "offset", required = false) offset: Int): ResponseEntity<List<RealEstate>>
 
 
     @ApiOperation(value = "Get all reservation", nickname = "getAllReservation", notes = "Get all reservation", response = Reservation::class, responseContainer = "List", tags = ["RESERVATION"])
@@ -86,8 +86,8 @@ interface RealEstateController {
     @RequestMapping(value = "/{realEstateId}/files", method = [RequestMethod.POST])
     fun uploadFiles(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long): ResponseEntity<Void>
 
-    @ApiOperation(value = "Get the user's real-estates", nickname = "getRealEstatesByUserId", notes = "Get user's real-estates", response = bme.aut.szarch.realestateportal.web.api.model.RealEstate::class, responseContainer = "List", tags = ["REAL-ESTATE"])
-    @ApiResponses(value = [ApiResponse(code = 200, message = "OK", response = bme.aut.szarch.realestateportal.web.api.model.RealEstate::class, responseContainer = "List"), ApiResponse(code = 404, message = "Not Found"), ApiResponse(code = 500, message = "Internal Server Error")])
+    @ApiOperation(value = "Get the user's real-estates", nickname = "getRealEstatesByUserId", notes = "Get user's real-estates", response = RealEstate::class, responseContainer = "List", tags = ["REAL-ESTATE"])
+    @ApiResponses(value = [ApiResponse(code = 200, message = "OK", response = RealEstate::class, responseContainer = "List"), ApiResponse(code = 404, message = "Not Found"), ApiResponse(code = 500, message = "Internal Server Error")])
     @RequestMapping(value = "/realestates/ownrealestates", produces = ["application/json"], method = [RequestMethod.GET])
     fun getRealEstatesByUserId(@NotNull @ApiParam(value = "", required = true) @Valid @RequestParam(value = "page", required = true) page: Int, @NotNull @ApiParam(value = "", required = true) @Valid @RequestParam(value = "offset", required = true) offset: Int): ResponseEntity<List<RealEstate>>
 
