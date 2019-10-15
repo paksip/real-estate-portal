@@ -90,5 +90,4 @@ interface RealEstateController {
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK", response = RealEstate::class, responseContainer = "List"), ApiResponse(code = 404, message = "Not Found"), ApiResponse(code = 500, message = "Internal Server Error")])
     @RequestMapping(value = "/realestates/ownrealestates", produces = ["application/json"], method = [RequestMethod.GET])
     fun getRealEstatesByUserId(@NotNull @ApiParam(value = "", required = true) @Valid @RequestParam(value = "page", required = true) page: Int, @NotNull @ApiParam(value = "", required = true) @Valid @RequestParam(value = "offset", required = true) offset: Int): ResponseEntity<List<RealEstate>>
-
 }

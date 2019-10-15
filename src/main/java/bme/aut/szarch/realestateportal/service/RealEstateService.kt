@@ -2,6 +2,11 @@ package bme.aut.szarch.realestateportal.service
 
 import bme.aut.szarch.realestateportal.repository.RealEstateRepository
 import bme.aut.szarch.realestateportal.repository.ReservationRepository
+import bme.aut.szarch.realestateportal.service.DataTransferResult.ClientFailure
+import bme.aut.szarch.realestateportal.service.DataTransferResult.ClientFailureReason.NOT_FOUND
+import bme.aut.szarch.realestateportal.service.DataTransferResult.Success
+import bme.aut.szarch.realestateportal.service.DataTransferResult.SuccessType.CREATED
+import bme.aut.szarch.realestateportal.service.DataTransferResult.SuccessType.OK
 import bme.aut.szarch.realestateportal.service.dto.*
 import bme.aut.szarch.realestateportal.service.mapper.toRealEstateEntity
 import bme.aut.szarch.realestateportal.service.mapper.toReservationEntity
@@ -89,10 +94,10 @@ open class RealEstateService(
     }
 }
 
-sealed class ExternalDataTransferResult<out T : Any> {
-    data class Success<out T : Any>(val successType: SuccessType, val result: T) : ExternalDataTransferResult<T>()
-    data class ClientFailure(val reason: ClientFailureReason, val message: String) : ExternalDataTransferResult<Nothing>()
-    data class ServerFailure(val reason: ServerFailureReason, val message: String) : ExternalDataTransferResult<Nothing>()
+sealed class DataTransferResult<out T : Any> {
+    data class Success<out T : Any>(val successType: SuccessType, val result: T) : DataTransferResult<T>()
+    data class ClientFailure(val failReason: ClientFailureReason, val message: String) : DataTransferResult<Nothing>()
+    data class ServerFailure(val failReason: ServerFailureReason, val message: String) : DataTransferResult<Nothing>()
 
     enum class SuccessType {
         OK,
@@ -111,3 +116,17 @@ sealed class ExternalDataTransferResult<out T : Any> {
         INTERNAL_SERVER_ERROR,
     }
 }
+
+fun <T : Any> DataTransferResult<T>.toResponseEntity(): ResponseEntity<T> {
+    return when (this) {
+        is Success -> when (this.successType) {
+            OK -> ResponseEntity.ok(this.result)
+            CREATED -> ResponseEntity.status(201).build()
+        }
+        is ClientFailure -> when (this.failReason) {
+            NOT_FOUND -> ResponseEntity.status(404).body().build()
+        }
+    }
+}
+
+
