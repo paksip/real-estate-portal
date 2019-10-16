@@ -78,13 +78,13 @@ fun LocationEntity.toLocationDTO(): Location {
 }
 //endregion
 
-
 //region Reservation
 fun ReservationEntity.toReservationDTO(): ReservationDTO {
     return ReservationDTO().also { reservationDTO ->
         reservationDTO.id = this.id
         reservationDTO.from = this.from
         reservationDTO.to = this.to
+        reservationDTO.isFree = this.isFree
     }
 }
 
@@ -109,7 +109,8 @@ fun ReservationEntity.toUpdatedReservationEntity(
         phoneNumber = newReservationDTO.phoneNumber,
         message = newReservationDTO.message,
         userName = newReservationDTO.userName,
-        realEstate = this.realEstate
+        realEstate = this.realEstate,
+        isFree = false
     )
 }
 

@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.stream.Stream
 import kotlin.streams.toList
 
 
@@ -31,34 +30,33 @@ open class RealEstateService(
 
     @Transactional(readOnly = true)
     open fun getRealEstateById(realEstateId: Long): DataTransferResult<RealEstateDetailsDTO> {
-        val files = when (val storageResult = storageService.loadFiles(realEstateId)) {
-            is StorageMethodResult.SuccessWithResult -> storageResult.result
+        val fileUrls = when (val storageResult = storageService.loadFiles(realEstateId)) {
+            is StorageMethodResult.SuccessWithResult -> storageResult.result.toList().map { it.toUrl<RealEstateService>() }
             is StorageMethodResult.Failed -> return Failure(HttpStatus.INTERNAL_SERVER_ERROR, "IOException occurred during file uploading")
-            else -> Stream.empty()
+            else -> emptyList()
         }
 
-        realEstateRepository.findById(realEstateId).orNull()?.let { realEstate ->
-            return Success(
-                HttpStatus.OK,
-                realEstate.toRealEstateDetailsDTO(
-                    files.toList().map { it.toUrl<RealEstateService>() }
-                )
-            )
-        } ?: return Failure(HttpStatus.NOT_FOUND, "Resource does not exists with id $realEstateId")
+        realEstateRepository.findById(realEstateId).orNull()?.let { realEstateEntity ->
+            return Success(HttpStatus.OK, realEstateEntity.toRealEstateDetailsDTO(fileUrls))
+        }
+
+        return Failure(HttpStatus.NOT_FOUND, "Resource does not exists with id $realEstateId")
     }
 
     @Transactional(readOnly = true)
     open fun getAllRealEstates(search: String, page: Int?, offset: Int?): ResponseEntity<List<RealEstateDTO>> {
+
         //TODO ez bonyolult ezt majd a végén!
         return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
-
     }
 
     @Transactional(readOnly = true)
-    open fun getRealEstatesByUserId(page: Int, offset: Int): DataTransferResult<RealEstateDetailsDTO> {
+    open fun getRealEstatesByUserId(page: Int, offset: Int): DataTransferResult<List<RealEstateDTO>> {
+
         val user = userService
             .userWithAuthorities
             .orNull() ?: return Failure(HttpStatus.UNAUTHORIZED, "User not Authenticated")
+
         //TODO ez bonyolult ezt majd a végén!
         return Success(HttpStatus.OK)
     }
