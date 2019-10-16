@@ -2,18 +2,19 @@ package bme.aut.szarch.realestateportal;
 
 import bme.aut.szarch.realestateportal.config.ApplicationProperties;
 import bme.aut.szarch.realestateportal.config.DefaultProfileUtil;
-
+import bme.aut.szarch.realestateportal.service.StorageServiceImp;
 import io.github.jhipster.config.JHipsterConstants;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
 import java.net.InetAddress;
@@ -32,6 +33,15 @@ public class RealEstatePortalApp implements InitializingBean {
 
     public RealEstatePortalApp(Environment env) {
         this.env = env;
+    }
+
+
+    @Bean
+    CommandLineRunner init(StorageServiceImp storageService) {
+        return (args) -> {
+            storageService.deleteAll();
+            storageService.init();
+        };
     }
 
     /**

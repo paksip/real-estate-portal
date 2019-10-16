@@ -499,6 +499,9 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <languageVersion>1.3</languageVersion>
+                </configuration>
             </plugin>
             <!-- jhipster-needle-maven-add-plugin -->
         </plugins>
