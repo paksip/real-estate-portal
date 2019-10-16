@@ -2,7 +2,7 @@ package bme.aut.szarch.realestateportal;
 
 import bme.aut.szarch.realestateportal.config.ApplicationProperties;
 import bme.aut.szarch.realestateportal.config.DefaultProfileUtil;
-import bme.aut.szarch.realestateportal.service.StorageServiceImp;
+import bme.aut.szarch.realestateportal.service.kotlin.StorageServiceImp;
 import io.github.jhipster.config.JHipsterConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
