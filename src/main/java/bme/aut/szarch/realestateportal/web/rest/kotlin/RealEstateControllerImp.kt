@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @RequestMapping("/realestates")
-class RealEstateControllerImp(
+open class RealEstateControllerImp(
     val realEStateService: RealEstateService,
     val reservationService: RealEstateService,
     val storageService: StorageService

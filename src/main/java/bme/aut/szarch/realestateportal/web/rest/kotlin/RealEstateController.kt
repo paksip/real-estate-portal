@@ -12,9 +12,10 @@ import javax.validation.Valid
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
 
+
+@RestController
 @Validated
 @Api(value = "realestates", description = "the realestates API")
-@RequestMapping("/default")
 interface RealEstateController {
 
 
