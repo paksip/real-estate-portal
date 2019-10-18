@@ -126,6 +126,4 @@ fun AvailableReservationTimeDTO.toReservationEntity(realEstateEntity: RealEstate
         realEstate = realEstateEntity
     )
 }
-
 //endregion
-

@@ -6,14 +6,17 @@ import javax.validation.constraints.Email
 import javax.validation.constraints.Pattern
 
 @Entity
+@Table(name="realestate_reservation")
 data class ReservationEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
+    @Column(name = "reservation_from")
     val from: OffsetDateTime,
 
+    @Column(name = "reservation_to")
     val to: OffsetDateTime,
 
     @Email
@@ -27,7 +30,7 @@ data class ReservationEntity(
     val userName: String?,
 
     @ManyToOne
-    @JoinColumn(name = "real_estate_id", nullable = false)
+    @JoinColumn(name = "real_estate_id")
     val realEstate: RealEstateEntity,
 
     val isFree: Boolean = true

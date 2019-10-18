@@ -39,7 +39,6 @@ public class RealEstatePortalApp implements InitializingBean {
     @Bean
     CommandLineRunner init(StorageServiceImp storageService) {
         return (args) -> {
-            storageService.deleteAll();
             storageService.init();
         };
     }

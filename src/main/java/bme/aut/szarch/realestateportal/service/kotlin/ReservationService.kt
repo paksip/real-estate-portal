@@ -2,6 +2,7 @@ package bme.aut.szarch.realestateportal.service.kotlin
 
 import bme.aut.szarch.realestateportal.repository.kotlin.RealEstateRepository
 import bme.aut.szarch.realestateportal.repository.kotlin.ReservationRepository
+import bme.aut.szarch.realestateportal.security.SecurityUtils
 import bme.aut.szarch.realestateportal.service.UserService
 import bme.aut.szarch.realestateportal.service.kotlin.dto.AvailableReservationTimeDTO
 import bme.aut.szarch.realestateportal.service.kotlin.dto.NewReservationDTO
@@ -30,7 +31,7 @@ open class ReservationService(
 ) {
 
 
-    fun createNewReservation(realEstateId: Long, availableReservationTimeDTO: AvailableReservationTimeDTO): DataTransferResult<Void> {
+    fun createNewAvailableReservationTime(realEstateId: Long, availableReservationTimeDTO: AvailableReservationTimeDTO): DataTransferResult<Void> {
         val realEstate = realEstateRepository
             .findById(realEstateId)
             .orNull() ?: return Failure(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $realEstateId")
@@ -40,7 +41,7 @@ open class ReservationService(
             .orNull() ?: return Failure(HttpStatus.UNAUTHORIZED, "User not Authenticated")
 
         if (user.id != realEstate.user.id) {
-            Failure(HttpStatus.UNAUTHORIZED, "User not Authorized")
+            return Failure(HttpStatus.UNAUTHORIZED, "User not Authorized")
         }
 
         reservationRepository.save(availableReservationTimeDTO.toReservationEntity(realEstate))
@@ -48,30 +49,7 @@ open class ReservationService(
     }
 
 
-    fun deleteReservation(realEstateId: Long, reservationId: Long): ResponseEntity<Void> {
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
-    }
-
-    fun getAllReservation(realEstateId: Long): DataTransferResult<List<ReservationDTO>> {
-        //TODO findByRealEstateId megnézni h ez müködik!
-        //TODO mást lát a user és a nem user!
-        val reservations = reservationRepository
-            .findByRealEstateId(realEstateId)
-
-        return Success(HttpStatus.OK, reservations.map { it.toReservationDTO() })
-    }
-
-    fun getReservationDetails(realEstateId: Long, reservationId: Long): DataTransferResult<ReservationDetailsDTO> {
-        val reservation = reservationRepository
-            .findByIdAndRealEstateId(reservationId, realEstateId)
-            ?: return Failure(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $reservationId")
-
-        userService.userWithAuthorities.orNull() ?: return Failure(HttpStatus.UNAUTHORIZED, "User not Authenticated")
-
-        return Success(HttpStatus.OK, reservation.toReservationDetailsDTO())
-    }
-
-    fun newReservation(realEstateId: Long, reservationId: Long, newReservationDTO: NewReservationDTO): DataTransferResult<Void> {
+    fun deleteReservation(realEstateId: Long, reservationId: Long): DataTransferResult<Void> {
         val realEstate = realEstateRepository
             .findById(realEstateId)
             .orNull() ?: return Failure(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $realEstateId")
@@ -80,10 +58,73 @@ open class ReservationService(
             .findByIdAndRealEstateId(reservationId, realEstateId)
             ?: return Failure(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $reservationId")
 
+        val user = userService
+            .userWithAuthorities
+            .orNull() ?: return Failure(HttpStatus.UNAUTHORIZED, "User not Authenticated")
 
-        //TODO megnézni hogy ez jól müködik e.
+        if (user.id != realEstate.user.id) {
+            return Failure(HttpStatus.UNAUTHORIZED, "User not Authorized")
+        }
+
         reservationRepository.delete(reservation)
-        reservationRepository.save(reservation.toUpdatedReservationEntity(newReservationDTO))
+        return Success(HttpStatus.OK)
+    }
+
+    fun getAllReservation(realEstateId: Long): DataTransferResult<List<ReservationDTO>> {
+        val user = userService
+            .userWithAuthorities
+            .orNull()
+
+        val realEstate = realEstateRepository
+            .findById(realEstateId)
+            .orNull() ?: return Failure(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $realEstateId")
+
+        //TODO findByRealEstateId megnézni h ez müködik!
+        val reservations = reservationRepository
+            .findByRealEstateId(realEstateId).filter { it.isFree }
+
+
+        if (user != null && user.id == realEstate.user.id) {
+            return Success(HttpStatus.OK, reservations.map { it.toReservationDTO() })
+        }
+
+        return Success(HttpStatus.OK, reservations.filter { it.isFree }.map { it.toReservationDTO() })
+    }
+
+    fun getReservationDetails(realEstateId: Long, reservationId: Long): DataTransferResult<ReservationDetailsDTO> {
+        val user = userService
+            .userWithAuthorities
+            .orNull() ?: return Failure(HttpStatus.UNAUTHORIZED, "User not Authenticated")
+
+        val realEstate = realEstateRepository
+            .findById(realEstateId)
+            .orNull() ?: return Failure(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $realEstateId")
+
+        val reservation = reservationRepository
+            .findByIdAndRealEstateId(reservationId, realEstateId)
+            ?: return Failure(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $reservationId")
+
+        if (user.id != realEstate.user.id) {
+            return Failure(HttpStatus.UNAUTHORIZED, "User not Authorized")
+        }
+
+        return Success(HttpStatus.OK, reservation.toReservationDetailsDTO())
+    }
+
+    fun makeNewReservation(realEstateId: Long, reservationId: Long, newReservationDTO: NewReservationDTO): DataTransferResult<Void> {
+        val reservation = reservationRepository
+            .findByIdAndRealEstateId(reservationId, realEstateId)
+            ?: return Failure(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $reservationId")
+
+
+        val newReservation = reservation.copy(
+            emailAddress = newReservationDTO.email,
+            phoneNumber = newReservationDTO.phoneNumber,
+            message = newReservationDTO.message,
+            userName = newReservationDTO.userName,
+            isFree = false
+        )
+        reservationRepository.save(newReservation)
         return Success(HttpStatus.CREATED)
     }
 
@@ -101,11 +142,18 @@ open class ReservationService(
             .orNull() ?: return Failure(HttpStatus.UNAUTHORIZED, "User not Authenticated")
 
         if (user.id != realEstate.user.id) {
-            Failure(HttpStatus.UNAUTHORIZED, "User not Authorized")
+            return Failure(HttpStatus.UNAUTHORIZED, "User not Authorized")
         }
 
-        reservationRepository.delete(reservation)
-        reservationRepository.save(availableReservationTimeDTO.toReservationEntity(realEstate))
+        if (!reservation.isFree) {
+            return Failure(HttpStatus.FORBIDDEN, "The reservation is not free!")
+        }
+
+        val newReservation = reservation.copy(
+            from = availableReservationTimeDTO.from,
+            to = availableReservationTimeDTO.to
+        )
+        reservationRepository.save(newReservation)
         return Success(HttpStatus.CREATED)
     }
 }

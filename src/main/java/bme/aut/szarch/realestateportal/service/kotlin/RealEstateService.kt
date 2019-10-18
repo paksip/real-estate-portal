@@ -1,20 +1,25 @@
 package bme.aut.szarch.realestateportal.service.kotlin
 
+import bme.aut.szarch.realestateportal.domain.kotlin.RealEstateEntity
 import bme.aut.szarch.realestateportal.repository.kotlin.RealEstateRepository
 import bme.aut.szarch.realestateportal.service.UserService
 import bme.aut.szarch.realestateportal.service.kotlin.dto.NewRealEstateDTO
 import bme.aut.szarch.realestateportal.service.kotlin.dto.RealEstateDTO
 import bme.aut.szarch.realestateportal.service.kotlin.dto.RealEstateDetailsDTO
 import bme.aut.szarch.realestateportal.service.kotlin.extensions.orNull
+import bme.aut.szarch.realestateportal.service.kotlin.mapper.toLocationEntity
+import bme.aut.szarch.realestateportal.service.kotlin.mapper.toRealEstateDTO
 import bme.aut.szarch.realestateportal.service.kotlin.mapper.toRealEstateDetailsDTO
 import bme.aut.szarch.realestateportal.service.kotlin.mapper.toRealEstateEntity
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Failure
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Success
-import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult
-import bme.aut.szarch.realestateportal.service.kotlin.util.toUrl
+import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult.Failed
+import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult.SuccessWithResult
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import kotlin.streams.toList
@@ -30,35 +35,40 @@ open class RealEstateService(
 
     @Transactional(readOnly = true)
     open fun getRealEstateById(realEstateId: Long): DataTransferResult<RealEstateDetailsDTO> {
-        val fileUrls = when (val storageResult = storageService.loadFiles(realEstateId)) {
-            is StorageMethodResult.SuccessWithResult -> storageResult.result.toList().map { it.toUrl<RealEstateService>() }
-            is StorageMethodResult.Failed -> return Failure(HttpStatus.INTERNAL_SERVER_ERROR, "IOException occurred during file uploading")
-            else -> emptyList()
-        }
+        val fileNames = getFilenamesByRealEstateId(realEstateId)
 
         realEstateRepository.findById(realEstateId).orNull()?.let { realEstateEntity ->
-            return Success(HttpStatus.OK, realEstateEntity.toRealEstateDetailsDTO(fileUrls))
+            return Success(HttpStatus.OK, realEstateEntity.toRealEstateDetailsDTO(fileNames))
         }
 
         return Failure(HttpStatus.NOT_FOUND, "Resource does not exists with id $realEstateId")
     }
 
     @Transactional(readOnly = true)
-    open fun getAllRealEstates(search: String, page: Int?, offset: Int?): ResponseEntity<List<RealEstateDTO>> {
-
-        //TODO ez bonyolult ezt majd a végén!
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+    open fun getAllRealEstates(realEstateSpecification: Specification<RealEstateEntity>?, pageable: Pageable): DataTransferResult<Page<RealEstateDTO>> {
+        return Success(
+            HttpStatus.OK,
+            realEstateRepository.findAll(realEstateSpecification, pageable)
+                .map {
+                    it.toRealEstateDTO(getFilenamesByRealEstateId(it.id))
+                }
+        )
     }
 
-    @Transactional(readOnly = true)
-    open fun getRealEstatesByUserId(page: Int, offset: Int): DataTransferResult<List<RealEstateDTO>> {
 
+    @Transactional(readOnly = true)
+    open fun getRealEstatesByUserId(pageable: Pageable): DataTransferResult<Page<RealEstateDTO>> {
         val user = userService
             .userWithAuthorities
             .orNull() ?: return Failure(HttpStatus.UNAUTHORIZED, "User not Authenticated")
 
-        //TODO ez bonyolult ezt majd a végén!
-        return Success(HttpStatus.OK)
+        return Success(
+            HttpStatus.OK,
+            realEstateRepository.findByUserId(user.id, pageable)
+                .map {
+                    it.toRealEstateDTO(getFilenamesByRealEstateId(it.id))
+                }
+        )
     }
 
 
@@ -68,7 +78,7 @@ open class RealEstateService(
             .orNull() ?: return Failure(HttpStatus.UNAUTHORIZED, "User not Authenticated")
 
         realEstateRepository.save(newRealEstateDTO.toRealEstateEntity(user))
-        return Success(HttpStatus.OK)
+        return Success(HttpStatus.CREATED)
     }
 
     fun updateRealEstate(realEstateId: Long, newRealEstateDTO: NewRealEstateDTO): DataTransferResult<Void> {
@@ -81,11 +91,22 @@ open class RealEstateService(
             .orNull() ?: return Failure(HttpStatus.UNAUTHORIZED, "User not Authenticated")
 
         if (user.id != realEstate.user.id) {
-            Failure(HttpStatus.UNAUTHORIZED, "User not Authorized")
+            return Failure(HttpStatus.UNAUTHORIZED, "User not Authorized")
         }
 
-        realEstateRepository.delete(realEstate)
-        realEstateRepository.save(newRealEstateDTO.toRealEstateEntity(user))
+        val updatedRealEstate = realEstate.copy(
+            name = newRealEstateDTO.name,
+            description = newRealEstateDTO.description,
+            category = newRealEstateDTO.category,
+            location = newRealEstateDTO.location.toLocationEntity(),
+            squareMeter = newRealEstateDTO.squareMeter,
+            price = newRealEstateDTO.price,
+            numberOfRooms = newRealEstateDTO.numberOfRooms,
+            hasBalcony = newRealEstateDTO.hasBalncony,
+            hasAircondition = newRealEstateDTO.hasBalncony,
+            ownerPhoneNumber = newRealEstateDTO.ownerPhoneNumber
+        )
+        realEstateRepository.save(updatedRealEstate)
         return Success(HttpStatus.OK)
 
     }
@@ -100,11 +121,19 @@ open class RealEstateService(
             .orNull() ?: return Failure(HttpStatus.UNAUTHORIZED, "User not Authenticated")
 
         if (user.id != realEstate.user.id) {
-            Failure(HttpStatus.UNAUTHORIZED, "User not Authorized")
+            return Failure(HttpStatus.UNAUTHORIZED, "User not Authorized")
         }
 
         realEstateRepository.delete(realEstate)
         return Success(HttpStatus.OK)
+    }
+
+    private fun getFilenamesByRealEstateId(realEstateId: Long): List<String> {
+        return when (val storageResult = storageService.loadFiles(realEstateId)) {
+            is SuccessWithResult -> storageResult.result.toList().map { it.toFile().name }
+            is Failed -> emptyList()
+            else -> emptyList()
+        }
     }
 }
 
