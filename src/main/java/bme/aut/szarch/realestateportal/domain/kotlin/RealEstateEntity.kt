@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
 
 @Entity
-@Table(name="realestate")
+@Table(schema = "realestateportal", name = "realestate")
 data class RealEstateEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

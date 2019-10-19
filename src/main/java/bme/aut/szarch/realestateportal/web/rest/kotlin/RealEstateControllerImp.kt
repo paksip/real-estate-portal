@@ -9,9 +9,10 @@ import bme.aut.szarch.realestateportal.service.kotlin.StorageServiceImp
 import bme.aut.szarch.realestateportal.service.kotlin.dto.AvailableReservationTimeDTO
 import bme.aut.szarch.realestateportal.service.kotlin.dto.NewRealEstateDTO
 import bme.aut.szarch.realestateportal.service.kotlin.dto.NewReservationDTO
-import bme.aut.szarch.realestateportal.service.kotlin.dto.ReservationDetailsDTO
+import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult.*
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.toResponseEntity
+import org.springframework.core.io.Resource
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -85,7 +86,8 @@ open class RealEstateControllerImp(
     }
 
     override fun uploadFiles(realEstateId: Long, file: MultipartFile): ResponseEntity<Any> {
-        return when (val result = storageService.uploadFiles(realEstateId, file)) {
+        val result = storageService.uploadFiles(realEstateId, file)
+        return when (result) {
             is Success -> ResponseEntity.ok().build()
             is Failed -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result.message)
             else -> ResponseEntity.ok().build()
@@ -93,7 +95,8 @@ open class RealEstateControllerImp(
     }
 
     override fun downloadFile(filename: String): ResponseEntity<Any> {
-        return when (val result = storageService.loadFile(filename)) {
+        val result: StorageMethodResult<Resource> = storageService.loadFile(filename)
+        return when (result) {
             is SuccessWithResult -> {
                 val fileResource = result.result
                 ResponseEntity.ok()

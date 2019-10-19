@@ -6,7 +6,7 @@ import javax.validation.constraints.Email
 import javax.validation.constraints.Pattern
 
 @Entity
-@Table(name="realestate_reservation")
+@Table(schema = "realestateportal", name = "realestate_reservation")
 data class ReservationEntity(
 
     @Id
