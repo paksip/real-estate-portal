@@ -1,5 +1,6 @@
 package bme.aut.szarch.realestateportal.service.kotlin
 
+import bme.aut.szarch.realestateportal.service.kotlin.util.addIdentifier
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult.*
@@ -30,7 +31,7 @@ open class StorageServiceImp : StorageService {
 
     override fun uploadFiles(realEstateId: Long, file: MultipartFile): DataTransferResult<String> {
         return try {
-            Files.copy(file.inputStream, rootLocation.resolve(file.originalFilename!! + realEstateId))
+            Files.copy(file.inputStream, rootLocation.resolve(file.originalFilename!!.addIdentifier(realEstateId.toString())))
             DataTransferSuccess(HttpStatus.CREATED, "${file.originalFilename} has  been uploaded successfullly ")
         } catch (e: IOException) {
             DataTransferError(HttpStatus.INTERNAL_SERVER_ERROR, "Occurred an issue during deleting")

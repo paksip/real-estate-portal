@@ -13,16 +13,16 @@ import javax.validation.Valid
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
 
-
 @RestController
 @Validated
 @Api(value = "realestates", description = "the realestates API")
+@RequestMapping("/api/realestates")
 interface RealEstateController {
 
 
     @ApiOperation(value = "Create new real-estate", nickname = "createNewRealEstate", notes = "Create a new real-estate", tags = ["REAL-ESTATE"])
     @ApiResponses(value = [ApiResponse(code = 201, message = "Created"), ApiResponse(code = 500, message = "Internal Server Error")])
-    @RequestMapping(value = ["/"], consumes = ["application/json"], method = [RequestMethod.POST])
+    @RequestMapping(value = [""], consumes = ["application/json"], method = [RequestMethod.POST])
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     fun createNewRealEstate(@ApiParam(value = "") @Valid @RequestBody newRealEstateDTO: NewRealEstateDTO): ResponseEntity<Any>
 
@@ -34,8 +34,8 @@ interface RealEstateController {
 
     @ApiOperation(value = "Get real-estates", nickname = "getAllRealEstates", notes = "Get all real-estates. There is possibilities for sort the result by the query params.", response = RealEstateDTO::class, responseContainer = "List", tags = ["REAL-ESTATE"])
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK", response = RealEstateDTO::class, responseContainer = "List"), ApiResponse(code = 500, message = "Internal Server Error"), ApiResponse(code = 404, message = "Not Found")])
-    @RequestMapping(value = ["/"], produces = ["application/json"], method = [RequestMethod.GET])
-    fun getAllRealEstates(@Pattern(regexp = "(\\w+?)(:|<|>)(\\w+?),") @ApiParam(value = "") @Valid @RequestParam(value = "search", required = false) search: String?, @ApiParam(value = "") @Valid @RequestParam(value = "page", required = false) page: Int, @ApiParam(value = "") @Valid @RequestParam(value = "offset", required = false) offset: Int): ResponseEntity<Any>
+    @GetMapping(value = [""], produces = ["application/json"])
+    fun getAllRealEstates(@Pattern(regexp = "(\\w+?)(:|<|>)(\\w+?),") @ApiParam(value = "") @Valid @RequestParam(value = "search", required = false) search: String?, @ApiParam(value = "") @Valid @RequestParam(value = "page", required = false) page: Int?, @ApiParam(value = "") @Valid @RequestParam(value = "offset", required = false) offset: Int?): ResponseEntity<Any>
 
     @ApiOperation(value = "Get real-estates", nickname = "getRealEstateById", notes = "Get the details of a real-estate", response = RealEstateDetailsDTO::class, tags = ["REAL-ESTATE"])
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK", response = RealEstateDetailsDTO::class), ApiResponse(code = 500, message = "Internal Server Error"), ApiResponse(code = 404, message = "Not Found")])

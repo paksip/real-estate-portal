@@ -12,31 +12,29 @@ import bme.aut.szarch.realestateportal.service.kotlin.dto.NewReservationDTO
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.toResponseEntity
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
 import java.util.regex.Pattern
 
-@RestController
-@RequestMapping("/realestates")
+@Component
 open class RealEstateControllerImp(
-    private val realEStateService: RealEstateService,
+    private val realEstateService: RealEstateService,
     private val reservationService: ReservationService,
     private val storageService: StorageServiceImp
 ) : RealEstateController {
     override fun createNewRealEstate(newRealEstateDTO: NewRealEstateDTO): ResponseEntity<Any> {
-        return realEStateService.createNewRealEstate(newRealEstateDTO).toResponseEntity()
+        return realEstateService.createNewRealEstate(newRealEstateDTO).toResponseEntity()
     }
 
     override fun updateRealEstate(realEstateId: Long, newRealEstateDTO: NewRealEstateDTO): ResponseEntity<Any> {
-        return realEStateService.updateRealEstate(realEstateId, newRealEstateDTO).toResponseEntity()
+        return realEstateService.updateRealEstate(realEstateId, newRealEstateDTO).toResponseEntity()
     }
 
     override fun deleteRealEstate(realEstateId: Long): ResponseEntity<Any> {
-        return realEStateService.deleteRealEstate(realEstateId).toResponseEntity()
+        return realEstateService.deleteRealEstate(realEstateId).toResponseEntity()
     }
 
-    override fun getAllRealEstates(search: String?, page: Int, offset: Int): ResponseEntity<Any> {
+    override fun getAllRealEstates(search: String?, page: Int?, offset: Int?): ResponseEntity<Any> {
         val builder = RealEstateSpecificationBuilder()
         val pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),")
         val matcher = pattern.matcher("$search,")
@@ -44,15 +42,15 @@ open class RealEstateControllerImp(
             val searchCriteria = SpecSearchCriteria(matcher.group(1), getSimpleOperation(matcher.group(2)[0]), matcher.group(3))
             builder.with(searchCriteria)
         }
-        return realEStateService.getAllRealEstates(builder.build(), PageRequest.of(page, offset)).toResponseEntity()
+        return realEstateService.getAllRealEstates(builder.build(), PageRequest.of(page?:0, offset?:1)).toResponseEntity()
     }
 
     override fun getRealEstatesByUserId(page: Int, offset: Int): ResponseEntity<Any> {
-        return realEStateService.getRealEstatesByUserId(PageRequest.of(page, offset)).toResponseEntity()
+        return realEstateService.getRealEstatesByUserId(PageRequest.of(page, offset)).toResponseEntity()
     }
 
     override fun getRealEstateById(realEstateId: Long): ResponseEntity<Any> {
-        return realEStateService.getRealEstateById(realEstateId).toResponseEntity()
+        return realEstateService.getRealEstateById(realEstateId).toResponseEntity()
     }
 
     override fun creatAvailReservetionTime(realEstateId: Long, availableReservationTimeDTO: AvailableReservationTimeDTO): ResponseEntity<Any> {
