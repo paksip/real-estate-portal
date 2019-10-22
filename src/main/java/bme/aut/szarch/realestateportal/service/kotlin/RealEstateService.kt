@@ -14,18 +14,12 @@ import bme.aut.szarch.realestateportal.service.kotlin.mapper.toRealEstateEntity
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Error
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Success
-import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult
-import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult.Failed
-import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult.SuccessWithResult
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.nio.file.Path
-import java.util.stream.Stream
-import kotlin.streams.toList
 
 
 @Service
@@ -131,14 +125,10 @@ open class RealEstateService(
         return Success(HttpStatus.OK)
     }
 
-    private fun getFilenamesByRealEstateId(realEstateId: Long): List<String> {
-        val storageResult: StorageMethodResult<Stream<Path>> = storageService.loadFiles(realEstateId)
-        return when (storageResult) {
-            is SuccessWithResult -> storageResult.result.toList().map { it.toFile().name }
-            is Failed -> emptyList()
-            else -> emptyList()
-        }
-    }
+    private fun getFilenamesByRealEstateId(realEstateId: Long): List<String> =
+        storageService.loadFiles(realEstateId)
+
+
 }
 
 
