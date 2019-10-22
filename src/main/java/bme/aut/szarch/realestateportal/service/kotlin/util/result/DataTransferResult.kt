@@ -1,6 +1,6 @@
 package bme.aut.szarch.realestateportal.service.kotlin.util.result
 
-import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Failure
+import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Error
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Success
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -13,7 +13,7 @@ sealed class DataTransferResult<out T : Any> {
         val headers: HttpHeaders? = null
     ) : DataTransferResult<T>()
 
-    data class Failure(val failureCode: HttpStatus, val message: String) : DataTransferResult<Nothing>()
+    data class Error(val failureCode: HttpStatus, val message: String) : DataTransferResult<Nothing>()
 }
 
 
@@ -28,6 +28,6 @@ fun <T : Any> DataTransferResult<T>.toResponseEntity(): ResponseEntity<Any> {
             }
             ResponseEntity.status(successCode).build()
         }
-        is Failure -> ResponseEntity.status(failureCode).body(message)
+        is Error -> ResponseEntity.status(failureCode).body(message)
     }
 }

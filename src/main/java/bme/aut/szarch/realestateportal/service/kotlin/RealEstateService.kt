@@ -12,7 +12,7 @@ import bme.aut.szarch.realestateportal.service.kotlin.mapper.toRealEstateDTO
 import bme.aut.szarch.realestateportal.service.kotlin.mapper.toRealEstateDetailsDTO
 import bme.aut.szarch.realestateportal.service.kotlin.mapper.toRealEstateEntity
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult
-import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Failure
+import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Error
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Success
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult.Failed
@@ -44,7 +44,7 @@ open class RealEstateService(
             return Success(HttpStatus.OK, realEstateEntity.toRealEstateDetailsDTO(fileNames))
         }
 
-        return Failure(HttpStatus.NOT_FOUND, "Resource does not exists with id $realEstateId")
+        return Error(HttpStatus.NOT_FOUND, "Resource does not exists with id $realEstateId")
     }
 
     @Transactional(readOnly = true)
@@ -63,7 +63,7 @@ open class RealEstateService(
     open fun getRealEstatesByUserId(pageable: Pageable): DataTransferResult<Page<RealEstateDTO>> {
         val user = userService
             .userWithAuthorities
-            .orNull() ?: return Failure(HttpStatus.UNAUTHORIZED, "User not Authenticated")
+            .orNull() ?: return Error(HttpStatus.UNAUTHORIZED, "User not Authenticated")
 
         return Success(
             HttpStatus.OK,
@@ -78,7 +78,7 @@ open class RealEstateService(
     fun createNewRealEstate(newRealEstateDTO: NewRealEstateDTO): DataTransferResult<Void> {
         val user = userService
             .userWithAuthorities
-            .orNull() ?: return Failure(HttpStatus.UNAUTHORIZED, "User not Authenticated")
+            .orNull() ?: return Error(HttpStatus.UNAUTHORIZED, "User not Authenticated")
 
         realEstateRepository.save(newRealEstateDTO.toRealEstateEntity(user))
         return Success(HttpStatus.CREATED)
@@ -87,14 +87,14 @@ open class RealEstateService(
     fun updateRealEstate(realEstateId: Long, newRealEstateDTO: NewRealEstateDTO): DataTransferResult<Void> {
         val realEstate = realEstateRepository
             .findById(realEstateId)
-            .orNull() ?: return Failure(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $realEstateId")
+            .orNull() ?: return Error(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $realEstateId")
 
         val user = userService
             .userWithAuthorities
-            .orNull() ?: return Failure(HttpStatus.UNAUTHORIZED, "User not Authenticated")
+            .orNull() ?: return Error(HttpStatus.UNAUTHORIZED, "User not Authenticated")
 
         if (user.id != realEstate.user.id) {
-            return Failure(HttpStatus.UNAUTHORIZED, "User not Authorized")
+            return Error(HttpStatus.UNAUTHORIZED, "User not Authorized")
         }
 
         val updatedRealEstate = realEstate.copy(
@@ -117,14 +117,14 @@ open class RealEstateService(
     fun deleteRealEstate(realEstateId: Long): DataTransferResult<Void> {
         val realEstate = realEstateRepository
             .findById(realEstateId)
-            .orNull() ?: return Failure(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $realEstateId")
+            .orNull() ?: return Error(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $realEstateId")
 
         val user = userService
             .userWithAuthorities
-            .orNull() ?: return Failure(HttpStatus.UNAUTHORIZED, "User not Authenticated")
+            .orNull() ?: return Error(HttpStatus.UNAUTHORIZED, "User not Authenticated")
 
         if (user.id != realEstate.user.id) {
-            return Failure(HttpStatus.UNAUTHORIZED, "User not Authorized")
+            return Error(HttpStatus.UNAUTHORIZED, "User not Authorized")
         }
 
         realEstateRepository.delete(realEstate)
