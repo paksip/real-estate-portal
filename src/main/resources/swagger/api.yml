@@ -227,7 +227,7 @@ paths:
   '/realestates/{realEstateId}/files':
     parameters:
       - schema:
-          type: string
+          type: integer
         name: realEstateId
         in: path
         required: true
@@ -273,6 +273,34 @@ paths:
           required: true
       tags:
         - REAL-ESTATE
+  /realestates/{realEstateId}/files/{fileName}:
+    parameters:
+      - schema:
+          type: integer
+        name: realEstateId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: fileName
+        in: path
+        required: true
+    get:
+      summary: Get a file
+      tags:
+        - REAL-ESTATE
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        '500':
+          description: Internal Server Error
+      operationId: getFile
+      description: Get a File
 components:
   schemas:
     NewRealEstate:
@@ -447,6 +475,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Reservation'
+        userId:
+          type: integer
+          format: int64
       required:
         - name
         - description
@@ -461,6 +492,7 @@ components:
         - ownerPhoneNumber
         - filePaths
         - reservations
+        - userId
     Reservation:
       title: Reservation
       type: object
