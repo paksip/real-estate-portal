@@ -1,7 +1,9 @@
 package bme.aut.szarch.realestateportal.service.kotlin
 
 import bme.aut.szarch.realestateportal.domain.kotlin.RealEstateEntity
+import bme.aut.szarch.realestateportal.repository.UserRepository
 import bme.aut.szarch.realestateportal.repository.kotlin.RealEstateRepository
+import bme.aut.szarch.realestateportal.service.MailService
 import bme.aut.szarch.realestateportal.service.UserService
 import bme.aut.szarch.realestateportal.service.kotlin.dto.NewRealEstateDTO
 import bme.aut.szarch.realestateportal.service.kotlin.dto.RealEstateDTO
@@ -13,9 +15,11 @@ import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferRe
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Error
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Success
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.http.HttpStatus
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -25,9 +29,16 @@ import org.springframework.transaction.annotation.Transactional
 open class RealEstateService(
     private val realEstateRepository: RealEstateRepository,
     private val userService: UserService,
-    private val storageService: StorageServiceImp
+    private val userRepository: UserRepository,
+    private val storageService: StorageServiceImp,
+    private val mailService: MailService
 ) {
 
+    companion object {
+        const val WEEK_IN_MILLISEC: Long = 604_800_000
+    }
+
+    //TODO incrementt spectators count
     @Transactional(readOnly = true)
     open fun getRealEstateById(realEstateId: Long): DataTransferResult<RealEstateDetailsDTO> {
         val fileNames = getFilenamesByRealEstateId(realEstateId)
@@ -113,9 +124,25 @@ open class RealEstateService(
 
     private fun getFilenamesByRealEstateId(realEstateId: Long): List<String> =
         storageService.loadFiles(realEstateId)
+
+
+    //TODO test it. optimize
+    @Scheduled(fixedDelay = WEEK_IN_MILLISEC)
+    private fun sendSpectatorsCountToUsers() {
+        userService.getAllManagedUsers(PageRequest.of(0, 100)).content
+            .forEach { user ->
+                realEstateRepository.findByUserId(user.id, PageRequest.of(0, 100)).content
+                    .forEach {
+                        mailService.sendEmail(
+                            user.email,
+                            "SpectatorsCount",
+                            "Real-estates: ${it.name} SpectatorsCount: ${it.spectatorsCount}",
+                            false,
+                            false
+                        )
+                    }
+            }
+    }
 }
-
-
-
 
 

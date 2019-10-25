@@ -33,7 +33,7 @@ open class StorageServiceImp : StorageService {
         return try {
             Files.copy(file.inputStream, rootLocation.resolve(file.originalFilename!!.addIdentifier(realEstateId.toString())))
             DataTransferSuccess(HttpStatus.CREATED)
-        } catch (e: IOException) {
+        } catch (e: Throwable) {
             DataTransferError(HttpStatus.INTERNAL_SERVER_ERROR, "Occurred an issue during deleting")
         } catch (e: KotlinNullPointerException) {
             DataTransferError(HttpStatus.BAD_REQUEST, "The File must exists")

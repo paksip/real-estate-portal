@@ -29,6 +29,7 @@ fun <T : Any> DataTransferResult<T>.toResponseEntity(): ResponseEntity<T> {
             }
             ResponseEntity.status(successCode).build()
         }
+        //TODO Replace with Autsoft exception
         is Error -> throw RuntimeException("Error")
     }
 }

@@ -74,7 +74,6 @@ open class RealEstateControllerImp(
         return reservationService.makeNewReservation(realEstateId, reservationId, newReservation).toResponseEntity()
     }
 
-
     override fun updateReservation(realEstateId: Long, reservationId: Long, availableReservationTime: AvailableReservationTimeDTO): ResponseEntity<Void> {
         return reservationService.updateReservation(realEstateId, reservationId, availableReservationTime).toResponseEntity()
     }
