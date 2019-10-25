@@ -7,10 +7,8 @@ import bme.aut.szarch.realestateportal.service.kotlin.dto.NewRealEstateDTO
 import bme.aut.szarch.realestateportal.service.kotlin.dto.RealEstateDTO
 import bme.aut.szarch.realestateportal.service.kotlin.dto.RealEstateDetailsDTO
 import bme.aut.szarch.realestateportal.service.kotlin.extensions.orNull
-import bme.aut.szarch.realestateportal.service.kotlin.mapper.toLocationEntity
+import bme.aut.szarch.realestateportal.service.kotlin.mapper.*
 import bme.aut.szarch.realestateportal.service.kotlin.mapper.toRealEstateDTO
-import bme.aut.szarch.realestateportal.service.kotlin.mapper.toRealEstateDetailsDTO
-import bme.aut.szarch.realestateportal.service.kotlin.mapper.toRealEstateEntity
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Error
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Success
@@ -91,19 +89,7 @@ open class RealEstateService(
             return Error(HttpStatus.UNAUTHORIZED, "User not Authorized")
         }
 
-        val updatedRealEstate = realEstate.copy(
-            name = newRealEstateDTO.name,
-            description = newRealEstateDTO.description,
-            category = newRealEstateDTO.category,
-            location = newRealEstateDTO.location.toLocationEntity(),
-            squareMeter = newRealEstateDTO.squareMeter,
-            price = newRealEstateDTO.price,
-            numberOfRooms = newRealEstateDTO.numberOfRooms,
-            hasBalcony = newRealEstateDTO.hasBalncony,
-            hasAircondition = newRealEstateDTO.hasBalncony,
-            ownerPhoneNumber = newRealEstateDTO.ownerPhoneNumber
-        )
-        realEstateRepository.save(updatedRealEstate)
+        realEstateRepository.save(realEstate.toUpdatedRealEstateEntity(newRealEstateDTO))
         return Success(HttpStatus.OK)
 
     }
@@ -127,8 +113,6 @@ open class RealEstateService(
 
     private fun getFilenamesByRealEstateId(realEstateId: Long): List<String> =
         storageService.loadFiles(realEstateId)
-
-
 }
 
 

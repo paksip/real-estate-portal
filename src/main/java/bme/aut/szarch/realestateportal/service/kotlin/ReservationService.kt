@@ -8,9 +8,7 @@ import bme.aut.szarch.realestateportal.service.kotlin.dto.NewReservationDTO
 import bme.aut.szarch.realestateportal.service.kotlin.dto.ReservationDTO
 import bme.aut.szarch.realestateportal.service.kotlin.dto.ReservationDetailsDTO
 import bme.aut.szarch.realestateportal.service.kotlin.extensions.orNull
-import bme.aut.szarch.realestateportal.service.kotlin.mapper.toReservationDTO
-import bme.aut.szarch.realestateportal.service.kotlin.mapper.toReservationDetailsDTO
-import bme.aut.szarch.realestateportal.service.kotlin.mapper.toReservationEntity
+import bme.aut.szarch.realestateportal.service.kotlin.mapper.*
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Error
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Success
@@ -41,7 +39,7 @@ open class ReservationService(
             return Error(HttpStatus.UNAUTHORIZED, "User not Authorized")
         }
 
-        reservationRepository.save(availableReservationTimeDTO.toReservationEntity(realEstate))
+        reservationRepository.save(availableReservationTimeDTO.toFreeReservationEntity(realEstate))
         return Success(HttpStatus.CREATED)
     }
 
@@ -105,6 +103,10 @@ open class ReservationService(
             return Error(HttpStatus.UNAUTHORIZED, "User not Authorized")
         }
 
+        if (reservation.isFree) {
+            return Error(HttpStatus.BAD_REQUEST, "The reservation is free! Thus that does not contain any Details")
+        }
+
         return Success(HttpStatus.OK, reservation.toReservationDetailsDTO())
     }
 
@@ -117,15 +119,7 @@ open class ReservationService(
             return Error(HttpStatus.BAD_REQUEST, "The reservation time is not free!")
         }
 
-
-        val newReservation = reservation.copy(
-            emailAddress = newReservationDTO.email,
-            phoneNumber = newReservationDTO.phoneNumber,
-            message = newReservationDTO.message,
-            userName = newReservationDTO.userName,
-            isFree = false
-        )
-        reservationRepository.save(newReservation)
+        reservationRepository.save(reservation.toReservedReservationEntity(newReservationDTO))
         return Success(HttpStatus.CREATED)
     }
 
@@ -150,11 +144,7 @@ open class ReservationService(
             return Error(HttpStatus.BAD_REQUEST, "The reservation is not free!")
         }
 
-        val newReservation = reservation.copy(
-            from = availableReservationTimeDTO.from,
-            to = availableReservationTimeDTO.to
-        )
-        reservationRepository.save(newReservation)
+        reservationRepository.save(reservation.toUpdatedFreeReservationEntity(availableReservationTimeDTO))
         return Success(HttpStatus.CREATED)
     }
 }
