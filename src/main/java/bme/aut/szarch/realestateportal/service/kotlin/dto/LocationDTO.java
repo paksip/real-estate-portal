@@ -10,19 +10,19 @@ import java.util.Objects;
 /**
  * Location
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-14T16:48:21.594559600+02:00[Europe/Belgrade]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-25T13:28:08.197256200+02:00[Europe/Belgrade]")
 
-public class Location   {
+public class LocationDTO {
   @JsonProperty("lat")
-  BigDecimal lat;
+  private BigDecimal lat;
 
   @JsonProperty("lon")
-  BigDecimal lon;
+  private BigDecimal lon;
 
   @JsonProperty("locationName")
-  String locationName;
+  private String locationName;
 
-  public Location lat(BigDecimal lat) {
+  public LocationDTO lat(BigDecimal lat) {
     this.lat = lat;
     return this;
   }
@@ -43,7 +43,7 @@ public class Location   {
     this.lat = lat;
   }
 
-  public Location lon(BigDecimal lon) {
+  public LocationDTO lon(BigDecimal lon) {
     this.lon = lon;
     return this;
   }
@@ -64,7 +64,7 @@ public class Location   {
     this.lon = lon;
   }
 
-  public Location locationName(String locationName) {
+  public LocationDTO locationName(String locationName) {
     this.locationName = locationName;
     return this;
   }
@@ -93,10 +93,10 @@ public class Location   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Location location = (Location) o;
-    return Objects.equals(this.lat, location.lat) &&
-        Objects.equals(this.lon, location.lon) &&
-        Objects.equals(this.locationName, location.locationName);
+    LocationDTO locationDTO = (LocationDTO) o;
+    return Objects.equals(this.lat, locationDTO.lat) &&
+        Objects.equals(this.lon, locationDTO.lon) &&
+        Objects.equals(this.locationName, locationDTO.locationName);
   }
 
   @Override

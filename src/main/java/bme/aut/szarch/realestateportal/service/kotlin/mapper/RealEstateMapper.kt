@@ -26,7 +26,7 @@ fun RealEstateEntity.toRealEstateDetailsDTO(filPaths: List<String>): RealEstateD
     return RealEstateDetailsDTO().also { realEstateDetailsDTO ->
         realEstateDetailsDTO.name = this.name
         realEstateDetailsDTO.description = this.description
-        realEstateDetailsDTO.location = this.location.toLocationDTO()
+        realEstateDetailsDTO.locationDTO = this.location.toLocationDTO()
         realEstateDetailsDTO.category = this.category
         realEstateDetailsDTO.spectatorsCount = this.spectatorsCount
         realEstateDetailsDTO.squareMeter = this.squareMeter
@@ -76,7 +76,7 @@ fun NewRealEstateDTO.toRealEstateEntity(user: User): RealEstateEntity {
 
 
 //region Location
-fun Location.toLocationEntity(): LocationEntity {
+fun LocationDTO.toLocationEntity(): LocationEntity {
     return LocationEntity(
         lat = this.lat.toInt(),
         lon = this.lon.toInt(),
@@ -84,8 +84,8 @@ fun Location.toLocationEntity(): LocationEntity {
     )
 }
 
-fun LocationEntity.toLocationDTO(): Location {
-    return Location().also { locationDTO ->
+fun LocationEntity.toLocationDTO(): LocationDTO {
+    return LocationDTO().also { locationDTO ->
         locationDTO.lat = this.lat.toBigDecimal()
         locationDTO.lon = this.lon.toBigDecimal()
         locationDTO.locationName = this.locationName

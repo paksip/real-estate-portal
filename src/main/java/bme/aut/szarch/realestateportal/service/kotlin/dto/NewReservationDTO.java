@@ -9,22 +9,22 @@ import java.util.Objects;
 /**
  * NewReservation
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-14T16:48:21.594559600+02:00[Europe/Belgrade]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-25T13:28:08.197256200+02:00[Europe/Belgrade]")
 
 public class NewReservationDTO {
   @JsonProperty("email")
-  String email;
+  private String email;
 
   @JsonProperty("phoneNumber")
-  String phoneNumber;
+  private String phoneNumber;
 
   @JsonProperty("message")
-  String message;
+  private String message;
 
   @JsonProperty("userName")
-  String userName;
+  private String userName;
 
-    public NewReservationDTO email(String email) {
+  public NewReservationDTO email(String email) {
     this.email = email;
     return this;
   }
@@ -45,7 +45,7 @@ public class NewReservationDTO {
     this.email = email;
   }
 
-    public NewReservationDTO phoneNumber(String phoneNumber) {
+  public NewReservationDTO phoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
     return this;
   }
@@ -66,7 +66,7 @@ public class NewReservationDTO {
     this.phoneNumber = phoneNumber;
   }
 
-    public NewReservationDTO message(String message) {
+  public NewReservationDTO message(String message) {
     this.message = message;
     return this;
   }
@@ -86,7 +86,7 @@ public class NewReservationDTO {
     this.message = message;
   }
 
-    public NewReservationDTO userName(String userName) {
+  public NewReservationDTO userName(String userName) {
     this.userName = userName;
     return this;
   }
@@ -116,11 +116,11 @@ public class NewReservationDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-      NewReservationDTO newReservationDTO = (NewReservationDTO) o;
-      return Objects.equals(this.email, newReservationDTO.email) &&
-          Objects.equals(this.phoneNumber, newReservationDTO.phoneNumber) &&
-          Objects.equals(this.message, newReservationDTO.message) &&
-          Objects.equals(this.userName, newReservationDTO.userName);
+    NewReservationDTO newReservationDTO = (NewReservationDTO) o;
+    return Objects.equals(this.email, newReservationDTO.email) &&
+        Objects.equals(this.phoneNumber, newReservationDTO.phoneNumber) &&
+        Objects.equals(this.message, newReservationDTO.message) &&
+        Objects.equals(this.userName, newReservationDTO.userName);
   }
 
   @Override

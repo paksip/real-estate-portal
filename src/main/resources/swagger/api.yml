@@ -273,7 +273,7 @@ paths:
           required: true
       tags:
         - REAL-ESTATE
-  /realestates/{realEstateId}/files/{fileName}:
+  /realestates/files/{fileName}:
     parameters:
       - schema:
           type: integer

@@ -29,10 +29,10 @@ open class StorageServiceImp : StorageService {
     val log = LoggerFactory.getLogger(this::class.java)
     private val rootLocation = Paths.get("filestorage")
 
-    override fun uploadFiles(realEstateId: Long, file: MultipartFile): DataTransferResult<String> {
+    override fun uploadFiles(realEstateId: Long, file: MultipartFile): DataTransferResult<Void> {
         return try {
             Files.copy(file.inputStream, rootLocation.resolve(file.originalFilename!!.addIdentifier(realEstateId.toString())))
-            DataTransferSuccess(HttpStatus.CREATED, "${file.originalFilename} has  been uploaded successfullly ")
+            DataTransferSuccess(HttpStatus.CREATED)
         } catch (e: IOException) {
             DataTransferError(HttpStatus.INTERNAL_SERVER_ERROR, "Occurred an issue during deleting")
         } catch (e: KotlinNullPointerException) {

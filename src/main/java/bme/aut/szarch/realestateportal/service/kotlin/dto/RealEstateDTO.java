@@ -12,32 +12,32 @@ import java.util.Objects;
 /**
  * RealEstate
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-14T16:48:21.594559600+02:00[Europe/Belgrade]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-25T13:28:08.197256200+02:00[Europe/Belgrade]")
 
 public class RealEstateDTO {
   @JsonProperty("id")
-  Long id;
+  private Long id;
 
   @JsonProperty("name")
-  String name;
+  private String name;
 
   @JsonProperty("spectatorsCount")
-  Long spectatorsCount;
+  private Long spectatorsCount;
 
   @JsonProperty("price")
-  Integer price;
+  private Integer price;
 
   @JsonProperty("squareMeter")
-  Integer squareMeter;
+  private Integer squareMeter;
 
   @JsonProperty("numberOfRooms")
-  Integer numberOfRooms;
+  private Integer numberOfRooms;
 
   @JsonProperty("filePaths")
   @Valid
-  List<String> filePaths = null;
+  private List<String> filePaths = null;
 
-    public RealEstateDTO id(Long id) {
+  public RealEstateDTO id(Long id) {
     this.id = id;
     return this;
   }
@@ -58,7 +58,7 @@ public class RealEstateDTO {
     this.id = id;
   }
 
-    public RealEstateDTO name(String name) {
+  public RealEstateDTO name(String name) {
     this.name = name;
     return this;
   }
@@ -79,7 +79,7 @@ public class RealEstateDTO {
     this.name = name;
   }
 
-    public RealEstateDTO spectatorsCount(Long spectatorsCount) {
+  public RealEstateDTO spectatorsCount(Long spectatorsCount) {
     this.spectatorsCount = spectatorsCount;
     return this;
   }
@@ -100,7 +100,7 @@ public class RealEstateDTO {
     this.spectatorsCount = spectatorsCount;
   }
 
-    public RealEstateDTO price(Integer price) {
+  public RealEstateDTO price(Integer price) {
     this.price = price;
     return this;
   }
@@ -121,7 +121,7 @@ public class RealEstateDTO {
     this.price = price;
   }
 
-    public RealEstateDTO squareMeter(Integer squareMeter) {
+  public RealEstateDTO squareMeter(Integer squareMeter) {
     this.squareMeter = squareMeter;
     return this;
   }
@@ -142,7 +142,7 @@ public class RealEstateDTO {
     this.squareMeter = squareMeter;
   }
 
-    public RealEstateDTO numberOfRooms(Integer numberOfRooms) {
+  public RealEstateDTO numberOfRooms(Integer numberOfRooms) {
     this.numberOfRooms = numberOfRooms;
     return this;
   }
@@ -163,12 +163,12 @@ public class RealEstateDTO {
     this.numberOfRooms = numberOfRooms;
   }
 
-    public RealEstateDTO filePaths(List<String> filePaths) {
+  public RealEstateDTO filePaths(List<String> filePaths) {
     this.filePaths = filePaths;
     return this;
   }
 
-    public RealEstateDTO addFilePathsItem(String filePathsItem) {
+  public RealEstateDTO addFilePathsItem(String filePathsItem) {
     if (this.filePaths == null) {
       this.filePaths = new ArrayList<>();
     }
@@ -200,14 +200,14 @@ public class RealEstateDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-      RealEstateDTO realEstateDTO = (RealEstateDTO) o;
-      return Objects.equals(this.id, realEstateDTO.id) &&
-          Objects.equals(this.name, realEstateDTO.name) &&
-          Objects.equals(this.spectatorsCount, realEstateDTO.spectatorsCount) &&
-          Objects.equals(this.price, realEstateDTO.price) &&
-          Objects.equals(this.squareMeter, realEstateDTO.squareMeter) &&
-          Objects.equals(this.numberOfRooms, realEstateDTO.numberOfRooms) &&
-          Objects.equals(this.filePaths, realEstateDTO.filePaths);
+    RealEstateDTO realEstateDTO = (RealEstateDTO) o;
+    return Objects.equals(this.id, realEstateDTO.id) &&
+        Objects.equals(this.name, realEstateDTO.name) &&
+        Objects.equals(this.spectatorsCount, realEstateDTO.spectatorsCount) &&
+        Objects.equals(this.price, realEstateDTO.price) &&
+        Objects.equals(this.squareMeter, realEstateDTO.squareMeter) &&
+        Objects.equals(this.numberOfRooms, realEstateDTO.numberOfRooms) &&
+        Objects.equals(this.filePaths, realEstateDTO.filePaths);
   }
 
   @Override
@@ -235,7 +235,7 @@ public class RealEstateDTO {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  String toIndentedString(Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

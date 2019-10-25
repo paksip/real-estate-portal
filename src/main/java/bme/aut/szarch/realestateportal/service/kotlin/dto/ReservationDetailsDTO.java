@@ -11,28 +11,28 @@ import java.util.Objects;
 /**
  * ReservationDetails
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-14T16:48:21.594559600+02:00[Europe/Belgrade]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-25T13:28:08.197256200+02:00[Europe/Belgrade]")
 
 public class ReservationDetailsDTO {
   @JsonProperty("from")
-  OffsetDateTime from;
+  private OffsetDateTime from;
 
   @JsonProperty("to")
-  OffsetDateTime to;
+  private OffsetDateTime to;
 
   @JsonProperty("emailAddress")
-  String emailAddress;
+  private String emailAddress;
 
   @JsonProperty("phoneNumber")
-  String phoneNumber;
+  private String phoneNumber;
 
   @JsonProperty("message")
-  String message;
+  private String message;
 
   @JsonProperty("userName")
-  String userName;
+  private String userName;
 
-    public ReservationDetailsDTO from(OffsetDateTime from) {
+  public ReservationDetailsDTO from(OffsetDateTime from) {
     this.from = from;
     return this;
   }
@@ -54,7 +54,7 @@ public class ReservationDetailsDTO {
     this.from = from;
   }
 
-    public ReservationDetailsDTO to(OffsetDateTime to) {
+  public ReservationDetailsDTO to(OffsetDateTime to) {
     this.to = to;
     return this;
   }
@@ -76,7 +76,7 @@ public class ReservationDetailsDTO {
     this.to = to;
   }
 
-    public ReservationDetailsDTO emailAddress(String emailAddress) {
+  public ReservationDetailsDTO emailAddress(String emailAddress) {
     this.emailAddress = emailAddress;
     return this;
   }
@@ -97,7 +97,7 @@ public class ReservationDetailsDTO {
     this.emailAddress = emailAddress;
   }
 
-    public ReservationDetailsDTO phoneNumber(String phoneNumber) {
+  public ReservationDetailsDTO phoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
     return this;
   }
@@ -118,7 +118,7 @@ public class ReservationDetailsDTO {
     this.phoneNumber = phoneNumber;
   }
 
-    public ReservationDetailsDTO message(String message) {
+  public ReservationDetailsDTO message(String message) {
     this.message = message;
     return this;
   }
@@ -138,7 +138,7 @@ public class ReservationDetailsDTO {
     this.message = message;
   }
 
-    public ReservationDetailsDTO userName(String userName) {
+  public ReservationDetailsDTO userName(String userName) {
     this.userName = userName;
     return this;
   }
@@ -168,13 +168,13 @@ public class ReservationDetailsDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-      ReservationDetailsDTO reservationDetailsDTO = (ReservationDetailsDTO) o;
-      return Objects.equals(this.from, reservationDetailsDTO.from) &&
-          Objects.equals(this.to, reservationDetailsDTO.to) &&
-          Objects.equals(this.emailAddress, reservationDetailsDTO.emailAddress) &&
-          Objects.equals(this.phoneNumber, reservationDetailsDTO.phoneNumber) &&
-          Objects.equals(this.message, reservationDetailsDTO.message) &&
-          Objects.equals(this.userName, reservationDetailsDTO.userName);
+    ReservationDetailsDTO reservationDetailsDTO = (ReservationDetailsDTO) o;
+    return Objects.equals(this.from, reservationDetailsDTO.from) &&
+        Objects.equals(this.to, reservationDetailsDTO.to) &&
+        Objects.equals(this.emailAddress, reservationDetailsDTO.emailAddress) &&
+        Objects.equals(this.phoneNumber, reservationDetailsDTO.phoneNumber) &&
+        Objects.equals(this.message, reservationDetailsDTO.message) &&
+        Objects.equals(this.userName, reservationDetailsDTO.userName);
   }
 
   @Override

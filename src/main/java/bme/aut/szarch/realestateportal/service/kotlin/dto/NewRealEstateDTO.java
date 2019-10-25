@@ -1,7 +1,8 @@
 package bme.aut.szarch.realestateportal.service.kotlin.dto;
 
-import bme.aut.szarch.realestateportal.service.kotlin.dto.RealEstateDetailsDTO.CategoryEnum;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.Valid;
@@ -11,40 +12,77 @@ import java.util.Objects;
 /**
  * NewRealEstate
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-14T16:48:21.594559600+02:00[Europe/Belgrade]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-25T13:28:08.197256200+02:00[Europe/Belgrade]")
 
 public class NewRealEstateDTO {
   @JsonProperty("name")
-  String name;
+  private String name;
+
+  /**
+   * Gets or Sets category
+   */
+  public enum CategoryEnum {
+    FLAT("FLAT"),
+
+    PANEL("PANEL"),
+
+    COUNTRY_HOUSE("COUNTRY_HOUSE"),
+
+    LUXORY_HOUSE("LUXORY_HOUSE"),
+
+    DETACHED_HOUSE("DETACHED_HOUSE");
+
+    private String value;
+
+    CategoryEnum(String value) {
+      this.value = value;
+    }
+
+    @Override
+    @JsonValue
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static CategoryEnum fromValue(String value) {
+      for (CategoryEnum b : CategoryEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
 
   @JsonProperty("category")
-  CategoryEnum category;
+  private CategoryEnum category;
 
   @JsonProperty("location")
-  Location location;
+  private LocationDTO location;
 
   @JsonProperty("description")
-  String description;
+  private String description;
 
   @JsonProperty("squareMeter")
-  Integer squareMeter;
+  private Integer squareMeter;
 
   @JsonProperty("price")
-  Integer price;
+  private Integer price;
 
   @JsonProperty("numberOfRooms")
-  Integer numberOfRooms;
+  private Integer numberOfRooms;
 
   @JsonProperty("hasBalncony")
-  Boolean hasBalncony;
+  private Boolean hasBalncony;
 
   @JsonProperty("hasAirCondition")
-  Boolean hasAirCondition;
+  private Boolean hasAirCondition;
 
   @JsonProperty("ownerPhoneNumber")
-  String ownerPhoneNumber;
+  private String ownerPhoneNumber;
 
-    public NewRealEstateDTO name(String name) {
+  public NewRealEstateDTO name(String name) {
     this.name = name;
     return this;
   }
@@ -65,7 +103,7 @@ public class NewRealEstateDTO {
     this.name = name;
   }
 
-    public NewRealEstateDTO category(CategoryEnum category) {
+  public NewRealEstateDTO category(CategoryEnum category) {
     this.category = category;
     return this;
   }
@@ -86,8 +124,8 @@ public class NewRealEstateDTO {
     this.category = category;
   }
 
-    public NewRealEstateDTO location(Location location) {
-    this.location = location;
+  public NewRealEstateDTO location(LocationDTO locationDTO) {
+    this.location = locationDTO;
     return this;
   }
 
@@ -100,15 +138,15 @@ public class NewRealEstateDTO {
 
   @Valid
 
-  public Location getLocation() {
+  public LocationDTO getLocation() {
     return location;
   }
 
-  public void setLocation(Location location) {
-    this.location = location;
+  public void setLocation(LocationDTO locationDTO) {
+    this.location = locationDTO;
   }
 
-    public NewRealEstateDTO description(String description) {
+  public NewRealEstateDTO description(String description) {
     this.description = description;
     return this;
   }
@@ -129,7 +167,7 @@ public class NewRealEstateDTO {
     this.description = description;
   }
 
-    public NewRealEstateDTO squareMeter(Integer squareMeter) {
+  public NewRealEstateDTO squareMeter(Integer squareMeter) {
     this.squareMeter = squareMeter;
     return this;
   }
@@ -150,7 +188,7 @@ public class NewRealEstateDTO {
     this.squareMeter = squareMeter;
   }
 
-    public NewRealEstateDTO price(Integer price) {
+  public NewRealEstateDTO price(Integer price) {
     this.price = price;
     return this;
   }
@@ -171,7 +209,7 @@ public class NewRealEstateDTO {
     this.price = price;
   }
 
-    public NewRealEstateDTO numberOfRooms(Integer numberOfRooms) {
+  public NewRealEstateDTO numberOfRooms(Integer numberOfRooms) {
     this.numberOfRooms = numberOfRooms;
     return this;
   }
@@ -192,7 +230,7 @@ public class NewRealEstateDTO {
     this.numberOfRooms = numberOfRooms;
   }
 
-    public NewRealEstateDTO hasBalncony(Boolean hasBalncony) {
+  public NewRealEstateDTO hasBalncony(Boolean hasBalncony) {
     this.hasBalncony = hasBalncony;
     return this;
   }
@@ -213,7 +251,7 @@ public class NewRealEstateDTO {
     this.hasBalncony = hasBalncony;
   }
 
-    public NewRealEstateDTO hasAirCondition(Boolean hasAirCondition) {
+  public NewRealEstateDTO hasAirCondition(Boolean hasAirCondition) {
     this.hasAirCondition = hasAirCondition;
     return this;
   }
@@ -234,7 +272,7 @@ public class NewRealEstateDTO {
     this.hasAirCondition = hasAirCondition;
   }
 
-    public NewRealEstateDTO ownerPhoneNumber(String ownerPhoneNumber) {
+  public NewRealEstateDTO ownerPhoneNumber(String ownerPhoneNumber) {
     this.ownerPhoneNumber = ownerPhoneNumber;
     return this;
   }
@@ -264,17 +302,17 @@ public class NewRealEstateDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-      NewRealEstateDTO newRealEstateDTO = (NewRealEstateDTO) o;
-      return Objects.equals(this.name, newRealEstateDTO.name) &&
-          Objects.equals(this.category, newRealEstateDTO.category) &&
-          Objects.equals(this.location, newRealEstateDTO.location) &&
-          Objects.equals(this.description, newRealEstateDTO.description) &&
-          Objects.equals(this.squareMeter, newRealEstateDTO.squareMeter) &&
-          Objects.equals(this.price, newRealEstateDTO.price) &&
-          Objects.equals(this.numberOfRooms, newRealEstateDTO.numberOfRooms) &&
-          Objects.equals(this.hasBalncony, newRealEstateDTO.hasBalncony) &&
-          Objects.equals(this.hasAirCondition, newRealEstateDTO.hasAirCondition) &&
-          Objects.equals(this.ownerPhoneNumber, newRealEstateDTO.ownerPhoneNumber);
+    NewRealEstateDTO newRealEstateDTO = (NewRealEstateDTO) o;
+    return Objects.equals(this.name, newRealEstateDTO.name) &&
+        Objects.equals(this.category, newRealEstateDTO.category) &&
+        Objects.equals(this.location, newRealEstateDTO.location) &&
+        Objects.equals(this.description, newRealEstateDTO.description) &&
+        Objects.equals(this.squareMeter, newRealEstateDTO.squareMeter) &&
+        Objects.equals(this.price, newRealEstateDTO.price) &&
+        Objects.equals(this.numberOfRooms, newRealEstateDTO.numberOfRooms) &&
+        Objects.equals(this.hasBalncony, newRealEstateDTO.hasBalncony) &&
+        Objects.equals(this.hasAirCondition, newRealEstateDTO.hasAirCondition) &&
+        Objects.equals(this.ownerPhoneNumber, newRealEstateDTO.ownerPhoneNumber);
   }
 
   @Override

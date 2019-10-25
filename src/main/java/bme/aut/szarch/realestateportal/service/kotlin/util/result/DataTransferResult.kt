@@ -5,6 +5,7 @@ import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferRe
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import java.lang.RuntimeException
 
 sealed class DataTransferResult<out T : Any> {
     data class Success<out T : Any>(
@@ -17,7 +18,7 @@ sealed class DataTransferResult<out T : Any> {
 }
 
 
-fun <T : Any> DataTransferResult<T>.toResponseEntity(): ResponseEntity<Any> {
+fun <T : Any> DataTransferResult<T>.toResponseEntity(): ResponseEntity<T> {
     return when (this) {
         is Success -> {
             result?.let {
@@ -28,6 +29,6 @@ fun <T : Any> DataTransferResult<T>.toResponseEntity(): ResponseEntity<Any> {
             }
             ResponseEntity.status(successCode).build()
         }
-        is Error -> ResponseEntity.status(failureCode).body(message)
+        is Error -> throw RuntimeException("Error")
     }
 }

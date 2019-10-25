@@ -11,16 +11,16 @@ import java.util.Objects;
 /**
  * AvailableReservationTime
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-14T16:48:21.594559600+02:00[Europe/Belgrade]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-25T13:28:08.197256200+02:00[Europe/Belgrade]")
 
 public class AvailableReservationTimeDTO {
   @JsonProperty("from ")
-  OffsetDateTime from;
+  private OffsetDateTime from;
 
   @JsonProperty("to")
-  OffsetDateTime to;
+  private OffsetDateTime to;
 
-    public AvailableReservationTimeDTO from(OffsetDateTime from) {
+  public AvailableReservationTimeDTO from(OffsetDateTime from) {
     this.from = from;
     return this;
   }
@@ -42,7 +42,7 @@ public class AvailableReservationTimeDTO {
     this.from = from;
   }
 
-    public AvailableReservationTimeDTO to(OffsetDateTime to) {
+  public AvailableReservationTimeDTO to(OffsetDateTime to) {
     this.to = to;
     return this;
   }
@@ -73,9 +73,9 @@ public class AvailableReservationTimeDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-      AvailableReservationTimeDTO availableReservationTimeDTO = (AvailableReservationTimeDTO) o;
-      return Objects.equals(this.from, availableReservationTimeDTO.from) &&
-          Objects.equals(this.to, availableReservationTimeDTO.to);
+    AvailableReservationTimeDTO availableReservationTime = (AvailableReservationTimeDTO) o;
+    return Objects.equals(this.from, availableReservationTime.from) &&
+        Objects.equals(this.to, availableReservationTime.to);
   }
 
   @Override

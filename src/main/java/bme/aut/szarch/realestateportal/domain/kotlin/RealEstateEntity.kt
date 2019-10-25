@@ -1,7 +1,7 @@
 package bme.aut.szarch.realestateportal.domain.kotlin
 
 import bme.aut.szarch.realestateportal.domain.User
-import bme.aut.szarch.realestateportal.service.kotlin.dto.RealEstateDetailsDTO.CategoryEnum
+import bme.aut.szarch.realestateportal.service.kotlin.dto.NewRealEstateDTO.CategoryEnum
 import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.CascadeType
 import javax.persistence.*
