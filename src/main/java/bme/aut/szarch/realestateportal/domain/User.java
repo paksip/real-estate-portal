@@ -1,6 +1,7 @@
 package bme.aut.szarch.realestateportal.domain;
 
 import bme.aut.szarch.realestateportal.config.Constants;
+import bme.aut.szarch.realestateportal.domain.kotlin.RealEstateEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Cache;

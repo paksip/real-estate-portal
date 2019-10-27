@@ -32,6 +32,16 @@ paths:
             pattern: "(\\w+?)(:|<|>)(\\w+?),"
           in: query
           name: search
+        - schema:
+            type: integer
+          in: query
+          name: page
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: offset
+          required: true
       operationId: getAllRealEstates
     post:
       summary: Create new real-estate
@@ -61,6 +71,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RealEstateDetails'
+        '404':
+          description: Not Found
         '500':
           description: Internal Server Error
       description: Get the details of a real-estate
@@ -113,6 +125,8 @@ paths:
       responses:
         '200':
           description: OK
+        '403':
+          description: Forbidden
         '500':
           description: Internal Server Error
       description: Update an old reservation
@@ -120,7 +134,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReservationDetails'
+              $ref: '#/components/schemas/availableReservationTime'
       tags:
         - RESERVATION
       operationId: updateReservation
@@ -129,6 +143,8 @@ paths:
       responses:
         '200':
           description: OK
+        '403':
+          description: Forbidden
         '500':
           description: Internal Server Error
       description: Deleten en existing reservation
@@ -144,12 +160,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReservationDetails'
+        '404':
+          description: Not Found
         '500':
           description: Internal Server Error
       description: Get reservation details
       tags:
         - RESERVATION
       operationId: getReservationDetails
+    patch:
+      summary: Make a new reservation
+      responses:
+        '200':
+          description: OK
+      description: A customer create a new reservation.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewReservation'
+      operationId: newReservation
+      tags:
+        - REAL-ESTATE
   '/realestates/{realEstateId}/reservations':
     post:
       summary: Create a new reservation
@@ -165,7 +197,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ReservationDetails'
+              $ref: '#/components/schemas/availableReservationTime'
       operationId: createNewReservation
     parameters:
       - schema:
@@ -184,12 +216,91 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Reservation'
+        '404':
+          description: Not Found
         '500':
           description: Internal Server Error
       description: Get all reservation
       tags:
         - RESERVATION
       operationId: getAllReservation
+  '/realestates/{realEstateId}/files':
+    parameters:
+      - schema:
+          type: integer
+        name: realEstateId
+        in: path
+        required: true
+    post:
+      summary: Upload files
+      tags:
+        - REAL-ESTATE
+      responses:
+        '201':
+          description: Created
+        '500':
+          description: Internal Server Error
+      operationId: uploadFiles
+      description: Upload files
+  /realestates/ownrealestates:
+    get:
+      summary: "Get the user's real-estates"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RealEstate'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: getRealEstatesByUserId
+      description: "Get user's real-estates"
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: page
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: offset
+          required: true
+      tags:
+        - REAL-ESTATE
+  /realestates/files/{fileName}:
+    parameters:
+      - schema:
+          type: integer
+        name: realEstateId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: fileName
+        in: path
+        required: true
+    get:
+      summary: Get a file
+      tags:
+        - REAL-ESTATE
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        '500':
+          description: Internal Server Error
+      operationId: getFile
+      description: Get a File
 components:
   schemas:
     NewRealEstate:
@@ -198,10 +309,6 @@ components:
       properties:
         name:
           type: string
-        availableReservationTimes:
-          type: array
-          items:
-            $ref: '#/components/schemas/availableReservationTime'
         category:
           type: string
           enum:
@@ -231,7 +338,6 @@ components:
           type: string
       required:
         - name
-        - availableReservationTimes
         - category
         - location
         - description
@@ -346,10 +452,6 @@ components:
         spectatorsCount:
           type: integer
           format: int64
-        availableReservationTimes:
-          type: array
-          items:
-            $ref: '#/components/schemas/availableReservationTime'
         squareMeter:
           type: integer
           format: int32
@@ -373,13 +475,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Reservation'
+        userId:
+          type: integer
+          format: int64
       required:
         - name
         - description
         - location
         - category
         - spectatorsCount
-        - availableReservationTimes
         - squareMeter
         - price
         - numberOfRooms
@@ -388,6 +492,7 @@ components:
         - ownerPhoneNumber
         - filePaths
         - reservations
+        - userId
     Reservation:
       title: Reservation
       type: object
@@ -403,7 +508,29 @@ components:
           type: string
           format: date-time
           description: The end of the reservation interval.
+        isFree:
+          type: boolean
       required:
         - id
         - from
         - to
+        - isFree
+    NewReservation:
+      title: NewReservation
+      type: object
+      x-tags:
+        - RESERVATION
+      properties:
+        email:
+          type: string
+          format: email
+        phoneNumber:
+          type: string
+        message:
+          type: string
+        userName:
+          type: string
+      required:
+        - email
+        - phoneNumber
+        - userName
