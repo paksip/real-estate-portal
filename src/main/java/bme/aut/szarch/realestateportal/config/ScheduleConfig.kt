@@ -22,21 +22,25 @@ open class ScheduleConfig(
         const val WEEK_IN_MILLISEC: Long = 604_800_000
     }
 
-    //TODO test it. optimize
     @Scheduled(fixedDelay = WEEK_IN_MILLISEC)
     fun sendSpectatorsCountToUsers() {
         userService.getAllManagedUsers(PageRequest.of(0, 100)).content
             .forEach { user ->
-                realEstateRepository.findByUserId(user.id, PageRequest.of(0, 100)).content
+                val contentStringBuilder = StringBuilder()
+
+                realEstateRepository
+                    .findByUserId(user.id, PageRequest.of(0, 100)).content
                     .forEach {
-                        mailService.sendEmail(
-                            user.email,
-                            "SpectatorsCount",
-                            "Real-estates: ${it.name} SpectatorsCount: ${it.spectatorsCount}",
-                            false,
-                            false
-                        )
+                        contentStringBuilder.append("Real-estates: ${it.name} SpectatorsCount: ${it.spectatorsCount} \n")
                     }
+                mailService.sendEmail(
+                    user.email,
+                    "SpectatorsCount",
+                    contentStringBuilder.toString(),
+                    false,
+                    false
+                )
+
             }
     }
 }
