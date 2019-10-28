@@ -1,16 +1,18 @@
 package bme.aut.szarch.realestateportal.web.rest.kotlin
 
+import bme.aut.szarch.realestateportal.domain.kotlin.RealEstateEntity
 import bme.aut.szarch.realestateportal.service.kotlin.dto.*
+import com.sipios.springsearch.anotation.SearchSpec
 import io.swagger.annotations.*
 import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
-import javax.validation.constraints.Pattern
 
 @RestController
 @Validated
@@ -45,7 +47,7 @@ interface RealEstateController {
     @ApiOperation(value = "Get real-estates", nickname = "getAllRealEstates", notes = "Get all real-estates. There is possibilities for sort the result by the query params.", response = RealEstateDTO::class, responseContainer = "List", tags = ["REAL-ESTATE"])
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK", response = RealEstateDTO::class, responseContainer = "List"), ApiResponse(code = 500, message = "Internal Server Error")])
     @RequestMapping(value = ["/realestates"], produces = ["application/json"], method = [RequestMethod.GET])
-    fun getAllRealEstates(@NotNull @ApiParam(value = "", required = true) @Valid @RequestParam(value = "page", required = true) page: Int?, @NotNull @ApiParam(value = "", required = true) @Valid @RequestParam(value = "offset", required = true) offset: Int?, @Pattern(regexp = "(\\w+?)(:|<|>)(\\w+?),") @ApiParam(value = "") @Valid @RequestParam(value = "search", required = false) search: String?): ResponseEntity<Page<RealEstateDTO>>
+    fun getAllRealEstates(@NotNull @ApiParam(value = "", required = true) @Valid @RequestParam(value = "page", required = true) page: Int?, @NotNull @ApiParam(value = "", required = true) @Valid @RequestParam(value = "offset", required = true) offset: Int?, @SearchSpec specs: Specification<RealEstateEntity>): ResponseEntity<Page<RealEstateDTO>>
 
 
     @ApiOperation(value = "Get all reservation", nickname = "getAllReservation", notes = "Get all reservation", response = ReservationDTO::class, responseContainer = "List", tags = ["RESERVATION"])
@@ -87,7 +89,7 @@ interface RealEstateController {
     @ApiOperation(value = "Update realEstate", nickname = "updateRealEstate", notes = "Update an existing real-estate", tags = ["REAL-ESTATE"])
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK")])
     @RequestMapping(value = ["/{realEstateId}"], consumes = ["application/json"], method = [RequestMethod.PUT])
-    fun updateRealEstate(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long, @ApiParam(value = "") @Valid @RequestBody newRealEstate: NewRealEstateDTO): ResponseEntity<Void>
+    fun updateRealEstate(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long, @ApiParam(value = "") @Valid @RequestBody newRealEstate: NewRealEstateDTO): ResponseEntity<RealEstateDTO>
 
 
     @ApiOperation(value = "update a reservation", nickname = "updateReservation", notes = "Update an old reservation", tags = ["RESERVATION"])

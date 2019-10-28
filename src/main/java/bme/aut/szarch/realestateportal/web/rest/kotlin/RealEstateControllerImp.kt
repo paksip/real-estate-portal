@@ -1,8 +1,7 @@
 package bme.aut.szarch.realestateportal.web.rest.kotlin
 
-import bme.aut.szarch.realestateportal.repository.kotlin.realstatespecification.RealEstateSpecificationBuilder
-import bme.aut.szarch.realestateportal.repository.kotlin.realstatespecification.SearchOperation.getSimpleOperation
-import bme.aut.szarch.realestateportal.repository.kotlin.realstatespecification.SpecSearchCriteria
+
+import bme.aut.szarch.realestateportal.domain.kotlin.RealEstateEntity
 import bme.aut.szarch.realestateportal.service.kotlin.RealEstateService
 import bme.aut.szarch.realestateportal.service.kotlin.ReservationService
 import bme.aut.szarch.realestateportal.service.kotlin.StorageServiceImp
@@ -11,10 +10,10 @@ import bme.aut.szarch.realestateportal.service.kotlin.util.result.toResponseEnti
 import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
-import java.util.regex.Pattern
 
 @Component
 open class RealEstateControllerImp(
@@ -22,6 +21,10 @@ open class RealEstateControllerImp(
     private val reservationService: ReservationService,
     private val storageService: StorageServiceImp
 ) : RealEstateController {
+    override fun getAllRealEstates(page: Int?, offset: Int?, specs: Specification<RealEstateEntity>): ResponseEntity<Page<RealEstateDTO>> {
+        return realEstateService.getAllRealEstates(specs, PageRequest.of(page ?: 0, offset ?: 1)).toResponseEntity()
+    }
+
     override fun createNewRealEstate(newRealEstate: NewRealEstateDTO): ResponseEntity<Void> {
         return realEstateService.createNewRealEstate(newRealEstate).toResponseEntity()
     }
@@ -32,18 +35,6 @@ open class RealEstateControllerImp(
 
     override fun deleteRealEstate(realEstateId: Long): ResponseEntity<Void> {
         return realEstateService.deleteRealEstate(realEstateId).toResponseEntity()
-    }
-
-    override fun getAllRealEstates(page: Int?, offset: Int?, search: String?): ResponseEntity<Page<RealEstateDTO>> {
-        val builder = RealEstateSpecificationBuilder()
-        val pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),")
-        val matcher = pattern.matcher("$search,")
-        while (matcher.find()) {
-            val searchCriteria = SpecSearchCriteria(matcher.group(1), getSimpleOperation(matcher.group(2)[0]), matcher.group(3))
-            builder.with(searchCriteria)
-        }
-        return realEstateService.getAllRealEstates(builder.build(), PageRequest.of(page ?: 0, offset
-            ?: 1)).toResponseEntity()
     }
 
     override fun getRealEstatesByUserId(page: Int?, offset: Int?): ResponseEntity<Page<RealEstateDTO>> {
