@@ -1,7 +1,6 @@
 package bme.aut.szarch.realestateportal.service.kotlin
 
 import bme.aut.szarch.realestateportal.domain.kotlin.RealEstateEntity
-import bme.aut.szarch.realestateportal.repository.UserRepository
 import bme.aut.szarch.realestateportal.repository.kotlin.RealEstateRepository
 import bme.aut.szarch.realestateportal.service.MailService
 import bme.aut.szarch.realestateportal.service.UserService
@@ -15,7 +14,6 @@ import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferRe
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Error
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Success
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.http.HttpStatus
@@ -29,24 +27,20 @@ import org.springframework.transaction.annotation.Transactional
 open class RealEstateService(
     private val realEstateRepository: RealEstateRepository,
     private val userService: UserService,
-    private val storageService: StorageServiceImp,
-    private val mailService: MailService
+    private val storageService: StorageServiceImp
 ) {
 
-    companion object {
-        const val WEEK_IN_MILLISEC: Long = 604_800_000
-    }
-
-    //TODO incrementt spectators count
     @Transactional(readOnly = true)
     open fun getRealEstateById(realEstateId: Long): DataTransferResult<RealEstateDetailsDTO> {
         val fileNames = getFilenamesByRealEstateId(realEstateId)
 
-        realEstateRepository.findById(realEstateId).orNull()?.let { realEstateEntity ->
-            return Success(HttpStatus.OK, realEstateEntity.toRealEstateDetailsDTO(fileNames))
-        }
+        val realEstateEntity = realEstateRepository
+            .findById(realEstateId)
+            .orNull() ?: return Error(HttpStatus.NOT_FOUND, "Resource does not exists with id $realEstateId")
 
-        return Error(HttpStatus.NOT_FOUND, "Resource does not exists with id $realEstateId")
+        realEstateRepository.save(realEstateEntity.incrementSpectatorsCount())
+
+        return Success(HttpStatus.OK, realEstateEntity.toRealEstateDetailsDTO(fileNames))
     }
 
     @Transactional(readOnly = true)
@@ -123,25 +117,6 @@ open class RealEstateService(
 
     private fun getFilenamesByRealEstateId(realEstateId: Long): List<String> =
         storageService.loadFiles(realEstateId)
-
-
-    //TODO test it. optimize
-    @Scheduled(fixedDelay = WEEK_IN_MILLISEC)
-    fun sendSpectatorsCountToUsers() {
-        userService.getAllManagedUsers(PageRequest.of(0, 100)).content
-            .forEach { user ->
-                realEstateRepository.findByUserId(user.id, PageRequest.of(0, 100)).content
-                    .forEach {
-                        mailService.sendEmail(
-                            user.email,
-                            "SpectatorsCount",
-                            "Real-estates: ${it.name} SpectatorsCount: ${it.spectatorsCount}",
-                            false,
-                            false
-                        )
-                    }
-            }
-    }
 }
 
 

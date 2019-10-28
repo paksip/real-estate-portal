@@ -40,6 +40,10 @@ fun RealEstateEntity.toRealEstateDetailsDTO(filPaths: List<String>): RealEstateD
     }
 }
 
+fun RealEstateEntity.incrementSpectatorsCount(): RealEstateEntity {
+    return this.copy(spectatorsCount = this.spectatorsCount + 1)
+}
+
 fun RealEstateEntity.toUpdatedRealEstateEntity(newRealEstateDTO: NewRealEstateDTO): RealEstateEntity {
     return this.copy(
         name = newRealEstateDTO.name,
