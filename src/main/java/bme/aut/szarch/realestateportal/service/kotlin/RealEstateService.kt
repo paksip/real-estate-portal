@@ -128,7 +128,7 @@ open class RealEstateService(
 
     //TODO test it. optimize
     @Scheduled(fixedDelay = WEEK_IN_MILLISEC)
-    private fun sendSpectatorsCountToUsers() {
+    fun sendSpectatorsCountToUsers() {
         userService.getAllManagedUsers(PageRequest.of(0, 100)).content
             .forEach { user ->
                 realEstateRepository.findByUserId(user.id, PageRequest.of(0, 100)).content

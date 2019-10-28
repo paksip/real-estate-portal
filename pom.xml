@@ -125,11 +125,6 @@
             <groupId>io.github.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>
         </dependency>
-        <dependency>
-            <groupId>hu.autsoft.spring</groupId>
-            <artifactId>exception-web</artifactId>
-            <version>${autsoft-exception-version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
