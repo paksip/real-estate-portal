@@ -29,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional
 open class RealEstateService(
     private val realEstateRepository: RealEstateRepository,
     private val userService: UserService,
-    private val userRepository: UserRepository,
     private val storageService: StorageServiceImp,
     private val mailService: MailService
 ) {
@@ -128,7 +127,7 @@ open class RealEstateService(
 
     //TODO test it. optimize
     @Scheduled(fixedDelay = WEEK_IN_MILLISEC)
-    private fun sendSpectatorsCountToUsers() {
+    fun sendSpectatorsCountToUsers() {
         userService.getAllManagedUsers(PageRequest.of(0, 100)).content
             .forEach { user ->
                 realEstateRepository.findByUserId(user.id, PageRequest.of(0, 100)).content
