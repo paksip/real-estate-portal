@@ -3,7 +3,6 @@ package bme.aut.szarch.realestateportal.config
 import bme.aut.szarch.realestateportal.repository.kotlin.RealEstateRepository
 import bme.aut.szarch.realestateportal.service.MailService
 import bme.aut.szarch.realestateportal.service.UserService
-import bme.aut.szarch.realestateportal.service.kotlin.StorageServiceImp
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.domain.PageRequest
 import org.springframework.scheduling.annotation.EnableScheduling
@@ -19,7 +18,7 @@ open class ScheduleConfig(
 ) {
 
     companion object {
-        const val WEEK_IN_MILLISEC: Long = 604_800_000
+        const val WEEK_IN_MILLISEC: Long = 604800000
     }
 
     @Scheduled(fixedDelay = WEEK_IN_MILLISEC)
@@ -27,7 +26,6 @@ open class ScheduleConfig(
         userService.getAllManagedUsers(PageRequest.of(0, 100)).content
             .forEach { user ->
                 val contentStringBuilder = StringBuilder()
-
                 realEstateRepository
                     .findByUserId(user.id, PageRequest.of(0, 100)).content
                     .forEach {

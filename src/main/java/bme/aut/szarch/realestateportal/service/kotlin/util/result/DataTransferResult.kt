@@ -1,20 +1,28 @@
 package bme.aut.szarch.realestateportal.service.kotlin.util.result
 
+import bme.aut.szarch.realestateportal.service.UserService
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Error
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Success
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import java.lang.RuntimeException
+import org.springframework.stereotype.Component
 
+
+@Component
 sealed class DataTransferResult<out T : Any> {
+    @Autowired
+    lateinit var userService: UserService
+
+
     data class Success<out T : Any>(
         val successCode: HttpStatus,
         val result: T? = null,
         val headers: HttpHeaders? = null
     ) : DataTransferResult<T>()
 
-    data class Error(val failureCode: HttpStatus, val message: String) : DataTransferResult<Nothing>()
+    data class Error(val failureCode: HttpStatus? = null, val message: String? = null) : DataTransferResult<Nothing>()
 }
 
 
@@ -30,6 +38,11 @@ fun <T : Any> DataTransferResult<T>.toResponseEntity(): ResponseEntity<T> {
             ResponseEntity.status(successCode).build()
         }
         //TODO Replace with Autsoft exception
-        is Error -> throw RuntimeException("Error")
+        is Error -> throw RuntimeException(message)
     }
 }
+
+
+
+
+
