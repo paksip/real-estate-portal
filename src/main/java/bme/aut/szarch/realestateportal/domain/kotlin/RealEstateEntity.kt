@@ -1,6 +1,5 @@
 package bme.aut.szarch.realestateportal.domain.kotlin
 
-import bme.aut.szarch.realestateportal.domain.User
 import bme.aut.szarch.realestateportal.service.kotlin.dto.NewRealEstateDTO.CategoryEnum
 import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.CascadeType
@@ -11,11 +10,8 @@ import javax.validation.constraints.Pattern
 
 @Entity
 @Table(schema = "realestateportal", name = "realestate")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 data class RealEstateEntity(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
-
     @NotNull
     @NotEmpty
     val name: String,
@@ -47,9 +43,6 @@ data class RealEstateEntity(
 
     @OneToMany(mappedBy = "realEstate")
     @Cascade(CascadeType.DELETE)
-    val reservations: List<ReservationEntity>,
+    val reservations: List<ReservationEntity>
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    val user: User
-)
+) : AbstractUserRelatedEntity()

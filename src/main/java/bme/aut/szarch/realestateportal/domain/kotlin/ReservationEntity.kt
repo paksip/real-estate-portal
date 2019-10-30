@@ -9,10 +9,6 @@ import javax.validation.constraints.Pattern
 @Table(schema = "realestateportal", name = "realestate_reservation")
 data class ReservationEntity(
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
-
     @Column(name = "reservation_from")
     val from: OffsetDateTime,
 
@@ -34,4 +30,4 @@ data class ReservationEntity(
     val realEstate: RealEstateEntity,
 
     val isFree: Boolean = true
-)
+) : AbstractJpaPersistable()
