@@ -59,9 +59,8 @@ fun RealEstateEntity.toUpdatedRealEstateEntity(newRealEstateDTO: NewRealEstateDT
     )
 }
 
-
 fun NewRealEstateDTO.toRealEstateEntity(user: User): RealEstateEntity {
-    return RealEstateEntity(
+    val realEstateEntity = RealEstateEntity(
         name = this.name,
         description = this.description,
         location = this.location.toLocationEntity(),
@@ -72,9 +71,10 @@ fun NewRealEstateDTO.toRealEstateEntity(user: User): RealEstateEntity {
         hasBalcony = this.hasBalncony,
         hasAircondition = this.hasAirCondition,
         ownerPhoneNumber = this.ownerPhoneNumber,
-        reservations = emptyList(),
-        user = user
+        reservations = emptyList()
     )
+    realEstateEntity.user = user
+    return realEstateEntity
 }
 //endregion
 

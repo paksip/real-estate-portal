@@ -1,7 +1,8 @@
 package bme.aut.szarch.realestateportal.service.kotlin
 
 import bme.aut.szarch.realestateportal.service.kotlin.util.addIdentifier
-import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult
+import bme.aut.szarch.realestateportal.service.kotlin.util.operations.create.executeCreateOperation
+import bme.aut.szarch.realestateportal.service.kotlin.util.operations.create.executeRead
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult.*
 import org.slf4j.LoggerFactory
@@ -17,28 +18,18 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.streams.asSequence
-import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Error as DataTransferError
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Success as DataTransferSuccess
 
 
 @Service
 @Transactional
 open class StorageServiceImp : StorageService {
-
-
     val log = LoggerFactory.getLogger(this::class.java)
     private val rootLocation = Paths.get("filestorage")
 
-    override fun uploadFiles(realEstateId: Long, file: MultipartFile): DataTransferResult<Void> {
-        return try {
-            Files.copy(file.inputStream, rootLocation.resolve(file.originalFilename!!.addIdentifier(realEstateId.toString())))
-            DataTransferSuccess(HttpStatus.CREATED)
-        } catch (e: Throwable) {
-            DataTransferError(HttpStatus.INTERNAL_SERVER_ERROR, "Occurred an issue during deleting")
-        } catch (e: KotlinNullPointerException) {
-            DataTransferError(HttpStatus.BAD_REQUEST, "The File must exists")
-        }
-    }
+    override fun uploadFiles(realEstateId: Long, file: MultipartFile) = executeCreateOperation(
+        operationCall = { Files.copy(file.inputStream, rootLocation.resolve(file.originalFilename!!.addIdentifier(realEstateId.toString()))) }
+    )
 
     override fun deleteAll(): StorageMethodResult<Void> {
         return if (FileSystemUtils.deleteRecursively(rootLocation.toFile())) {
@@ -74,21 +65,18 @@ open class StorageServiceImp : StorageService {
         }
     }
 
-    override fun loadFile(filename: String): DataTransferResult<Resource> {
-        return try {
+    override fun loadFile(filename: String) = executeRead(
+        getTargetEntity = {
             val file = rootLocation.resolve(filename)
-            val resource = UrlResource(file.toUri()) as Resource
-
-            return if (resource.exists() || resource.isReadable) {
-                val headers = HttpHeaders()
-                headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.filename + "\"")
-                DataTransferSuccess(HttpStatus.OK, resource, headers)
-            } else {
-                DataTransferError(HttpStatus.NOT_FOUND, "File does not exist. Related resource name is : $filename")
-            }
-        } catch (e: Exception) {
-            DataTransferError(HttpStatus.INTERNAL_SERVER_ERROR, "Occurred an issue during loading files. Related resource name : $filename . Exception message: ${e.message}")
+            UrlResource(file.toUri()) as Resource
+        },
+        validationCall = { resource -> check(resource.exists() || resource.isReadable) { "Does not exist any resource with name :$filename" } },
+        mappingCall = { resource -> resource },
+        onSuccess = { resource ->
+            val headers = HttpHeaders()
+            headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.filename + "\"")
+            DataTransferSuccess(HttpStatus.OK, resource, headers)
         }
-    }
+    )
 }
 

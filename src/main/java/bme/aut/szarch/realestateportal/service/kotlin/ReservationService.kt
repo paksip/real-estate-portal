@@ -5,12 +5,9 @@ import bme.aut.szarch.realestateportal.repository.kotlin.ReservationRepository
 import bme.aut.szarch.realestateportal.service.UserService
 import bme.aut.szarch.realestateportal.service.kotlin.dto.AvailableReservationTimeDTO
 import bme.aut.szarch.realestateportal.service.kotlin.dto.NewReservationDTO
-import bme.aut.szarch.realestateportal.service.kotlin.dto.ReservationDTO
-import bme.aut.szarch.realestateportal.service.kotlin.dto.ReservationDetailsDTO
 import bme.aut.szarch.realestateportal.service.kotlin.extensions.orNull
 import bme.aut.szarch.realestateportal.service.kotlin.mapper.*
-import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult
-import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Error
+import bme.aut.szarch.realestateportal.service.kotlin.util.operations.create.*
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Success
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -24,127 +21,46 @@ open class ReservationService(
     private val reservationRepository: ReservationRepository,
     private val userService: UserService
 ) {
+    fun createNewAvailableReservationTime(realEstateId: Long, availableReservationTimeDTO: AvailableReservationTimeDTO) = executeCreateWithAutParent(
+        getUserCall = { userService.userWithAuthorities.orNull() },
+        getParentEntityCall = { realEstateRepository.findById(realEstateId).orNull() },
+        operationCall = { realEstate -> reservationRepository.save(availableReservationTimeDTO.toFreeReservationEntity(realEstate)) }
+    )
 
+    fun deleteReservation(realEstateId: Long, reservationId: Long) = executeUpdateOrDeleteWithAuthParent(
+        getUserCall = { userService.userWithAuthorities.orNull() },
+        getUserRelatedParentEntityCalls = listOf { realEstateRepository.findById(realEstateId).orNull() },
+        getTargetEntityCall = { reservationRepository.findByIdAndRealEstateId(reservationId, realEstateId) },
+        operationCall = { reservation -> reservationRepository.delete(reservation) },
+        validationCall = { reservation -> check(reservation.isFree) { "The reservation is not free!" } }
+    )
 
-    fun createNewAvailableReservationTime(realEstateId: Long, availableReservationTimeDTO: AvailableReservationTimeDTO): DataTransferResult<Void> {
-        val realEstate = realEstateRepository
-            .findById(realEstateId)
-            .orNull() ?: return Error(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $realEstateId")
+    fun getAllReservation(realEstateId: Long) = executeRead(
+        getTargetEntity = { reservationRepository.findByRealEstateId(realEstateId) },
+        mappingCall = { realEstates -> realEstates.map { it.toReservationDTO() } },
+        onSuccess = { realEstatesDTO -> Success(HttpStatus.OK, realEstatesDTO) }
+    )
 
-        val user = userService
-            .userWithAuthorities
-            .orNull() ?: return Error(HttpStatus.UNAUTHORIZED, "User not Authenticated")
+    fun getReservationDetails(realEstateId: Long, reservationId: Long) = executeReadWithAuthParent(
+        getUserCall = { userService.userWithAuthorities.orNull() },
+        getUserRelatedParentEntityCalls = listOf { realEstateRepository.findById(realEstateId).orNull() },
+        getTargetEntity = { reservationRepository.findByIdAndRealEstateId(reservationId, realEstateId) },
+        validationCall = { reservation -> check(reservation.isFree.not()) { "The reservation is free! Thus that does not contain any Details" } },
+        mappingCall = { reservation -> reservation.toReservationDetailsDTO() },
+        onSuccess = { reservationDTO -> Success(HttpStatus.OK, reservationDTO) }
+    )
 
-        if (user.id != realEstate.user.id) {
-            return Error(HttpStatus.UNAUTHORIZED, "User not Authorized")
-        }
+    fun makeNewReservation(realEstateId: Long, reservationId: Long, newReservationDTO: NewReservationDTO) = executeUpdateOrDelete(
+        databaseGetCall = { reservationRepository.findByIdAndRealEstateId(reservationId, realEstateId) },
+        validationCall = { reservation -> check(reservation.isFree) { "The reservation is not free!" } },
+        operationCall = { reservation -> reservationRepository.save(reservation.toReservedReservationEntity(newReservationDTO)) }
+    )
 
-        reservationRepository.save(availableReservationTimeDTO.toFreeReservationEntity(realEstate))
-        return Success(HttpStatus.CREATED)
-    }
-
-
-    fun deleteReservation(realEstateId: Long, reservationId: Long): DataTransferResult<Void> {
-        val realEstate = realEstateRepository
-            .findById(realEstateId)
-            .orNull() ?: return Error(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $realEstateId")
-
-        val reservation = reservationRepository
-            .findByIdAndRealEstateId(reservationId, realEstateId)
-            ?: return Error(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $reservationId")
-
-        val user = userService
-            .userWithAuthorities
-            .orNull() ?: return Error(HttpStatus.UNAUTHORIZED, "User not Authenticated")
-
-        if (user.id != realEstate.user.id) {
-            return Error(HttpStatus.UNAUTHORIZED, "User not Authorized")
-        }
-
-        reservationRepository.delete(reservation)
-        return Success(HttpStatus.OK)
-    }
-
-    fun getAllReservation(realEstateId: Long): DataTransferResult<List<ReservationDTO>> {
-        val user = userService
-            .userWithAuthorities
-            .orNull()
-
-        val realEstate = realEstateRepository
-            .findById(realEstateId)
-            .orNull() ?: return Error(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $realEstateId")
-
-        //TODO findByRealEstateId megnézni h ez müködik!
-        val reservations = reservationRepository
-            .findByRealEstateId(realEstateId).filter { it.isFree }
-
-
-        if (user != null && user.id == realEstate.user.id) {
-            return Success(HttpStatus.OK, reservations.map { it.toReservationDTO() })
-        }
-
-        return Success(HttpStatus.OK, reservations.filter { it.isFree }.map { it.toReservationDTO() })
-    }
-
-    fun getReservationDetails(realEstateId: Long, reservationId: Long): DataTransferResult<ReservationDetailsDTO> {
-        val user = userService
-            .userWithAuthorities
-            .orNull() ?: return Error(HttpStatus.UNAUTHORIZED, "User not Authenticated")
-
-        val realEstate = realEstateRepository
-            .findById(realEstateId)
-            .orNull() ?: return Error(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $realEstateId")
-
-        val reservation = reservationRepository
-            .findByIdAndRealEstateId(reservationId, realEstateId)
-            ?: return Error(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $reservationId")
-
-        if (user.id != realEstate.user.id) {
-            return Error(HttpStatus.UNAUTHORIZED, "User not Authorized")
-        }
-
-        if (reservation.isFree) {
-            return Error(HttpStatus.BAD_REQUEST, "The reservation is free! Thus that does not contain any Details")
-        }
-
-        return Success(HttpStatus.OK, reservation.toReservationDetailsDTO())
-    }
-
-    fun makeNewReservation(realEstateId: Long, reservationId: Long, newReservationDTO: NewReservationDTO): DataTransferResult<Void> {
-        val reservation = reservationRepository
-            .findByIdAndRealEstateId(reservationId, realEstateId)
-            ?: return Error(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $reservationId")
-
-        if (!reservation.isFree) {
-            return Error(HttpStatus.BAD_REQUEST, "The reservation time is not free!")
-        }
-
-        reservationRepository.save(reservation.toReservedReservationEntity(newReservationDTO))
-        return Success(HttpStatus.CREATED)
-    }
-
-    fun updateReservation(realEstateId: Long, reservationId: Long, availableReservationTimeDTO: AvailableReservationTimeDTO): DataTransferResult<Void> {
-        val realEstate = realEstateRepository
-            .findById(realEstateId)
-            .orNull() ?: return Error(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $realEstateId")
-
-        val reservation = reservationRepository
-            .findByIdAndRealEstateId(reservationId, realEstateId)
-            ?: return Error(HttpStatus.NOT_FOUND, "Does not exists any recourse with id : $reservationId")
-
-        val user = userService
-            .userWithAuthorities
-            .orNull() ?: return Error(HttpStatus.UNAUTHORIZED, "User not Authenticated")
-
-        if (user.id != realEstate.user.id) {
-            return Error(HttpStatus.UNAUTHORIZED, "User not Authorized")
-        }
-
-        if (!reservation.isFree) {
-            return Error(HttpStatus.BAD_REQUEST, "The reservation is not free!")
-        }
-
-        reservationRepository.save(reservation.toUpdatedFreeReservationEntity(availableReservationTimeDTO))
-        return Success(HttpStatus.CREATED)
-    }
+    fun updateReservation(realEstateId: Long, reservationId: Long, availableReservationTimeDTO: AvailableReservationTimeDTO) = executeUpdateOrDeleteWithAuthParent(
+        getUserCall = { userService.userWithAuthorities.orNull() },
+        getUserRelatedParentEntityCalls = listOf { realEstateRepository.findById(realEstateId).orNull() },
+        getTargetEntityCall = { reservationRepository.findByIdAndRealEstateId(reservationId, realEstateId) },
+        operationCall = { reservation -> reservationRepository.save(reservation.toUpdatedFreeReservationEntity(availableReservationTimeDTO)) },
+        validationCall = { reservation -> check(reservation.isFree) { "The reservation is not free!" } }
+    )
 }

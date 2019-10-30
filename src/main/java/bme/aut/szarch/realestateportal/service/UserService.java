@@ -9,7 +9,6 @@ import bme.aut.szarch.realestateportal.security.AuthoritiesConstants;
 import bme.aut.szarch.realestateportal.security.SecurityUtils;
 import bme.aut.szarch.realestateportal.service.dto.UserDTO;
 import bme.aut.szarch.realestateportal.service.util.RandomUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
