@@ -29,7 +29,7 @@ interface RealEstateController {
     @ApiOperation(value = "Create a new reservation", nickname = "createNewReservation", notes = "Create a new reservation", tags = ["RESERVATION"])
     @ApiResponses(value = [ApiResponse(code = 201, message = "Created"), ApiResponse(code = 500, message = "Internal Server Error")])
     @RequestMapping(value = ["/{realEstateId}/reservations"], consumes = ["application/json"], method = [RequestMethod.POST])
-    fun creatNewAvailableReservetionTime(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long, @ApiParam(value = "") @Valid @RequestBody availableReservationTime: AvailableReservationTimeDTO): ResponseEntity<Void>
+    fun creatNewAvailableReservationTime(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long, @ApiParam(value = "") @Valid @RequestBody availableReservationTime: AvailableReservationTimeDTO): ResponseEntity<Void>
 
 
     @ApiOperation(value = "Delete a real-estate", nickname = "deleteRealEstate", notes = "Delete a real-estate", tags = ["REAL-ESTATE"])
@@ -46,7 +46,7 @@ interface RealEstateController {
 
     @ApiOperation(value = "Get real-estates", nickname = "getAllRealEstates", notes = "Get all real-estates. There is possibilities for sort the result by the query params.", response = RealEstateDTO::class, responseContainer = "List", tags = ["REAL-ESTATE"])
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK", response = RealEstateDTO::class, responseContainer = "List"), ApiResponse(code = 500, message = "Internal Server Error")])
-    @RequestMapping(value = ["/realestates"], produces = ["application/json"], method = [RequestMethod.GET])
+    @RequestMapping(value = [""], produces = ["application/json"], method = [RequestMethod.GET])
     fun getAllRealEstates(@NotNull @ApiParam(value = "", required = true) @Valid @RequestParam(value = "page", required = true) page: Int?, @NotNull @ApiParam(value = "", required = true) @Valid @RequestParam(value = "offset", required = true) offset: Int?, @SearchSpec specs: Specification<RealEstateEntity>): ResponseEntity<Page<RealEstateDTO>>
 
 
@@ -89,7 +89,7 @@ interface RealEstateController {
     @ApiOperation(value = "Update realEstate", nickname = "updateRealEstate", notes = "Update an existing real-estate", tags = ["REAL-ESTATE"])
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK")])
     @RequestMapping(value = ["/{realEstateId}"], consumes = ["application/json"], method = [RequestMethod.PUT])
-    fun updateRealEstate(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long, @ApiParam(value = "") @Valid @RequestBody newRealEstate: NewRealEstateDTO): ResponseEntity<RealEstateDTO>
+    fun updateRealEstate(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long, @ApiParam(value = "") @Valid @RequestBody newRealEstate: NewRealEstateDTO): ResponseEntity<Void>
 
 
     @ApiOperation(value = "update a reservation", nickname = "updateReservation", notes = "Update an old reservation", tags = ["RESERVATION"])
@@ -102,5 +102,4 @@ interface RealEstateController {
     @ApiResponses(value = [ApiResponse(code = 201, message = "Created"), ApiResponse(code = 500, message = "Internal Server Error")])
     @RequestMapping(value = ["/{realEstateId}/files"], method = [RequestMethod.POST])
     fun uploadFiles(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long, file: MultipartFile): ResponseEntity<Void>
-
 }
