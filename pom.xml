@@ -14,9 +14,6 @@
             <id>artifactory</id>
             <name>artifactory-releases</name>
             <url>http://artifactory.autsoft.hu:8081/artifactory/libs-release-local</url>
-            <releases>
-                <updatePolicy>always</updatePolicy>
-            </releases>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -131,9 +128,8 @@
             <version>0.2.0</version>
         </dependency>
         <dependency>
-            <groupId>hu.autsoft.spring</groupId>
+            <groupId>hu.autsoft.mol.dashboard</groupId>
             <artifactId>exception-web</artifactId>
-            <version>${autsoft-exception-version}</version>
         </dependency>
 
         <dependency>

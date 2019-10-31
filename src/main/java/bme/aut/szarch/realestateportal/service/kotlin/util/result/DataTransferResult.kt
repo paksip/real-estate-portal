@@ -12,10 +12,6 @@ import org.springframework.stereotype.Component
 
 @Component
 sealed class DataTransferResult<out T : Any> {
-    @Autowired
-    lateinit var userService: UserService
-
-
     data class Success<out T : Any>(
         val successCode: HttpStatus,
         val result: T? = null,
