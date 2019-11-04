@@ -83,6 +83,8 @@ management:
 spring:
   application:
     name: realEstatePortal
+  resources:
+    add-mappings: false
   jmx:
     enabled: false
   data:
@@ -105,6 +107,7 @@ spring:
   mvc:
     favicon:
       enabled: false
+    throw-exception-if-no-handler-found: true
   task:
     execution:
       thread-name-prefix: real-estate-portal-task-

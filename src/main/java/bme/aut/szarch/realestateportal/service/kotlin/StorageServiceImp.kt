@@ -2,7 +2,7 @@ package bme.aut.szarch.realestateportal.service.kotlin
 
 import bme.aut.szarch.realestateportal.service.kotlin.util.addIdentifier
 import bme.aut.szarch.realestateportal.service.kotlin.util.operations.create.executeCreateOperation
-import bme.aut.szarch.realestateportal.service.kotlin.util.operations.create.executeRead
+import bme.aut.szarch.realestateportal.service.kotlin.util.operations.read.executeRead
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.StorageMethodResult.*
 import org.slf4j.LoggerFactory

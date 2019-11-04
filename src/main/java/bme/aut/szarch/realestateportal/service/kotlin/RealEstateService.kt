@@ -7,9 +7,9 @@ import bme.aut.szarch.realestateportal.service.kotlin.dto.NewRealEstateDTO
 import bme.aut.szarch.realestateportal.service.kotlin.extensions.orNull
 import bme.aut.szarch.realestateportal.service.kotlin.mapper.*
 import bme.aut.szarch.realestateportal.service.kotlin.util.operations.create.executeCreateWithParent
-import bme.aut.szarch.realestateportal.service.kotlin.util.operations.create.executeRead
-import bme.aut.szarch.realestateportal.service.kotlin.util.operations.create.executeReadListWithAuthorization
-import bme.aut.szarch.realestateportal.service.kotlin.util.operations.create.executeUpdateOrDeleteWithAuthorization
+import bme.aut.szarch.realestateportal.service.kotlin.util.operations.read.executeRead
+import bme.aut.szarch.realestateportal.service.kotlin.util.operations.read.executeReadListWithAuthorization
+import bme.aut.szarch.realestateportal.service.kotlin.util.operations.update.executeUpdateOrDeleteWithAuthorization
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Success
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 open class RealEstateService(
     private val realEstateRepository: RealEstateRepository,
-    private val userService: UserService,
+    private val userService: UserService?,
     private val storageService: StorageServiceImp
 ) {
     @Transactional(readOnly = true)
@@ -43,30 +43,29 @@ open class RealEstateService(
 
     @Transactional(readOnly = true)
     open fun getRealEstatesByUserId(pageable: Pageable) = executeReadListWithAuthorization(
-        getUserCall = { userService.userWithAuthorities.orNull() },
+        getUserCall = { userService?.userWithAuthorities?.orNull() },
         getEntityListCall = { userId -> realEstateRepository.findByUserId(userId, pageable) },
         mappingCall = { realEstates -> realEstates.map { it.toRealEstateDTO(getFilenamesByRealEstateId(it.id)) } },
         onSuccess = { realEstates -> Success(HttpStatus.OK, realEstates) }
     )
 
     fun createNewRealEstate(newRealEstateDTO: NewRealEstateDTO) = executeCreateWithParent(
-        getParentEntityCall = { userService.userWithAuthorities.orNull() },
+        getParentEntityCall = { userService?.userWithAuthorities?.orNull() },
         operationCall = { user -> realEstateRepository.save(newRealEstateDTO.toRealEstateEntity(user)) }
     )
 
     fun updateRealEstate(realEstateId: Long, newRealEstateDTO: NewRealEstateDTO) = executeUpdateOrDeleteWithAuthorization(
-        getUserCall = { userService.userWithAuthorities.orNull() },
+        getUserCall = { userService?.userWithAuthorities?.orNull() },
         getEntityCall = { realEstateRepository.findById(realEstateId).orNull() },
         operationCall = { realEstate -> realEstateRepository.save(realEstate.toUpdatedRealEstateEntity(newRealEstateDTO)) }
     )
 
 
     fun deleteRealEstate(realEstateId: Long) = executeUpdateOrDeleteWithAuthorization(
-        getUserCall = { userService.userWithAuthorities.orNull() },
+        getUserCall = { userService?.userWithAuthorities?.orNull() },
         getEntityCall = { realEstateRepository.findById(realEstateId).orNull() },
         operationCall = { realEstate -> realEstateRepository.delete(realEstate) }
     )
-
 
     private fun getFilenamesByRealEstateId(realEstateId: Long): List<String> =
         storageService.loadFiles(realEstateId)

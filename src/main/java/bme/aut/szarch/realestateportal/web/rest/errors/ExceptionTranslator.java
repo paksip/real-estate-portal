@@ -1,7 +1,6 @@
 package bme.aut.szarch.realestateportal.web.rest.errors;
 
 import io.github.jhipster.web.util.HeaderUtil;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,7 @@ import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.Status;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 import org.zalando.problem.spring.web.advice.security.SecurityAdviceTrait;
-import org.zalando.problem.violations.ConstraintViolationProblem;
+import org.zalando.problem.spring.web.advice.validation.ConstraintViolationProblem;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -100,22 +99,24 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
             .build();
         return create(ex, problem, request);
     }
+
     @ExceptionHandler
     public ResponseEntity<Problem> handleEmailAreadyUsedException(bme.aut.szarch.realestateportal.service.EmailAlreadyUsedException ex, NativeWebRequest request) {
         EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
-        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+        return create(problem, request, HeaderUtil.createFailureAlert(applicationName, true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }
 
     @ExceptionHandler
     public ResponseEntity<Problem> handleUsernameAreadyUsedException(bme.aut.szarch.realestateportal.service.UsernameAlreadyUsedException ex, NativeWebRequest request) {
         LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
-        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+        return create(problem, request, HeaderUtil.createFailureAlert(applicationName, true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }
 
     @ExceptionHandler
     public ResponseEntity<Problem> handleInvalidPasswordException(bme.aut.szarch.realestateportal.service.InvalidPasswordException ex, NativeWebRequest request) {
         return create(new InvalidPasswordException(), request);
     }
+
     @ExceptionHandler
     public ResponseEntity<Problem> handleBadRequestAlertException(BadRequestAlertException ex, NativeWebRequest request) {
         return create(ex, request, HeaderUtil.createFailureAlert(applicationName, true, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
@@ -126,6 +127,16 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
         Problem problem = Problem.builder()
             .withStatus(Status.CONFLICT)
             .with(MESSAGE_KEY, ErrorConstants.ERR_CONCURRENCY_FAILURE)
+            .build();
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleValidationFailure(IllegalStateException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+            .withStatus(Status.BAD_REQUEST)
+            .with(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION)
+            .withDetail(ex.getMessage())
             .build();
         return create(ex, problem, request);
     }

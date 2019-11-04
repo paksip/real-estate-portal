@@ -7,7 +7,11 @@ import bme.aut.szarch.realestateportal.service.kotlin.dto.AvailableReservationTi
 import bme.aut.szarch.realestateportal.service.kotlin.dto.NewReservationDTO
 import bme.aut.szarch.realestateportal.service.kotlin.extensions.orNull
 import bme.aut.szarch.realestateportal.service.kotlin.mapper.*
-import bme.aut.szarch.realestateportal.service.kotlin.util.operations.create.*
+import bme.aut.szarch.realestateportal.service.kotlin.util.operations.create.executeCreateWithAutParent
+import bme.aut.szarch.realestateportal.service.kotlin.util.operations.read.executeRead
+import bme.aut.szarch.realestateportal.service.kotlin.util.operations.read.executeReadWithAuthParent
+import bme.aut.szarch.realestateportal.service.kotlin.util.operations.update.executeUpdateOrDelete
+import bme.aut.szarch.realestateportal.service.kotlin.util.operations.update.executeUpdateOrDeleteWithAuthParent
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Success
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -21,7 +25,10 @@ open class ReservationService(
     private val reservationRepository: ReservationRepository,
     private val userService: UserService
 ) {
-    fun createNewAvailableReservationTime(realEstateId: Long, availableReservationTimeDTO: AvailableReservationTimeDTO) = executeCreateWithAutParent(
+    fun createNewAvailableReservationTime(
+        realEstateId: Long,
+        availableReservationTimeDTO: AvailableReservationTimeDTO
+    ) = executeCreateWithAutParent(
         getUserCall = { userService.userWithAuthorities.orNull() },
         getParentEntityCall = { realEstateRepository.findById(realEstateId).orNull() },
         operationCall = { realEstate -> reservationRepository.save(availableReservationTimeDTO.toFreeReservationEntity(realEstate)) }
@@ -60,7 +67,7 @@ open class ReservationService(
         getUserCall = { userService.userWithAuthorities.orNull() },
         getUserRelatedParentEntityCalls = listOf { realEstateRepository.findById(realEstateId).orNull() },
         getTargetEntityCall = { reservationRepository.findByIdAndRealEstateId(reservationId, realEstateId) },
-        operationCall = { reservation -> reservationRepository.save(reservation.toUpdatedFreeReservationEntity(availableReservationTimeDTO)) },
+        operationCall = { reservationRepository.save(it.toUpdatedFreeReservationEntity(availableReservationTimeDTO)) },
         validationCall = { reservation -> check(reservation.isFree) { "The reservation is not free!" } }
     )
 }

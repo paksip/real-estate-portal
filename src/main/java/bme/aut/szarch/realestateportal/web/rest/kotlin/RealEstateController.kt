@@ -1,6 +1,7 @@
 package bme.aut.szarch.realestateportal.web.rest.kotlin
 
 import bme.aut.szarch.realestateportal.domain.kotlin.RealEstateEntity
+import bme.aut.szarch.realestateportal.security.AuthoritiesConstants
 import bme.aut.szarch.realestateportal.service.kotlin.dto.*
 import com.sipios.springsearch.anotation.SearchSpec
 import io.swagger.annotations.*
@@ -8,6 +9,7 @@ import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
@@ -23,6 +25,7 @@ interface RealEstateController {
     @ApiOperation(value = "Create new real-estate", nickname = "createNewRealEstate", notes = "Create a new real-estate", tags = ["REAL-ESTATE"])
     @ApiResponses(value = [ApiResponse(code = 201, message = "Created"), ApiResponse(code = 500, message = "Internal Server Error")])
     @RequestMapping(value = [""], consumes = ["application/json"], method = [RequestMethod.POST])
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     fun createNewRealEstate(@ApiParam(value = "") @Valid @RequestBody newRealEstate: NewRealEstateDTO): ResponseEntity<Void>
 
 

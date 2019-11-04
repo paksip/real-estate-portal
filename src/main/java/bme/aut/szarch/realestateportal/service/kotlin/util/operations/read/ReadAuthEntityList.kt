@@ -6,24 +6,28 @@ import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferRe
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.toResponseEntity
 import bme.aut.szarch.realestateportal.service.kotlin.util.validation.checkAuthentication
 import bme.aut.szarch.realestateportal.service.kotlin.util.validation.checkAuthorization
-import bme.aut.szarch.realestateportal.service.kotlin.util.validation.checkEntityNotFound
+import org.springframework.data.domain.Page
 import org.springframework.http.ResponseEntity
 
-inline fun <reified EntityClass : AbstractUserRelatedEntity, DTOClass : Any> executeReadWithAuthorization(
+fun <EntityClass : Page<AuthEntityClass>, AuthEntityClass : AbstractUserRelatedEntity, DTOClass : Any> executeReadListWithAuthorization(
     getUserCall: () -> User?,
-    getEntityCall: (Long) -> EntityClass?,
-    noinline validationCall: ((EntityClass) -> Unit)? = null,
+    getEntityListCall: (Long) -> EntityClass,
+    validationCall: ((EntityClass) -> Unit)? = null,
     mappingCall: (EntityClass) -> DTOClass,
     onSuccess: (DTOClass) -> DataTransferResult<DTOClass>
 ): ResponseEntity<DTOClass> {
     val user = getUserCall().checkAuthentication()
 
-    val authEntity = getEntityCall(user.id).checkEntityNotFound()
-    checkAuthorization(authEntity.user.id, user.id)
+    val callResult = getEntityListCall(user.id)
 
-    validationCall?.invoke(authEntity)
+    if (callResult.content.isNotEmpty()) {
+        val authEntity = callResult.content.first()
+        checkAuthorization(authEntity.user.id, user.id)
+    }
 
-    val dto = mappingCall(authEntity)
+    validationCall?.invoke(callResult)
+
+    val dto = mappingCall(callResult)
 
     return onSuccess(dto).toResponseEntity()
 }

@@ -3,6 +3,7 @@ package bme.aut.szarch.realestateportal;
 import bme.aut.szarch.realestateportal.config.ApplicationProperties;
 import bme.aut.szarch.realestateportal.config.DefaultProfileUtil;
 import bme.aut.szarch.realestateportal.service.kotlin.StorageServiceImp;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.jhipster.config.JHipsterConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -11,18 +12,20 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.zalando.problem.ProblemModule;
+import org.zalando.problem.validation.ConstraintViolationProblemModule;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = ErrorMvcAutoConfiguration.class)
 @EnableConfigurationProperties(ApplicationProperties.class)
 @EnableDiscoveryClient
 public class RealEstatePortalApp implements InitializingBean {
@@ -105,5 +108,12 @@ public class RealEstatePortalApp implements InitializingBean {
             serverPort,
             contextPath,
             env.getActiveProfiles());
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper().registerModules(
+            new ProblemModule(),
+            new ConstraintViolationProblemModule());
     }
 }
