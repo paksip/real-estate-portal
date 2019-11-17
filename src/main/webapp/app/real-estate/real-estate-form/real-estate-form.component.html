@@ -1,0 +1,9 @@
+<div class="avatar">
+    <div class="d-flex">
+        <img *ngFor="let image of images" [src]="image" class="image">
+    </div>
+    <ng-div *ngIf="modalData.mode === FormMode.CREATE || modalData.mode === FormMode.EDIT">
+        <input #file type="file" name="avatar" (change)="onFileChange()" (click)="onFileClicked()"
+               accept="image/png, image/jpeg"/>
+    </ng-div>
+</div>

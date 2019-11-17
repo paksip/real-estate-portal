@@ -20,10 +20,12 @@ import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 import { ErrorComponent } from './layouts/error/error.component';
 import { RealEstateModule } from 'app/real-estate/real-estate.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     RealEstatePortalSharedModule,
     RealEstatePortalCoreModule,
     RealEstatePortalHomeModule,

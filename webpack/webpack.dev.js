@@ -16,29 +16,13 @@ const ENV = 'development';
 
 module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     devtool: 'eval-source-map',
-    devServer: {
-        contentBase: './target/classes/static/',
-        proxy: [{
-            context: [
-                '/api',
-                '/services',
-                '/management',
-                '/swagger-resources',
-                '/v2/api-docs',
-                '/h2-console',
-                '/auth'
-            ],
-            target: `http${options.tls ? 's' : ''}://localhost:8080`,
-            secure: false,
-            changeOrigin: options.tls
-        }],
-        stats: options.stats,
-        watchOptions: {
-            ignored: /node_modules/
-        },
-        https: options.tls,
-        historyApiFallback: true
-    },
+  devServer: {
+    proxy: {
+      "*": "http://[::1]:8080"
+      // "secure": false,
+      // "changeOrigin": true
+    }
+  },
     entry: {
         polyfills: './src/main/webapp/app/polyfills',
         global: './src/main/webapp/content/scss/global.scss',

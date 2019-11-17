@@ -1,4 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { RealEstateService } from 'app/real-estate/real-estate.service';
+import { MatDialog } from '@angular/material/dialog';
+import { RealEstateFormComponent } from 'app/real-estate/real-estate-form/real-estate-form.component';
+import { RealEstate } from 'app/real-estate/models/realEstate';
+
+export enum FormMode {
+  EDIT = 'EDIT',
+  VIEW = 'VIEW',
+  CREATE = 'CREATE'
+}
 
 @Component({
   selector: 'jhi-real-estate',
@@ -6,7 +16,46 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./real-estate.component.scss']
 })
 export class RealEstateComponent implements OnInit {
-  constructor() {}
+  realEstates: RealEstate[];
 
-  ngOnInit() {}
+  constructor(private realEstateService: RealEstateService, public dialog: MatDialog) {}
+
+  ngOnInit() {
+    this.load();
+  }
+
+  load() {
+    this.realEstateService.getAll(0, 1, {}).subscribe(result => {
+      this.realEstates = result;
+    });
+  }
+
+  onView(id: number) {
+    const dialogRef = this.dialog.open(RealEstateFormComponent, {
+      width: '250px',
+      data: { id, mode: FormMode.VIEW }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {});
+  }
+
+  onEdit(id: number) {
+    const dialogRef = this.dialog.open(RealEstateFormComponent, {
+      width: '250px',
+      data: { id, mode: FormMode.EDIT }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {});
+  }
+
+  onCreate() {
+    const dialogRef = this.dialog.open(RealEstateFormComponent, {
+      width: '250px',
+      data: { id: null, mode: FormMode.CREATE }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {});
+  }
+
+  onDelete() {}
 }

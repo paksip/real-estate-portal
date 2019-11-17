@@ -1,1 +1,22 @@
-<p>real-estate works!</p>
+<div class="container">
+    <div class="row">
+        <button class="btn btn-group" (click)="onCreate()">
+            <fa-icon icon="plus" fixedWidth="true"></fa-icon>
+            <span >Add new</span>
+        </button>
+    </div>
+    <div class="row">
+        <div *ngFor="let entity of realEstates">
+            <mat-card (click)="onView(entity.id)">
+                <mat-card-title>
+                    {{entity.name}}
+                </mat-card-title>
+                <mat-card-content>
+                    <p>Number of rooms: {{entity.numberOfRooms}}</p>
+                    <p>Price: {{entity.price}}Ft</p>
+                    <p>Size: {{entity.squareMeter}}sm</p>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>
