@@ -1,4 +1,4 @@
-export interface Location {
+export interface MapLocation {
   lat?: number;
   lon?: number;
   locationName?: string;

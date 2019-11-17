@@ -19,6 +19,7 @@ import { ImageHandlerService } from 'app/real-estate/real-estate-form/image-hand
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MapHandlerComponent } from './real-estate-form/map-handler/map-handler.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     RealEstatePortalSharedModule,
     RouterModule.forChild([REAL_ESTATE_ROUTE]),
     BrowserModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyB06-nDzQzU4X3crMreB0qYZnsYtmkexFs'
+    }),
     HttpClientModule,
     MatCardModule,
     MatDialogModule,

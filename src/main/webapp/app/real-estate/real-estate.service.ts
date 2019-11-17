@@ -25,8 +25,8 @@ export class RealEstateService {
     return this.http.get<RealEstate[]>(`${this.configUrl}/?page=${page}&offset=${offset}&specs=${specs}`);
   }
 
-  get(id: number): Observable<RealEstateDetails[]> {
-    return this.http.get<RealEstateDetails[]>(`${this.configUrl}/${id}`);
+  get(id: number): Observable<RealEstateDetails> {
+    return this.http.get<RealEstateDetails>(`${this.configUrl}/${id}`);
   }
 
   getOwn(): Observable<RealEstate[]> {

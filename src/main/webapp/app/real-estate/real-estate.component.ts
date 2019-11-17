@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { RealEstateFormComponent } from 'app/real-estate/real-estate-form/real-estate-form.component';
 import { RealEstate } from 'app/real-estate/models/realEstate';
 import { FormMode } from 'app/real-estate/models/formMode';
+import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
   selector: 'jhi-real-estate',
@@ -13,7 +14,7 @@ import { FormMode } from 'app/real-estate/models/formMode';
 export class RealEstateComponent implements OnInit {
   realEstates: RealEstate[];
 
-  constructor(private realEstateService: RealEstateService, public dialog: MatDialog) {}
+  constructor(private realEstateService: RealEstateService, public dialog: MatDialog, private accountService: AccountService) {}
 
   ngOnInit() {
     this.load();
@@ -54,5 +55,9 @@ export class RealEstateComponent implements OnInit {
 
   onDelete(id: number) {
     this.realEstateService.delete(id).subscribe();
+  }
+
+  isAuthenticated() {
+    return this.accountService.isAuthenticated();
   }
 }

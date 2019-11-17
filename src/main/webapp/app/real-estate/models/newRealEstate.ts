@@ -1,10 +1,10 @@
-import { Location } from './location';
+import { MapLocation } from './mapLocation';
 import { CategoryEnum } from 'app/real-estate/models/category';
 
 export interface NewRealEstate {
   name: string;
   category: CategoryEnum;
-  location: Location;
+  location: MapLocation;
   description: string;
   squareMeter: number;
   price: number;
