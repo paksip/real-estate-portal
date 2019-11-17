@@ -8,9 +8,6 @@ import { MapLocation } from 'app/real-estate/models/mapLocation';
 })
 export class MapHandlerComponent implements OnInit {
   @Input() location: MapLocation;
-  texto = 'Wenceslau Braz - Cuidado com as cargas';
-  lat = -23.8779431;
-  lng = -49.8046873;
   zoom = 15;
   constructor() {}
 

@@ -9,7 +9,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material';
 import { RealEstateFormComponent } from './real-estate-form/real-estate-form.component';
 import { ImageHandlerComponent } from './real-estate-form/image-handler/image-handler.component';
 import { ReservationHandlerComponent } from './real-estate-form/reservation-handler/reservation-handler.component';

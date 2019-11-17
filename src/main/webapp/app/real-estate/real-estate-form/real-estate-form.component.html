@@ -2,54 +2,64 @@
 <mat-dialog-content>
     <div class="container" *ngIf="form">
         <form [formGroup]="form">
-            <label>
-                Name:
-                <input type="text" formControlName="name" [disabled]="this.modalData.mode === FormMode.VIEW">
-            </label>
-
-            <label>
-                Category:
-                <select class="custom-select" (change)="changeCategory($event)" formControlName="category"
-                        [disabled]="this.modalData.mode === FormMode.VIEW">
-                    <option value="" disabled>Choose your category</option>
-                    <option *ngFor="let category of categoryKeys()" [ngValue]="category">{{category}}</option>
-                </select>
-            </label>
-
-            <label>
-                Description:
-                <input type="text" formControlName="description" [disabled]="this.modalData.mode === FormMode.VIEW">
-            </label>
-
-            <label>
-                Size:
-                <input type="number" formControlName="squareMeter" [disabled]="this.modalData.mode === FormMode.VIEW">
-            </label>
-
-            <label>
-                Price:
-                <input type="number" formControlName="price" [disabled]="this.modalData.mode === FormMode.VIEW">
-            </label>
-
-            <label>
-                Number of Rooms:
-                <input type="number" formControlName="numberOfRooms" [disabled]="this.modalData.mode === FormMode.VIEW">
-            </label>
-
-            <label>
-                Balcony:
-                <mat-checkbox formControlName="hasBalcony" [disabled]="this.modalData.mode === FormMode.VIEW"></mat-checkbox>
-            </label>
-
-            <label>
-                Air condition:
-                <mat-checkbox formControlName="hasAirCondition" [disabled]="this.modalData.mode === FormMode.VIEW"></mat-checkbox>
-            </label>
-
-            <label>
-                Phone:
-                <input type="text" formControlName="ownerPhoneNumber" [disabled]="this.modalData.mode === FormMode.VIEW">
-            </label>
+            <div class="row">
+                <label>
+                    Name:
+                    <input type="text" formControlName="name" [disabled]="this.modalData.mode === FormMode.VIEW">
+                </label>
+            </div>
+            <div class="row">
+                <label>
+                    Category:
+                    <select class="custom-select" (change)="changeCategory($event)" formControlName="category"
+                            [disabled]="this.modalData.mode === FormMode.VIEW">
+                        <option value="" disabled>Choose your category</option>
+                        <option *ngFor="let category of categoryKeys()" [ngValue]="category">{{category}}</option>
+                    </select>
+                </label>
+            </div>
+            <div class="row">
+                <label>
+                    Description:
+                    <input type="text" formControlName="description" [disabled]="this.modalData.mode === FormMode.VIEW">
+                </label>
+            </div>
+            <div class="row">
+                <label>
+                    Size:
+                    <input type="number" formControlName="squareMeter" [disabled]="this.modalData.mode === FormMode.VIEW">
+                </label>
+            </div>
+            <div class="row">
+                <label>
+                    Price:
+                    <input type="number" formControlName="price" [disabled]="this.modalData.mode === FormMode.VIEW">
+                </label>
+            </div>
+            <div class="row">
+                <label>
+                    Number of Rooms:
+                    <input type="number" formControlName="numberOfRooms" [disabled]="this.modalData.mode === FormMode.VIEW">
+                </label>
+            </div>
+            <div class="row">
+                <label>
+                    Balcony:
+                    <mat-checkbox formControlName="hasBalcony" [disabled]="this.modalData.mode === FormMode.VIEW"></mat-checkbox>
+                </label>
+            </div>
+            <div class="row">
+                <label>
+                    Air condition:
+                    <mat-checkbox formControlName="hasAirCondition" [disabled]="this.modalData.mode === FormMode.VIEW"></mat-checkbox>
+                </label>
+            </div>
+            <div class="row">
+                <label>
+                    Phone:
+                    <input type="text" formControlName="ownerPhoneNumber" [disabled]="this.modalData.mode === FormMode.VIEW">
+                </label>
+            </div>
             <jhi-map-handler></jhi-map-handler>
         </form>
         <div *ngIf="modalData.mode === FormMode.EDIT">

@@ -26,8 +26,8 @@ export class RealEstateFormComponent implements OnInit {
     @Optional() @Inject(MAT_DIALOG_DATA) public modalData: { id: number; mode: FormMode }
   ) {
     this.location = {
-      lon: 50,
-      lat: 60
+      lon: -23.8779431,
+      lat: -49.8046873
     };
   }
 
