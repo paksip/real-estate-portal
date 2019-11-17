@@ -1,7 +1,7 @@
 export enum CategoryEnum {
-  FLAT = 'FLAT',
-  PANEL = 'PANEL',
-  COUNTRYHOUSE = 'COUNTRY_HOUSE',
-  LUXORYHOUSE = 'LUXORY_HOUSE',
-  DETACHEDHOUSE = 'DETACHED_HOUSE'
+  Flat = 'FLAT',
+  Panel = 'PANEL',
+  CountryHouse = 'COUNTRY_HOUSE',
+  LuxoryHouse = 'LUXORY_HOUSE',
+  DetachedHouse = 'DETACHED_HOUSE'
 }

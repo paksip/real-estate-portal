@@ -13,19 +13,36 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { RealEstateFormComponent } from './real-estate-form/real-estate-form.component';
 import { ImageHandlerComponent } from './real-estate-form/image-handler/image-handler.component';
 import { ReservationHandlerComponent } from './real-estate-form/reservation-handler/reservation-handler.component';
+import { RealEstateService } from 'app/real-estate/real-estate.service';
+import { ReservationHandlerService } from 'app/real-estate/real-estate-form/reservation-handler/reservation-handler.service';
+import { ImageHandlerService } from 'app/real-estate/real-estate-form/image-handler/image-handler.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MapHandlerComponent } from './real-estate-form/map-handler/map-handler.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
-  declarations: [RealEstateComponent, MyRealEstateComponent, RealEstateFormComponent, ImageHandlerComponent, ReservationHandlerComponent],
+  declarations: [
+    RealEstateComponent,
+    MyRealEstateComponent,
+    RealEstateFormComponent,
+    ImageHandlerComponent,
+    ReservationHandlerComponent,
+    MapHandlerComponent
+  ],
   imports: [
     CommonModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
+    FormsModule,
     RealEstatePortalSharedModule,
     RouterModule.forChild([REAL_ESTATE_ROUTE]),
     BrowserModule,
     HttpClientModule,
     MatCardModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCheckboxModule
   ],
-  entryComponents: [RealEstateFormComponent]
+  entryComponents: [RealEstateFormComponent],
+  providers: [RealEstateService, ReservationHandlerService, ImageHandlerService]
 })
 export class RealEstateModule {}

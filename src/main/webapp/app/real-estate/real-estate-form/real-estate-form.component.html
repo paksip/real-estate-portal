@@ -1,9 +1,65 @@
-<div class="avatar">
-    <div class="d-flex">
-        <img *ngFor="let image of images" [src]="image" class="image">
+<h2 mat-dialog-title>Form</h2>
+<mat-dialog-content>
+    <div class="container" *ngIf="form">
+        <form [formGroup]="form">
+            <label>
+                Name:
+                <input type="text" formControlName="name" [disabled]="this.modalData.mode === FormMode.VIEW">
+            </label>
+
+            <label>
+                Category:
+                <select class="custom-select" (change)="changeCategory($event)" formControlName="category"
+                        [disabled]="this.modalData.mode === FormMode.VIEW">
+                    <option value="" disabled>Choose your category</option>
+                    <option *ngFor="let category of categoryKeys()" [ngValue]="category">{{category}}</option>
+                </select>
+            </label>
+
+            <label>
+                Description:
+                <input type="text" formControlName="description" [disabled]="this.modalData.mode === FormMode.VIEW">
+            </label>
+
+            <label>
+                Size:
+                <input type="number" formControlName="squareMeter" [disabled]="this.modalData.mode === FormMode.VIEW">
+            </label>
+
+            <label>
+                Price:
+                <input type="number" formControlName="price" [disabled]="this.modalData.mode === FormMode.VIEW">
+            </label>
+
+            <label>
+                Number of Rooms:
+                <input type="number" formControlName="numberOfRooms" [disabled]="this.modalData.mode === FormMode.VIEW">
+            </label>
+
+            <label>
+                Balcony:
+                <mat-checkbox formControlName="hasBalcony" [disabled]="this.modalData.mode === FormMode.VIEW"></mat-checkbox>
+            </label>
+
+            <label>
+                Air condition:
+                <mat-checkbox formControlName="hasAirCondition" [disabled]="this.modalData.mode === FormMode.VIEW"></mat-checkbox>
+            </label>
+
+            <label>
+                Phone:
+                <input type="text" formControlName="ownerPhoneNumber" [disabled]="this.modalData.mode === FormMode.VIEW">
+            </label>
+            <jhi-map-handler></jhi-map-handler>
+        </form>
+        <div *ngIf="modalData.mode === FormMode.EDIT">
+            <jhi-image-handler></jhi-image-handler>
+            <jhi-reservation-handler></jhi-reservation-handler>
+        </div>
     </div>
-    <ng-div *ngIf="modalData.mode === FormMode.CREATE || modalData.mode === FormMode.EDIT">
-        <input #file type="file" name="avatar" (change)="onFileChange()" (click)="onFileClicked()"
-               accept="image/png, image/jpeg"/>
-    </ng-div>
-</div>
+</mat-dialog-content>
+<mat-dialog-actions mat-dialog-close *ngIf="modalData.mode !== FormMode.VIEW">
+    <button type="submit" class="btn btn btn-info" (click)="onSubmit()">
+        Save
+    </button>
+</mat-dialog-actions>

@@ -29,7 +29,11 @@ export class RealEstateService {
     return this.http.get<RealEstateDetails[]>(`${this.configUrl}/${id}`);
   }
 
-  delete(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.configUrl}/${id}`);
+  getOwn(): Observable<RealEstate[]> {
+    return this.http.get<RealEstate[]>(`${this.configUrl}/ownrealestates`);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.configUrl}/${id}`);
   }
 }

@@ -3,12 +3,7 @@ import { RealEstateService } from 'app/real-estate/real-estate.service';
 import { MatDialog } from '@angular/material/dialog';
 import { RealEstateFormComponent } from 'app/real-estate/real-estate-form/real-estate-form.component';
 import { RealEstate } from 'app/real-estate/models/realEstate';
-
-export enum FormMode {
-  EDIT = 'EDIT',
-  VIEW = 'VIEW',
-  CREATE = 'CREATE'
-}
+import { FormMode } from 'app/real-estate/models/formMode';
 
 @Component({
   selector: 'jhi-real-estate',
@@ -32,7 +27,7 @@ export class RealEstateComponent implements OnInit {
 
   onView(id: number) {
     const dialogRef = this.dialog.open(RealEstateFormComponent, {
-      width: '250px',
+      width: '90vw',
       data: { id, mode: FormMode.VIEW }
     });
 
@@ -41,7 +36,7 @@ export class RealEstateComponent implements OnInit {
 
   onEdit(id: number) {
     const dialogRef = this.dialog.open(RealEstateFormComponent, {
-      width: '250px',
+      width: '90vw',
       data: { id, mode: FormMode.EDIT }
     });
 
@@ -50,12 +45,14 @@ export class RealEstateComponent implements OnInit {
 
   onCreate() {
     const dialogRef = this.dialog.open(RealEstateFormComponent, {
-      width: '250px',
+      width: '90vw',
       data: { id: null, mode: FormMode.CREATE }
     });
 
     dialogRef.afterClosed().subscribe(result => {});
   }
 
-  onDelete() {}
+  onDelete(id: number) {
+    this.realEstateService.delete(id).subscribe();
+  }
 }
