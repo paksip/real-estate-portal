@@ -17,7 +17,7 @@
                 </a>
             </li>
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
                         <fa-icon icon="building"></fa-icon>
@@ -26,21 +26,22 @@
                         </span>
                     </span>
                 </a>
-                <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+                <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu" [ngSwitch]="isAuthenticated()">
                     <li>
-                        <a class="dropdown-item" routerLink="real-estate/list" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="/real-estate/list" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="list" fixedWidth="true"></fa-icon>
                             <span >Real-estates</span>
                         </a>
                     </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="real-estate/new" routerLinkActive="active" (click)="collapseNavbar()">
+                    <li *ngSwitchCase="true">
+                        <a  class="dropdown-item" routerLink="/real-estate/new"
+                           routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="plus" fixedWidth="true"></fa-icon>
                             <span >New real-estate</span>
                         </a>
                     </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="real-estate/my" routerLinkActive="active" (click)="collapseNavbar()">
+                    <li *ngSwitchCase="true">
+                        <a class="dropdown-item" routerLink="/real-estate/my" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="folder" fixedWidth="true"></fa-icon>
                             <span>My real-estates</span>
                         </a>
