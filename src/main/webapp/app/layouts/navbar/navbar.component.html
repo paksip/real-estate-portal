@@ -20,14 +20,31 @@
             <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
-                        <fa-icon icon="th-list"></fa-icon>
+                        <fa-icon icon="building"></fa-icon>
                         <span jhiTranslate="global.menu.entities.main">
                             Entities
                         </span>
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
-                    <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
+                    <li>
+                        <a class="dropdown-item" routerLink="real-estate/list" routerLinkActive="active" (click)="collapseNavbar()">
+                            <fa-icon icon="list" fixedWidth="true"></fa-icon>
+                            <span >Real-estates</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="real-estate/new" routerLinkActive="active" (click)="collapseNavbar()">
+                            <fa-icon icon="plus" fixedWidth="true"></fa-icon>
+                            <span >New real-estate</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" routerLink="real-estate/my" routerLinkActive="active" (click)="collapseNavbar()">
+                            <fa-icon icon="folder" fixedWidth="true"></fa-icon>
+                            <span>My real-estates</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
