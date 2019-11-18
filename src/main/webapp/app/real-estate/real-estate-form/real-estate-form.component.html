@@ -60,7 +60,25 @@
                     <input type="text" formControlName="ownerPhoneNumber" [disabled]="this.modalData.mode === FormMode.VIEW">
                 </label>
             </div>
-            <jhi-map-handler></jhi-map-handler>
+            <div class="row">
+                <label>
+                    Longitude:
+                    <input type="text" formControlName="lon" [disabled]="this.modalData.mode === FormMode.VIEW">
+                </label>
+            </div>
+            <div class="row">
+                <label>
+                    Latitude:
+                    <input type="text" formControlName="lat" [disabled]="this.modalData.mode === FormMode.VIEW">
+                </label>
+            </div>
+            <div class="row">
+                <label>
+                    Location's name:
+                    <input type="text" formControlName="locationName" [disabled]="this.modalData.mode === FormMode.VIEW">
+                </label>
+            </div>
+            <jhi-map-handler [location]="model ? model.location : location"></jhi-map-handler>
         </form>
         <div *ngIf="modalData.mode === FormMode.EDIT">
             <jhi-image-handler></jhi-image-handler>

@@ -11,7 +11,7 @@ export interface RealEstateDetails {
   squareMeter: number;
   price: number;
   numberOfRooms: number;
-  hasBalncony: boolean;
+  hasBalcony: boolean;
   hasAirCondition: boolean;
   ownerPhoneNumber: string;
   filePaths: Array<string>;

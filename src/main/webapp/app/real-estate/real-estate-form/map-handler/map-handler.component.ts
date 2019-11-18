@@ -7,7 +7,17 @@ import { MapLocation } from 'app/real-estate/models/mapLocation';
   styleUrls: ['./map-handler.component.scss']
 })
 export class MapHandlerComponent implements OnInit {
-  @Input() location: MapLocation;
+  _location: MapLocation;
+
+  @Input() set location(value) {
+    if (value) {
+      this._location = value;
+    }
+  }
+
+  get location(): MapLocation {
+    return this._location;
+  }
   zoom = 15;
   constructor() {}
 
