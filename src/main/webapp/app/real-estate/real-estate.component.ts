@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RealEstateService } from 'app/real-estate/real-estate.service';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { RealEstateFormComponent } from 'app/real-estate/real-estate-form/real-estate-form.component';
 import { RealEstate } from 'app/real-estate/models/realEstate';
 import { FormMode } from 'app/real-estate/models/formMode';
@@ -46,13 +46,6 @@ export class RealEstateComponent implements OnInit {
 
   onCreate() {
     const dialogRef = this.dialog.open(RealEstateFormComponent, {
-      autoFocus: true,
-      position: {
-        top: '',
-        bottom: '',
-        left: '',
-        right: ''
-      },
       width: '90vw',
       data: { id: null, mode: FormMode.CREATE }
     });
