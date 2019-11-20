@@ -23,12 +23,7 @@ export class RealEstateFormComponent implements OnInit {
   FormMode = FormMode;
   form: FormGroup;
 
-  constructor(private realEstateService: RealEstateService, private activatedRoute: ActivatedRoute, private router: Router) {
-    this.location = {
-      lon: -23.8779431,
-      lat: -49.8046873
-    };
-  }
+  constructor(private realEstateService: RealEstateService, private activatedRoute: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -117,5 +112,11 @@ export class RealEstateFormComponent implements OnInit {
 
   navigateToListPage() {
     this.router.navigate(['/real-estate']);
+  }
+
+  locationChanged($event: Event) {
+    // eslint-disable-next-line no-console
+    console.log('asd');
+    this.location = { lon: this.form.get('lon').value, lat: this.form.get('lat').value };
   }
 }

@@ -1,5 +1,5 @@
 <mat-card>
-    <mat-card-title class="d-flec justify-content-center w-100">
+    <mat-card-title class="d-flex justify-content-center w-100">
         <h3 class="text-center">{{modelId ? model?.name : "Creating real estate"}}</h3>
     </mat-card-title>
     <mat-card-content class="container d-flex justify-content-center w-100" *ngIf="form">
@@ -67,13 +67,13 @@
                     <label>
                         Longitude
                     </label>
-                    <input type="text" formControlName="lon" [disabled]="mode === FormMode.GET">
+                    <input type="text" formControlName="lon" [disabled]="mode === FormMode.GET" (change)="locationChanged($event)">
                 </div>
                 <div>
                     <label>
                         Latitude
                     </label>
-                    <input type="text" formControlName="lat" [disabled]="mode === FormMode.GET">
+                    <input type="text" formControlName="lat" [disabled]="mode === FormMode.GET" (change)="locationChanged($event)">
                 </div>
                 <div>
                     <label>
@@ -81,7 +81,7 @@
                     </label>
                     <input type="text" formControlName="locationName" [disabled]="mode === FormMode.GET">
                 </div>
-                <jhi-map-handler [location]="model ? model.location : location"></jhi-map-handler>
+                <jhi-map-handler [location]="modelId ? model.location : location"></jhi-map-handler>
                 <div *ngIf="mode !== FormMode.CREATE">
                     <jhi-image-handler [mode]="mode" [imageUrls]="model.filePaths" [realEstateId]="modelId" (imageUrlsChanged)="getData()"></jhi-image-handler>
                     <jhi-reservation-handler [mode]="mode" [realEstateId]="modelId"></jhi-reservation-handler>

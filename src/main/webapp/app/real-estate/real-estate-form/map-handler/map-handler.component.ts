@@ -10,6 +10,8 @@ export class MapHandlerComponent implements OnInit {
   _location: MapLocation;
 
   @Input() set location(value) {
+    // eslint-disable-next-line no-console
+    console.log(value);
     if (value) {
       this._location = value;
     }
@@ -18,7 +20,7 @@ export class MapHandlerComponent implements OnInit {
   get location(): MapLocation {
     return this._location;
   }
-  zoom = 15;
+  zoom = 5;
   constructor() {}
 
   ngOnInit() {}
