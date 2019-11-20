@@ -20,6 +20,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MapHandlerComponent } from './real-estate-form/map-handler/map-handler.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AgmCoreModule } from '@agm/core';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -43,8 +44,8 @@ import { AgmCoreModule } from '@agm/core';
     }),
     HttpClientModule,
     MatCardModule,
-    MatDialogModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatRadioModule
   ],
   entryComponents: [RealEstateFormComponent],
   providers: [RealEstateService, ReservationHandlerService, ImageHandlerService]

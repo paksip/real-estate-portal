@@ -1,6 +1,7 @@
 import { RealEstateComponent } from 'app/real-estate/real-estate.component';
 import { Route } from '@angular/router';
-import { MyRealEstateComponent } from 'app/real-estate/my-real-estate/my-real-estate.component';
+import { RealEstateFormComponent } from 'app/real-estate/real-estate-form/real-estate-form.component';
+import { FormMode } from 'app/real-estate/models/formMode';
 
 export const REAL_ESTATE_ROUTE: Route = {
   path: 'real-estate',
@@ -9,16 +10,33 @@ export const REAL_ESTATE_ROUTE: Route = {
   },
   children: [
     {
-      path: 'list',
+      path: '',
       component: RealEstateComponent,
       data: {
         authorities: []
       }
     },
     {
-      path: 'my',
-      component: MyRealEstateComponent,
+      path: 'create',
+      component: RealEstateFormComponent,
       data: {
+        formMode: FormMode.CREATE,
+        authorities: []
+      }
+    },
+    {
+      path: 'update/{id}',
+      component: RealEstateFormComponent,
+      data: {
+        formMode: FormMode.UPDATE,
+        authorities: []
+      }
+    },
+    {
+      path: 'get/{id}',
+      component: RealEstateFormComponent,
+      data: {
+        formMode: FormMode.GET,
         authorities: []
       }
     }

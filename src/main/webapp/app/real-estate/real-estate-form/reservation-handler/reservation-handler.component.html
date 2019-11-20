@@ -1,1 +1,63 @@
-<p>reservation-handler works!</p>
+<div class="container">
+    <div *ngIf="mode === FormMode.UPDATE">
+        <div *ngFor="let reservation of reservations" class="row">
+            From: <span>{{reservation.from}}</span>
+            To: <span>{{reservation.to}}</span>
+            isFree: <span>{{reservation.isFree}}</span>
+            <span><button class="btn btn-group btn-danger" (click)="remove(reservation)">Delete</button></span>
+        </div>
+        <div *ngIf="formCreate">
+            <form [formGroup]="formCreate">
+                <div class="row">
+                    <label>
+                        From:
+                        <input type="date" formControlName="from">
+                    </label>
+                </div>
+                <div class="row">
+                    <label>
+                        To:
+                        <input type="date" formControlName="to">
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-group btn-primary" (click)="onCreate()">
+                    Add new reservation
+                </button>
+            </form>
+
+            <div *ngIf="mode === FormMode.GET">
+
+            </div>
+        </div>
+    </div>
+    <div *ngIf="mode === FormMode.GET">
+        <form [formGroup]="formReserve">
+            <div *ngFor="let reservation of reservations">
+                <mat-radio-button formControlName="reservationId" [value]="reservation.id" class="row"></mat-radio-button>
+                From: <span>{{reservation.from}}</span>
+                To: <span>{{reservation.to}}</span>
+            </div>
+            <div class="row">
+                <label>
+                    Email:
+                    <input type="text" formControlName="email">
+                </label>
+                <label>
+                    Phone Number:
+                    <input type="text" formControlName="phoneNumber">
+                </label>
+                <label>
+                    Message:
+                    <input type="text" formControlName="message">
+                </label>
+                <label>
+                    Username:
+                    <input type="text" formControlName="userName">
+                </label>
+            </div>
+            <button type="submit" class="btn btn-group btn-primary" (click)="onReserve()">
+                Reserve
+            </button>
+        </form>
+    </div>
+</div>

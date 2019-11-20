@@ -1,93 +1,91 @@
-<h2 mat-dialog-title>Form</h2>
-<mat-dialog-content>
-    <div class="container" *ngIf="form">
-        <form [formGroup]="form">
-            <div class="row">
-                <label>
-                    Name:
-                    <input type="text" formControlName="name" [disabled]="this.modalData.mode === FormMode.VIEW">
-                </label>
-            </div>
-            <div class="row">
-                <label>
-                    Category:
-                    <select class="custom-select" (change)="changeCategory($event)" formControlName="category"
-                            [disabled]="this.modalData.mode === FormMode.VIEW">
-                        <option value="" disabled>Choose your category</option>
-                        <option *ngFor="let category of categoryKeys()" [ngValue]="category">{{category}}</option>
-                    </select>
-                </label>
-            </div>
-            <div class="row">
-                <label>
-                    Description:
-                    <input type="text" formControlName="description" [disabled]="this.modalData.mode === FormMode.VIEW">
-                </label>
-            </div>
-            <div class="row">
-                <label>
-                    Size:
-                    <input type="number" formControlName="squareMeter" [disabled]="this.modalData.mode === FormMode.VIEW">
-                </label>
-            </div>
-            <div class="row">
-                <label>
-                    Price:
-                    <input type="number" formControlName="price" [disabled]="this.modalData.mode === FormMode.VIEW">
-                </label>
-            </div>
-            <div class="row">
-                <label>
-                    Number of Rooms:
-                    <input type="number" formControlName="numberOfRooms" [disabled]="this.modalData.mode === FormMode.VIEW">
-                </label>
-            </div>
-            <div class="row">
-                <label>
-                    Balcony:
-                    <mat-checkbox formControlName="hasBalcony" [disabled]="this.modalData.mode === FormMode.VIEW"></mat-checkbox>
-                </label>
-            </div>
-            <div class="row">
-                <label>
-                    Air condition:
-                    <mat-checkbox formControlName="hasAirCondition" [disabled]="this.modalData.mode === FormMode.VIEW"></mat-checkbox>
-                </label>
-            </div>
-            <div class="row">
-                <label>
-                    Phone:
-                    <input type="text" formControlName="ownerPhoneNumber" [disabled]="this.modalData.mode === FormMode.VIEW">
-                </label>
-            </div>
-            <div class="row">
-                <label>
-                    Longitude:
-                    <input type="text" formControlName="lon" [disabled]="this.modalData.mode === FormMode.VIEW">
-                </label>
-            </div>
-            <div class="row">
-                <label>
-                    Latitude:
-                    <input type="text" formControlName="lat" [disabled]="this.modalData.mode === FormMode.VIEW">
-                </label>
-            </div>
-            <div class="row">
-                <label>
-                    Location's name:
-                    <input type="text" formControlName="locationName" [disabled]="this.modalData.mode === FormMode.VIEW">
-                </label>
-            </div>
-            <jhi-map-handler [location]="model ? model.location : location"></jhi-map-handler>
-        </form>
-        <div *ngIf="modalData.mode === FormMode.EDIT">
-            <jhi-image-handler></jhi-image-handler>
-            <jhi-reservation-handler></jhi-reservation-handler>
+<div class="container" *ngIf="form">
+    <form [formGroup]="form">
+        <div class="row">
+            <label>
+                Name:
+                <input type="text" formControlName="name" [disabled]="this.mode === FormMode.GET">
+            </label>
         </div>
-    </div>
-</mat-dialog-content>
-<mat-dialog-actions mat-dialog-close *ngIf="modalData.mode !== FormMode.VIEW">
-    <button type="submit" class="btn btn btn-info" (click)="onSubmit()">
-        Save
-    </button>
-</mat-dialog-actions>
+        <div class="row">
+            <label>
+                Category:
+                <select class="custom-select" formControlName="category"
+                        [disabled]="mode === FormMode.GET">
+                    <option value="" disabled>Choose your category</option>
+                    <option *ngFor="let category of CategoryEnum | keyvalue" [ngValue]="category.value">{{category.key}}</option>
+                </select>
+            </label>
+        </div>
+        <div class="row">
+            <label>
+                Description:
+                <input type="text" formControlName="description" [disabled]="mode === FormMode.GET">
+            </label>
+        </div>
+        <div class="row">
+            <label>
+                Size:
+                <input type="number" formControlName="squareMeter" [disabled]="mode === FormMode.GET">
+            </label>
+        </div>
+        <div class="row">
+            <label>
+                Price:
+                <input type="number" formControlName="price" [disabled]="mode === FormMode.GET">
+            </label>
+        </div>
+        <div class="row">
+            <label>
+                Number of Rooms:
+                <input type="number" formControlName="numberOfRooms" [disabled]="mode === FormMode.GET">
+            </label>
+        </div>
+        <div class="row">
+            <label>
+                Balcony:
+                <mat-checkbox formControlName="hasBalcony" [disabled]="mode === FormMode.GET"></mat-checkbox>
+            </label>
+        </div>
+        <div class="row">
+            <label>
+                Air condition:
+                <mat-checkbox formControlName="hasAirCondition" [disabled]="mode === FormMode.GET"></mat-checkbox>
+            </label>
+        </div>
+        <div class="row">
+            <label>
+                Phone:
+                <input type="text" formControlName="ownerPhoneNumber" [disabled]="mode === FormMode.GET">
+            </label>
+        </div>
+        <div class="row">
+            <label>
+                Longitude:
+                <input type="text" formControlName="lon" [disabled]="mode === FormMode.GET">
+            </label>
+        </div>
+        <div class="row">
+            <label>
+                Latitude:
+                <input type="text" formControlName="lat" [disabled]="mode === FormMode.GET">
+            </label>
+        </div>
+        <div class="row">
+            <label>
+                Location's name:
+                <input type="text" formControlName="locationName" [disabled]="mode === FormMode.GET">
+            </label>
+        </div>
+        <jhi-map-handler [location]="model ? model.location : location"></jhi-map-handler>
+        <div *ngIf="mode !== FormMode.CREATE">
+            <jhi-image-handler [mode]="mode" [imageUrls]="model.filePaths" [realEstateId]="modelId" (imageUrlsChanged)="getData()"></jhi-image-handler>
+            <jhi-reservation-handler [mode]="mode" [realEstateId]="modelId"></jhi-reservation-handler>
+        </div>
+        <div *ngIf="mode !== FormMode.GET">
+            <button type="submit" class="btn btn btn-info" (click)="onSubmit()">
+                Save
+            </button>
+        </div>
+    </form>
+</div>
+

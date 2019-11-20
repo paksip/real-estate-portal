@@ -14,7 +14,7 @@ export class ReservationHandlerService {
 
   constructor(private http: HttpClient) {}
 
-  create(realEstateId: number, body: NewReservation): Observable<AvailableReservationTime> {
+  create(realEstateId: number, body: AvailableReservationTime): Observable<AvailableReservationTime> {
     return this.http.post<AvailableReservationTime>(`${this.configUrl}/${realEstateId}/reservations`, body);
   }
 

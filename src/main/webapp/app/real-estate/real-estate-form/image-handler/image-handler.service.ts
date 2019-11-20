@@ -15,7 +15,7 @@ export class ImageHandlerService {
     return this.http.get<any>(`${this.configUrl}/files/${fileName}`);
   }
 
-  upload(id: string, file: Blob): Observable<any> {
+  upload(id: number, file: Blob): Observable<any> {
     return this.http.post<any>(`${this.configUrl}/${id}/files`, file);
   }
 }

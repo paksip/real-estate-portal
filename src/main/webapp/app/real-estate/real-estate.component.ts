@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RealEstateService } from 'app/real-estate/real-estate.service';
-import { MatDialog } from '@angular/material/dialog';
-import { RealEstateFormComponent } from 'app/real-estate/real-estate-form/real-estate-form.component';
 import { RealEstate } from 'app/real-estate/models/realEstate';
-import { FormMode } from 'app/real-estate/models/formMode';
 import { AccountService } from 'app/core/auth/account.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'jhi-real-estate',
@@ -14,7 +12,12 @@ import { AccountService } from 'app/core/auth/account.service';
 export class RealEstateComponent implements OnInit {
   realEstates: RealEstate[];
 
-  constructor(private realEstateService: RealEstateService, private dialog: MatDialog, private accountService: AccountService) {}
+  constructor(
+    private realEstateService: RealEstateService,
+    private accountService: AccountService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.load();
@@ -27,30 +30,15 @@ export class RealEstateComponent implements OnInit {
   }
 
   onView(id: number) {
-    const dialogRef = this.dialog.open(RealEstateFormComponent, {
-      width: '90vw',
-      data: { id, mode: FormMode.VIEW }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {});
+    this.router.navigate(['get', id], { relativeTo: this.activatedRoute });
   }
 
   onEdit(id: number) {
-    const dialogRef = this.dialog.open(RealEstateFormComponent, {
-      width: '90vw',
-      data: { id, mode: FormMode.EDIT }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {});
+    this.router.navigate(['update', id], { relativeTo: this.activatedRoute });
   }
 
   onCreate() {
-    const dialogRef = this.dialog.open(RealEstateFormComponent, {
-      width: '90vw',
-      data: { id: null, mode: FormMode.CREATE }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {});
+    this.router.navigate(['create'], { relativeTo: this.activatedRoute });
   }
 
   onDelete(id: number) {

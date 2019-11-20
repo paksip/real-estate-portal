@@ -1,9 +1,22 @@
-<div class="avatar">
+<div class="container">
     <div class="d-flex">
-        <img *ngFor="let image of images" [src]="image" class="image">
+        <div *ngFor="let image of imageUrls" >
+            <img [src]="image" class="image">
+            <button *ngIf="mode === FormMode.UPDATE"
+                    class="btn btn-danger ml-1" (click)="deleteImage(image)" >
+                <i aria-hidden="true" class="fas fa-fw fa-trash-alt mr-1"></i>
+                {{'EMPLOYEE_REGISTER.MODAL.CREATE.FILE_REMOVE' | translate}}
+            </button>
+        </div>
     </div>
-    <div *ngIf="mode === FormMode.CREATE || mode === FormMode.EDIT">
+    <div *ngIf="mode === FormMode.UPDATE">
         <input #file type="file" name="avatar" (change)="onFileChange()" (click)="onFileClicked()"
                accept="image/png, image/jpeg"/>
+        <div>
+            <button class="btn btn-info" (click)="select()">
+                <i aria-hidden="true" class="fas fa-upload fa-fw mr-1"></i>
+                Add new images
+            </button>
+        </div>
     </div>
 </div>

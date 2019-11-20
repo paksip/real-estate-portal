@@ -9,7 +9,7 @@ export interface NewRealEstate {
   squareMeter: number;
   price: number;
   numberOfRooms: number;
-  hasBalcony: boolean;
+  hasBalncony: boolean;
   hasAirCondition: boolean;
   ownerPhoneNumber: string;
 }

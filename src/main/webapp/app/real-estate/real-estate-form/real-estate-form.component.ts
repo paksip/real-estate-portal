@@ -1,12 +1,12 @@
-import { Component, ElementRef, Inject, OnInit, Optional, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { RealEstateService } from 'app/real-estate/real-estate.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormMode } from 'app/real-estate/models/formMode';
 import { CategoryEnum } from 'app/real-estate/models/category';
 import { RealEstateDetails } from 'app/real-estate/models/realEstateDetails';
 import { MapLocation } from 'app/real-estate/models/mapLocation';
 import { NewRealEstate } from 'app/real-estate/models/newRealEstate';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'jhi-real-estate-form',
@@ -16,16 +16,14 @@ import { NewRealEstate } from 'app/real-estate/models/newRealEstate';
 export class RealEstateFormComponent implements OnInit {
   @ViewChild('file', { static: false }) file: ElementRef;
   model: RealEstateDetails;
+  modelId: number;
   location: MapLocation;
+  mode: FormMode;
   CategoryEnum = CategoryEnum;
   FormMode = FormMode;
   form: FormGroup;
 
-  constructor(
-    private realEstateService: RealEstateService,
-    @Optional() public dialogRef: MatDialogRef<RealEstateFormComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public modalData: { id: number; mode: FormMode }
-  ) {
+  constructor(private realEstateService: RealEstateService, private activatedRoute: ActivatedRoute) {
     this.location = {
       lon: -23.8779431,
       lat: -49.8046873
@@ -33,42 +31,53 @@ export class RealEstateFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initForm();
+    this.activatedRoute.params.subscribe(params => {
+      this.mode = this.activatedRoute.snapshot.data['formMode'];
+      if (params['id']) {
+        this.modelId = params['id'];
+        this.getData();
+      } else {
+        this.initForm();
+      }
+    });
+  }
+
+  getData() {
+    this.realEstateService.get(this.modelId).subscribe(result => {
+      this.initForm();
+      this.model = result;
+    });
   }
 
   initForm() {
     this.form = new FormGroup({
-      name: new FormControl(''),
-      category: new FormControl(''),
+      name: new FormControl('', Validators.required),
+      category: new FormControl('', Validators.required),
       description: new FormControl(''),
-      squareMeter: new FormControl(''),
-      price: new FormControl(''),
-      numberOfRooms: new FormControl(''),
+      squareMeter: new FormControl('', Validators.required),
+      price: new FormControl('', Validators.required),
+      numberOfRooms: new FormControl('', Validators.required),
       hasBalcony: new FormControl(false),
       hasAirCondition: new FormControl(false),
-      ownerPhoneNumber: new FormControl(''),
+      ownerPhoneNumber: new FormControl('', Validators.required),
       lon: new FormControl(''),
       lat: new FormControl(''),
-      locationName: new FormControl('')
+      locationName: new FormControl('', Validators.required)
     });
 
-    if (this.modalData.id) {
-      this.realEstateService.get(this.modalData.id).subscribe(result => {
-        this.model = result;
-
-        this.form.get('name').patchValue(result.name);
-        this.form.get('category').patchValue(result.category);
-        this.form.get('description').patchValue(result.description);
-        this.form.get('squareMeter').patchValue(result.squareMeter);
-        this.form.get('price').patchValue(result.price);
-        this.form.get('numberOfRooms').patchValue(result.numberOfRooms);
-        this.form.get('hasBalcony').patchValue(result.hasBalcony);
-        this.form.get('hasAirCondition').patchValue(result.hasAirCondition);
-        this.form.get('ownerPhoneNumber').patchValue(result.ownerPhoneNumber);
-        this.form.get('lon').patchValue(result.location.lon);
-        this.form.get('lat').patchValue(result.location.lat);
-        this.form.get('locationName').patchValue(result.location.locationName);
-      });
+    if (this.model) {
+      this.form.get('name').patchValue(this.model.name);
+      this.form.get('category').patchValue(this.model.category);
+      this.form.get('description').patchValue(this.model.description);
+      this.form.get('squareMeter').patchValue(this.model.squareMeter);
+      this.form.get('price').patchValue(this.model.price);
+      this.form.get('numberOfRooms').patchValue(this.model.numberOfRooms);
+      this.form.get('hasBalcony').patchValue(this.model.hasBalcony);
+      this.form.get('hasAirCondition').patchValue(this.model.hasAirCondition);
+      this.form.get('ownerPhoneNumber').patchValue(this.model.ownerPhoneNumber);
+      this.form.get('lon').patchValue(this.model.location.lon);
+      this.form.get('lat').patchValue(this.model.location.lat);
+      this.form.get('locationName').patchValue(this.model.location.locationName);
     }
   }
 
@@ -77,12 +86,13 @@ export class RealEstateFormComponent implements OnInit {
   }
 
   onSubmit() {
+    this.form.markAllAsTouched();
     // eslint-disable-next-line no-console
     console.log(this.form.value);
-    if (this.modalData.mode === FormMode.CREATE) {
+    if (this.mode === FormMode.CREATE) {
       this.realEstateService.create(this.buildDto()).subscribe();
     } else {
-      this.realEstateService.update(this.modalData.id, this.buildDto()).subscribe();
+      this.realEstateService.update(this.modelId, this.buildDto()).subscribe();
     }
   }
 
@@ -94,7 +104,7 @@ export class RealEstateFormComponent implements OnInit {
       squareMeter: this.form.get('squareMeter').value,
       price: this.form.get('price').value,
       numberOfRooms: this.form.get('numberOfRooms').value,
-      hasBalcony: this.form.get('hasBalcony').value,
+      hasBalncony: this.form.get('hasBalcony').value,
       hasAirCondition: this.form.get('hasAirCondition').value,
       ownerPhoneNumber: this.form.get('name').value,
       location: {
@@ -103,11 +113,5 @@ export class RealEstateFormComponent implements OnInit {
         locationName: this.form.get('locationName').value
       }
     };
-  }
-
-  changeCategory(e) {
-    this.form.get('category').setValue(e.target.value, {
-      onlySelf: true
-    });
   }
 }
