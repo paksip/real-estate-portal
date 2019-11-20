@@ -1,9 +1,11 @@
-<div class="container">
-    <div class="row" *ngIf="isAuthenticated()">
-        <button class="btn btn-group" (click)="onCreate()">
-            <fa-icon icon="plus" fixedWidth="true"></fa-icon>
-            <span >Add new</span>
-        </button>
+<div class="container px-1 mx-0">
+    <div class="row mx-0" *ngIf="isAuthenticated()">
+        <div class="col-12">
+            <button class="btn btn-group btn-primary" (click)="onCreate()">
+                <fa-icon icon="plus" fixedWidth="true"></fa-icon>
+                <span >Add new</span>
+            </button>
+        </div>
     </div>
     <div class="row">
         <div *ngFor="let entity of realEstates">

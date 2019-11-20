@@ -6,7 +6,7 @@ import { CategoryEnum } from 'app/real-estate/models/category';
 import { RealEstateDetails } from 'app/real-estate/models/realEstateDetails';
 import { MapLocation } from 'app/real-estate/models/mapLocation';
 import { NewRealEstate } from 'app/real-estate/models/newRealEstate';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'jhi-real-estate-form',
@@ -23,7 +23,7 @@ export class RealEstateFormComponent implements OnInit {
   FormMode = FormMode;
   form: FormGroup;
 
-  constructor(private realEstateService: RealEstateService, private activatedRoute: ActivatedRoute) {
+  constructor(private realEstateService: RealEstateService, private activatedRoute: ActivatedRoute, private router: Router) {
     this.location = {
       lon: -23.8779431,
       lat: -49.8046873
@@ -90,9 +90,9 @@ export class RealEstateFormComponent implements OnInit {
     // eslint-disable-next-line no-console
     console.log(this.form.value);
     if (this.mode === FormMode.CREATE) {
-      this.realEstateService.create(this.buildDto()).subscribe();
+      this.realEstateService.create(this.buildDto()).subscribe(() => this.navigateToListPage());
     } else {
-      this.realEstateService.update(this.modelId, this.buildDto()).subscribe();
+      this.realEstateService.update(this.modelId, this.buildDto()).subscribe(() => this.navigateToListPage());
     }
   }
 
@@ -113,5 +113,9 @@ export class RealEstateFormComponent implements OnInit {
         locationName: this.form.get('locationName').value
       }
     };
+  }
+
+  navigateToListPage() {
+    this.router.navigate(['/real-estate']);
   }
 }
