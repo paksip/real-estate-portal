@@ -14,35 +14,35 @@ import javax.validation.constraints.Pattern
 data class RealEstateEntity(
     @NotNull
     @NotEmpty
-    val name: String,
+    var name: String,
 
     @NotNull
     @NotEmpty
-    val description: String,
+    var description: String,
 
     @Embedded
-    val location: LocationEntity,
+    var location: LocationEntity,
 
     @Enumerated(EnumType.STRING)
-    val category: CategoryEnum,
+    var category: CategoryEnum,
 
     var spectatorsCount: Long = 0,
 
-    val squareMeter: Int,
+    var squareMeter: Int,
 
-    val price: Int,
+    var price: Int,
 
-    val numberOfRooms: Int,
+    var numberOfRooms: Int,
 
-    val hasBalcony: Boolean,
+    var hasBalcony: Boolean,
 
-    val hasAircondition: Boolean,
+    var hasAircondition: Boolean,
 
     @Pattern(regexp = "(^$|[0-9]{10})")
-    val ownerPhoneNumber: String,
+    var ownerPhoneNumber: String,
 
     @OneToMany(mappedBy = "realEstate")
     @Cascade(CascadeType.DELETE)
-    val reservations: List<ReservationEntity>
+    var reservations: List<ReservationEntity>
 
 ) : AbstractUserRelatedEntity()

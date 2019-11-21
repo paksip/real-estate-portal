@@ -10,17 +10,6 @@
     <name>Real Estate Portal</name>
 
     <repositories>
-        <repository>
-            <id>artifactory</id>
-            <name>artifactory-releases</name>
-            <url>http://artifactory.autsoft.hu:8081/artifactory/libs-release-local</url>
-            <releases>
-                <updatePolicy>always</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -130,11 +119,6 @@
             <artifactId>spring-search</artifactId>
             <version>0.2.0</version>
         </dependency>
-        <dependency>
-            <groupId>hu.autsoft.spring</groupId>
-            <artifactId>exception-web</artifactId>
-            <version>${autsoft-exception-version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -169,7 +153,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-dependencies</artifactId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>

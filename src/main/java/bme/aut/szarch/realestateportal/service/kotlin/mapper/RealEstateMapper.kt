@@ -41,22 +41,22 @@ fun RealEstateEntity.toRealEstateDetailsDTO(filPaths: List<String>): RealEstateD
 }
 
 fun RealEstateEntity.incrementSpectatorsCount(): RealEstateEntity {
-    return this.copy(spectatorsCount = this.spectatorsCount + 1)
+    return this.apply { spectatorsCount += 1 }
 }
 
 fun RealEstateEntity.toUpdatedRealEstateEntity(newRealEstateDTO: NewRealEstateDTO): RealEstateEntity {
-    return this.copy(
-        name = newRealEstateDTO.name,
-        description = newRealEstateDTO.description,
-        category = newRealEstateDTO.category,
-        location = newRealEstateDTO.location.toLocationEntity(),
-        squareMeter = newRealEstateDTO.squareMeter,
-        price = newRealEstateDTO.price,
-        numberOfRooms = newRealEstateDTO.numberOfRooms,
-        hasBalcony = newRealEstateDTO.hasBalncony,
-        hasAircondition = newRealEstateDTO.hasBalncony,
+    return this.apply {
+        name = newRealEstateDTO.name
+        description = newRealEstateDTO.description
+        category = newRealEstateDTO.category
+        location = newRealEstateDTO.location.toLocationEntity()
+        squareMeter = newRealEstateDTO.squareMeter
+        price = newRealEstateDTO.price
+        numberOfRooms = newRealEstateDTO.numberOfRooms
+        hasBalcony = newRealEstateDTO.hasBalncony
+        hasAircondition = newRealEstateDTO.hasBalncony
         ownerPhoneNumber = newRealEstateDTO.ownerPhoneNumber
-    )
+    }
 }
 
 fun NewRealEstateDTO.toRealEstateEntity(user: User): RealEstateEntity {
@@ -121,13 +121,13 @@ fun ReservationEntity.toReservationDetailsDTO(): ReservationDetailsDTO {
 fun ReservationEntity.toReservedReservationEntity(
     newReservationDTO: NewReservationDTO
 ): ReservationEntity {
-    return this.copy(
-        emailAddress = newReservationDTO.email,
-        phoneNumber = newReservationDTO.phoneNumber,
-        message = newReservationDTO.message,
-        userName = newReservationDTO.userName,
+    return this.apply {
+        emailAddress = newReservationDTO.email
+        phoneNumber = newReservationDTO.phoneNumber
+        message = newReservationDTO.message
+        userName = newReservationDTO.userName
         isFree = false
-    )
+    }
 }
 
 fun AvailableReservationTimeDTO.toFreeReservationEntity(realEstateEntity: RealEstateEntity): ReservationEntity {
@@ -144,9 +144,9 @@ fun AvailableReservationTimeDTO.toFreeReservationEntity(realEstateEntity: RealEs
 }
 
 fun ReservationEntity.toUpdatedFreeReservationEntity(availableReservationTimeDTO: AvailableReservationTimeDTO): ReservationEntity {
-    return this.copy(
-        from = availableReservationTimeDTO.from,
+    return this.apply {
+        from = availableReservationTimeDTO.from
         to = availableReservationTimeDTO.to
-    )
+    }
 }
 //endregion
