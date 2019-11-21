@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 
 @Service
@@ -24,7 +23,6 @@ open class RealEstateService(
     private val userService: UserService?,
     private val storageService: StorageServiceImp
 ) {
-    @Transactional(readOnly = true)
     open fun getRealEstateById(realEstateId: Long) = executeRead(
         getTargetEntity = { realEstateRepository.findById(realEstateId).orNull() },
         mappingCall = { realEstateEntity ->
@@ -34,14 +32,12 @@ open class RealEstateService(
         onSuccess = { realEstaDto -> Success(HttpStatus.OK, realEstaDto) }
     )
 
-    @Transactional(readOnly = true)
     open fun getAllRealEstates(realEstateSpecification: Specification<RealEstateEntity>, pageable: Pageable) = executeRead(
         getTargetEntity = { realEstateRepository.findAll(realEstateSpecification, pageable) },
         mappingCall = { page -> page.map { it.toRealEstateDTO(getFilenamesByRealEstateId(it.id)) } },
         onSuccess = { realEstateDto -> Success(HttpStatus.OK, realEstateDto) }
     )
 
-    @Transactional(readOnly = true)
     open fun getRealEstatesByUserId(pageable: Pageable) = executeReadListWithAuthorization(
         getUserCall = { userService?.userWithAuthorities?.orNull() },
         getEntityListCall = { userId -> realEstateRepository.findByUserId(userId, pageable) },

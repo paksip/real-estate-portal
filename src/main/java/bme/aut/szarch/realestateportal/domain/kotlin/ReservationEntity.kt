@@ -10,24 +10,24 @@ import javax.validation.constraints.Pattern
 data class ReservationEntity(
 
     @Column(name = "reservation_from")
-    val from: OffsetDateTime,
+    var from: OffsetDateTime,
 
     @Column(name = "reservation_to")
-    val to: OffsetDateTime,
+    var to: OffsetDateTime,
 
     @Email
-    val emailAddress: String?,
+    var emailAddress: String?,
 
     @Pattern(regexp = "(^$|[0-9]{10})")
-    val phoneNumber: String?,
+    var phoneNumber: String?,
 
-    val message: String?,
+    var message: String?,
 
-    val userName: String?,
+    var userName: String?,
 
     @ManyToOne
     @JoinColumn(name = "real_estate_id")
-    val realEstate: RealEstateEntity,
+    var realEstate: RealEstateEntity,
 
-    val isFree: Boolean = true
+    var isFree: Boolean = true
 ) : AbstractJpaPersistable()
