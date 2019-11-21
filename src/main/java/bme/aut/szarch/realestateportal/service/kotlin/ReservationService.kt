@@ -15,7 +15,6 @@ import bme.aut.szarch.realestateportal.service.kotlin.util.operations.update.exe
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferResult.Success
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 
 @Service
@@ -28,12 +27,9 @@ open class ReservationService(
         realEstateId: Long,
         availableReservationTimeDTO: AvailableReservationTimeDTO
     ) = executeCreateWithAutParent(
-        getUserCall = {
-        userService.userWithAuthorities.orNull()
-    },
+        getUserCall = { userService.userWithAuthorities.orNull() },
         getParentEntityCall = { realEstateRepository.findById(realEstateId).orNull() },
-        operationCall = {
-            realEstate -> reservationRepository.save(availableReservationTimeDTO.toFreeReservationEntity(realEstate)) }
+        operationCall = { realEstate -> reservationRepository.save(availableReservationTimeDTO.toFreeReservationEntity(realEstate)) }
     )
 
     open fun deleteReservation(realEstateId: Long, reservationId: Long) = executeUpdateOrDeleteWithAuthParent(

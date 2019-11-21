@@ -26,8 +26,7 @@ open class RealEstateService(
     open fun getRealEstateById(realEstateId: Long) = executeRead(
         getTargetEntity = { realEstateRepository.findById(realEstateId).orNull() },
         mappingCall = { realEstateEntity ->
-            realEstateEntity.spectatorsCount++;
-            realEstateRepository.save(realEstateEntity)
+            realEstateRepository.save(realEstateEntity.incrementSpectatorsCount())
             realEstateEntity.toRealEstateDetailsDTO(getFilenamesByRealEstateId(realEstateId))
         },
         onSuccess = { realEstaDto -> Success(HttpStatus.OK, realEstaDto) }
@@ -40,26 +39,26 @@ open class RealEstateService(
     )
 
     open fun getRealEstatesByUserId(pageable: Pageable) = executeReadListWithAuthorization(
-        getUserCall = { userService?.userWithAuthorities?.orNull() },
+        getUserCall = { userService.userWithAuthorities?.orNull() },
         getEntityListCall = { userId -> realEstateRepository.findByUserId(userId, pageable) },
         mappingCall = { realEstates -> realEstates.map { it.toRealEstateDTO(getFilenamesByRealEstateId(it.id)) } },
         onSuccess = { realEstates -> Success(HttpStatus.OK, realEstates) }
     )
 
     open fun createNewRealEstate(newRealEstateDTO: NewRealEstateDTO) = executeCreateWithParent(
-        getParentEntityCall = { userService?.userWithAuthorities?.orNull() },
+        getParentEntityCall = { userService.userWithAuthorities?.orNull() },
         operationCall = { user -> realEstateRepository.save(newRealEstateDTO.toRealEstateEntity(user)) }
     )
 
     open fun updateRealEstate(realEstateId: Long, newRealEstateDTO: NewRealEstateDTO) = executeUpdateOrDeleteWithAuthorization(
-        getUserCall = { userService?.userWithAuthorities?.orNull() },
+        getUserCall = { userService.userWithAuthorities?.orNull() },
         getEntityCall = { realEstateRepository.findById(realEstateId).orNull() },
         operationCall = { realEstate -> realEstateRepository.save(realEstate.toUpdatedRealEstateEntity(newRealEstateDTO)) }
     )
 
 
     open fun deleteRealEstate(realEstateId: Long) = executeUpdateOrDeleteWithAuthorization(
-        getUserCall = { userService?.userWithAuthorities?.orNull() },
+        getUserCall = { userService.userWithAuthorities?.orNull() },
         getEntityCall = { realEstateRepository.findById(realEstateId).orNull() },
         operationCall = { realEstate -> realEstateRepository.delete(realEstate) }
     )
