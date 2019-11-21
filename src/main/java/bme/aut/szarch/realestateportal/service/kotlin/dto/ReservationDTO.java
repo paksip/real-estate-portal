@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
+import java.lang.String;
 import java.util.Objects;
 
 /**
@@ -18,10 +18,10 @@ public class ReservationDTO {
   private Long id;
 
   @JsonProperty("from")
-  private OffsetDateTime from;
+  private String from;
 
   @JsonProperty("to")
-  private OffsetDateTime to;
+  private String to;
 
   @JsonProperty("isFree")
   private Boolean isFree;
@@ -47,7 +47,7 @@ public class ReservationDTO {
     this.id = id;
   }
 
-  public ReservationDTO from(OffsetDateTime from) {
+  public ReservationDTO from(String from) {
     this.from = from;
     return this;
   }
@@ -61,15 +61,15 @@ public class ReservationDTO {
 
   @Valid
 
-  public OffsetDateTime getFrom() {
+  public String getFrom() {
     return from;
   }
 
-  public void setFrom(OffsetDateTime from) {
+  public void setFrom(String from) {
     this.from = from;
   }
 
-  public ReservationDTO to(OffsetDateTime to) {
+  public ReservationDTO to(String to) {
     this.to = to;
     return this;
   }
@@ -83,11 +83,11 @@ public class ReservationDTO {
 
   @Valid
 
-  public OffsetDateTime getTo() {
+  public String getTo() {
     return to;
   }
 
-  public void setTo(OffsetDateTime to) {
+  public void setTo(String to) {
     this.to = to;
   }
 

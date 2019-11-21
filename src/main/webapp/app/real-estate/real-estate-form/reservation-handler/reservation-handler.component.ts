@@ -87,6 +87,6 @@ export class ReservationHandlerComponent implements OnInit {
   }
 
   remove(reservation: Reservation) {
-    this.reservationHandlerService.delete(this.realEstateId, reservation.id).subscribe();
+    this.reservationHandlerService.delete(this.realEstateId, reservation.id).subscribe(() => this.load());
   }
 }

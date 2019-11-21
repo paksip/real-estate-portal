@@ -8,17 +8,16 @@
         </div>
     </div>
     <div class="row">
-        <div *ngFor="let entity of realEstates">
+        <div *ngFor="let entity of realEstates" class="row my-1">
             <mat-card (click)="onView(entity.id)">
                 <mat-card-title>
                     {{entity.name}}
                 </mat-card-title>
-                <img mat-card-image alt="image"
-                     src="https://media.wired.com/photos/598e35994ab8482c0d6946e0/master/w_2560%2Cc_limit/phonepicutres-TA.jpg"/>
                 <mat-card-content>
                     <p>Number of rooms: {{entity.numberOfRooms}}</p>
                     <p>Price: {{entity.price}}Ft</p>
                     <p>Size: {{entity.squareMeter}}sm</p>
+                    <button class="btn btn-secondary" (click)="onEdit(entity.id)">Edit</button>
                 </mat-card-content>
             </mat-card>
         </div>

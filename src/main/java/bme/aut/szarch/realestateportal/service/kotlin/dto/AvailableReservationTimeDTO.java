@@ -5,22 +5,21 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
+import java.lang.String;
 import java.util.Objects;
 
 /**
  * AvailableReservationTime
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-10-25T13:28:08.197256200+02:00[Europe/Belgrade]")
-
 public class AvailableReservationTimeDTO {
-  @JsonProperty("from ")
-  private OffsetDateTime from;
+  @JsonProperty("from")
+  private String from;
 
   @JsonProperty("to")
-  private OffsetDateTime to;
+  private String to;
 
-  public AvailableReservationTimeDTO from(OffsetDateTime from) {
+  public AvailableReservationTimeDTO from(String from) {
     this.from = from;
     return this;
   }
@@ -34,15 +33,15 @@ public class AvailableReservationTimeDTO {
 
   @Valid
 
-  public OffsetDateTime getFrom() {
+  public String getFrom() {
     return from;
   }
 
-  public void setFrom(OffsetDateTime from) {
+  public void setFrom(String from) {
     this.from = from;
   }
 
-  public AvailableReservationTimeDTO to(OffsetDateTime to) {
+  public AvailableReservationTimeDTO to(String to) {
     this.to = to;
     return this;
   }
@@ -56,11 +55,11 @@ public class AvailableReservationTimeDTO {
 
   @Valid
 
-  public OffsetDateTime getTo() {
+  public String getTo() {
     return to;
   }
 
-  public void setTo(OffsetDateTime to) {
+  public void setTo(String to) {
     this.to = to;
   }
 

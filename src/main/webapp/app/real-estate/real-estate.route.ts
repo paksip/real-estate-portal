@@ -25,7 +25,7 @@ export const REAL_ESTATE_ROUTE: Route = {
       }
     },
     {
-      path: 'update/{id}',
+      path: 'update/:id',
       component: RealEstateFormComponent,
       data: {
         formMode: FormMode.UPDATE,
@@ -33,7 +33,7 @@ export const REAL_ESTATE_ROUTE: Route = {
       }
     },
     {
-      path: 'get/{id}',
+      path: 'get/:id',
       component: RealEstateFormComponent,
       data: {
         formMode: FormMode.GET,

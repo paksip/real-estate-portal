@@ -26,7 +26,7 @@ data class RealEstateEntity(
     @Enumerated(EnumType.STRING)
     val category: CategoryEnum,
 
-    val spectatorsCount: Long = 0,
+    var spectatorsCount: Long = 0,
 
     val squareMeter: Int,
 

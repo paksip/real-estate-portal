@@ -14,12 +14,12 @@ export class ReservationHandlerService {
 
   constructor(private http: HttpClient) {}
 
-  create(realEstateId: number, body: AvailableReservationTime): Observable<AvailableReservationTime> {
-    return this.http.post<AvailableReservationTime>(`${this.configUrl}/${realEstateId}/reservations`, body);
+  create(realEstateId: number, body: AvailableReservationTime): Observable<void> {
+    return this.http.post<void>(`${this.configUrl}/${realEstateId}/reservations`, body);
   }
 
-  update(realEstateId: number, reservationId: number, body: AvailableReservationTime): Observable<AvailableReservationTime> {
-    return this.http.put<AvailableReservationTime>(`${this.configUrl}/${realEstateId}/reservations/${reservationId}`, body);
+  update(realEstateId: number, reservationId: number, body: AvailableReservationTime): Observable<void> {
+    return this.http.put<void>(`${this.configUrl}/${realEstateId}/reservations/${reservationId}`, body);
   }
 
   getAll(realEstateId: number): Observable<Reservation[]> {
@@ -35,6 +35,6 @@ export class ReservationHandlerService {
   }
 
   reserve(realEstateId: number, reservationId: number, body: NewReservation): Observable<void> {
-    return this.http.patch<void>(`${this.configUrl}/${realEstateId}/reservations/${reservationId}`, body);
+    return this.http.put<void>(`${this.configUrl}/${realEstateId}/reservations/${reservationId}`, body);
   }
 }

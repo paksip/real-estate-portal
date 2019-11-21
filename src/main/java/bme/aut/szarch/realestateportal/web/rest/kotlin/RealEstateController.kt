@@ -24,7 +24,7 @@ interface RealEstateController {
 
     @ApiOperation(value = "Create new real-estate", nickname = "createNewRealEstate", notes = "Create a new real-estate", tags = ["REAL-ESTATE"])
     @ApiResponses(value = [ApiResponse(code = 201, message = "Created"), ApiResponse(code = 500, message = "Internal Server Error")])
-    @RequestMapping(value = [""], consumes = ["application/json"], method = [RequestMethod.POST])
+    @RequestMapping(value = ["/"], consumes = ["application/json"], method = [RequestMethod.POST])
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.USER + "\")")
     fun createNewRealEstate(@ApiParam(value = "") @Valid @RequestBody newRealEstate: NewRealEstateDTO): ResponseEntity<Void>
 
@@ -85,7 +85,7 @@ interface RealEstateController {
 
     @ApiOperation(value = "Make a new reservation", nickname = "newReservation", notes = "A customer create a new reservation.", tags = ["REAL-ESTATE"])
     @ApiResponses(value = [ApiResponse(code = 200, message = "OK")])
-    @RequestMapping(value = ["/{realEstateId}/reservations/{reservationId}"], consumes = ["application/json"], method = [RequestMethod.PATCH])
+    @RequestMapping(value = ["/{realEstateId}/reservations/{reservationId}"], consumes = ["application/json"], method = [RequestMethod.PUT])
     fun makeNewReservation(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long, @ApiParam(value = "", required = true) @PathVariable("reservationId") reservationId: Long, @ApiParam(value = "") @Valid @RequestBody newReservation: NewReservationDTO): ResponseEntity<Void>
 
 

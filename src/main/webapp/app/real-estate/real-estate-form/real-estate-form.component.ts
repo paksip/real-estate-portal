@@ -39,8 +39,8 @@ export class RealEstateFormComponent implements OnInit {
 
   getData() {
     this.realEstateService.get(this.modelId).subscribe(result => {
-      this.initForm();
       this.model = result;
+      this.initForm();
     });
   }
 

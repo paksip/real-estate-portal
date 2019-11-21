@@ -1,6 +1,5 @@
 package bme.aut.szarch.realestateportal.domain.kotlin
 
-import java.time.OffsetDateTime
 import javax.persistence.*
 import javax.validation.constraints.Email
 import javax.validation.constraints.Pattern
@@ -10,10 +9,10 @@ import javax.validation.constraints.Pattern
 data class ReservationEntity(
 
     @Column(name = "reservation_from")
-    val from: OffsetDateTime,
+    val from: String,
 
     @Column(name = "reservation_to")
-    val to: OffsetDateTime,
+    val to: String,
 
     @Email
     val emailAddress: String?,

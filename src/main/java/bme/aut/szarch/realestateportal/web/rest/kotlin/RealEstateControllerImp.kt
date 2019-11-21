@@ -58,7 +58,8 @@ open class RealEstateControllerImp(
         realEstateId: Long,
         availableReservationTime: AvailableReservationTimeDTO
     ): ResponseEntity<Void> {
-        return reservationService.createNewAvailableReservationTime(realEstateId, availableReservationTime)
+        var a = reservationService.createNewAvailableReservationTime(realEstateId, availableReservationTime)
+        return a
     }
 
     override fun deleteReservation(

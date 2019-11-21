@@ -17,14 +17,14 @@ fun User?.checkAuthentication(): User {
 @UseExperimental(ExperimentalContracts::class)
 inline fun <reified T : Any> T?.checkEntityNotFound(): T {
     if (this == null) {
-        throw NoSuchElementException("Entity Not Found with name : ${T::class.java.name}")
+            throw NoSuchElementException("Entity Not Found with name : ${T::class.java.name}")
     }
     return this
 }
 
 @UseExperimental(ExperimentalContracts::class)
 fun checkAuthorization(relatedUserId: Long, userId: Long) {
-    if (relatedUserId == userId) {
+    if (relatedUserId != userId) {
         throw AccessDeniedException("Only authorized users can access the resource")
     }
 }

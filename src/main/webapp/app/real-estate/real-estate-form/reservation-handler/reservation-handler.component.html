@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="reservations && reservations.length || mode === FormMode.UPDATE">
     <div *ngIf="mode === FormMode.UPDATE">
         <div *ngFor="let reservation of reservations" class="row">
             From: <span>{{reservation.from}}</span>
@@ -11,29 +11,25 @@
                 <div class="row">
                     <label>
                         From:
-                        <input type="date" formControlName="from">
+                        <input type="datetime-local" formControlName="from">
                     </label>
                 </div>
                 <div class="row">
                     <label>
                         To:
-                        <input type="date" formControlName="to">
+                        <input type="datetime-local" formControlName="to">
                     </label>
                 </div>
                 <button type="submit" class="btn btn-group btn-primary" (click)="onCreate()">
                     Add new reservation
                 </button>
             </form>
-
-            <div *ngIf="mode === FormMode.GET">
-
-            </div>
         </div>
     </div>
     <div *ngIf="mode === FormMode.GET">
         <form [formGroup]="formReserve">
             <div *ngFor="let reservation of reservations">
-                <mat-radio-button formControlName="reservationId" [value]="reservation.id" class="row"></mat-radio-button>
+                <mat-radio-button formControlName="reservationId" [(ngModel)]="reservation.id" class="row"></mat-radio-button>
                 From: <span>{{reservation.from}}</span>
                 To: <span>{{reservation.to}}</span>
             </div>

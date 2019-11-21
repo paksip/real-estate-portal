@@ -19,22 +19,24 @@ import org.springframework.transaction.annotation.Transactional
 
 
 @Service
-@Transactional
 open class ReservationService(
     private val realEstateRepository: RealEstateRepository,
     private val reservationRepository: ReservationRepository,
     private val userService: UserService
 ) {
-    fun createNewAvailableReservationTime(
+    open fun createNewAvailableReservationTime(
         realEstateId: Long,
         availableReservationTimeDTO: AvailableReservationTimeDTO
     ) = executeCreateWithAutParent(
-        getUserCall = { userService.userWithAuthorities.orNull() },
+        getUserCall = {
+        userService.userWithAuthorities.orNull()
+    },
         getParentEntityCall = { realEstateRepository.findById(realEstateId).orNull() },
-        operationCall = { realEstate -> reservationRepository.save(availableReservationTimeDTO.toFreeReservationEntity(realEstate)) }
+        operationCall = {
+            realEstate -> reservationRepository.save(availableReservationTimeDTO.toFreeReservationEntity(realEstate)) }
     )
 
-    fun deleteReservation(realEstateId: Long, reservationId: Long) = executeUpdateOrDeleteWithAuthParent(
+    open fun deleteReservation(realEstateId: Long, reservationId: Long) = executeUpdateOrDeleteWithAuthParent(
         getUserCall = { userService.userWithAuthorities.orNull() },
         getUserRelatedParentEntityCalls = listOf { realEstateRepository.findById(realEstateId).orNull() },
         getTargetEntityCall = { reservationRepository.findByIdAndRealEstateId(reservationId, realEstateId) },
@@ -42,13 +44,13 @@ open class ReservationService(
         validationCall = { reservation -> check(reservation.isFree) { "The reservation is not free!" } }
     )
 
-    fun getAllReservation(realEstateId: Long) = executeRead(
+    open fun getAllReservation(realEstateId: Long) = executeRead(
         getTargetEntity = { reservationRepository.findByRealEstateId(realEstateId) },
         mappingCall = { realEstates -> realEstates.map { it.toReservationDTO() } },
         onSuccess = { realEstatesDTO -> Success(HttpStatus.OK, realEstatesDTO) }
     )
 
-    fun getReservationDetails(realEstateId: Long, reservationId: Long) = executeReadWithAuthParent(
+    open fun getReservationDetails(realEstateId: Long, reservationId: Long) = executeReadWithAuthParent(
         getUserCall = { userService.userWithAuthorities.orNull() },
         getUserRelatedParentEntityCalls = listOf { realEstateRepository.findById(realEstateId).orNull() },
         getTargetEntity = { reservationRepository.findByIdAndRealEstateId(reservationId, realEstateId) },
@@ -57,13 +59,13 @@ open class ReservationService(
         onSuccess = { reservationDTO -> Success(HttpStatus.OK, reservationDTO) }
     )
 
-    fun makeNewReservation(realEstateId: Long, reservationId: Long, newReservationDTO: NewReservationDTO) = executeUpdateOrDelete(
+    open fun makeNewReservation(realEstateId: Long, reservationId: Long, newReservationDTO: NewReservationDTO) = executeUpdateOrDelete(
         databaseGetCall = { reservationRepository.findByIdAndRealEstateId(reservationId, realEstateId) },
         validationCall = { reservation -> check(reservation.isFree) { "The reservation is not free!" } },
         operationCall = { reservation -> reservationRepository.save(reservation.toReservedReservationEntity(newReservationDTO)) }
     )
 
-    fun updateReservation(realEstateId: Long, reservationId: Long, availableReservationTimeDTO: AvailableReservationTimeDTO) = executeUpdateOrDeleteWithAuthParent(
+    open fun updateReservation(realEstateId: Long, reservationId: Long, availableReservationTimeDTO: AvailableReservationTimeDTO) = executeUpdateOrDeleteWithAuthParent(
         getUserCall = { userService.userWithAuthorities.orNull() },
         getUserRelatedParentEntityCalls = listOf { realEstateRepository.findById(realEstateId).orNull() },
         getTargetEntityCall = { reservationRepository.findByIdAndRealEstateId(reservationId, realEstateId) },

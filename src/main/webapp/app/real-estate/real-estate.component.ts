@@ -24,17 +24,17 @@ export class RealEstateComponent implements OnInit {
   }
 
   load() {
-    this.realEstateService.getAll(0, 1, {}).subscribe(result => {
-      this.realEstates = result;
+    this.realEstateService.getAll(0, 20, null).subscribe(result => {
+      this.realEstates = result.content;
     });
   }
 
   onView(id: number) {
-    this.router.navigate(['get', id], { relativeTo: this.activatedRoute });
+    this.router.navigate([`get/${id}`], { relativeTo: this.activatedRoute });
   }
 
   onEdit(id: number) {
-    this.router.navigate(['update', id], { relativeTo: this.activatedRoute });
+    this.router.navigate([`update/${id}`], { relativeTo: this.activatedRoute });
   }
 
   onCreate() {
