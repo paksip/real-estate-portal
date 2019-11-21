@@ -36,6 +36,7 @@ fun RealEstateEntity.toRealEstateDetailsDTO(filPaths: List<String>): RealEstateD
         realEstateDetailsDTO.hasAirCondition = this.hasAircondition
         realEstateDetailsDTO.ownerPhoneNumber = this.ownerPhoneNumber
         realEstateDetailsDTO.filePaths = filPaths
+        //TODO ezt megnézni!
 //        realEstateDetailsDTO.reservationDTOS = this.reservations.map(ReservationEntity::toReservationDTO)
     }
 }
