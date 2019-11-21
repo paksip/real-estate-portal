@@ -5,6 +5,12 @@
                 <fa-icon icon="plus" fixedWidth="true"></fa-icon>
                 <span >Add new</span>
             </button>
+            <button class="btn btn-group btn-primary" (click)="onMyRealEstates()">
+                <span >Show my real estates</span>
+            </button>
+            <button class="btn btn-group btn-primary" (click)="load()">
+                <span >Show all</span>
+            </button>
         </div>
     </div>
     <div class="row">
@@ -17,11 +23,12 @@
                     <p>Number of rooms: {{entity.numberOfRooms}}</p>
                     <p>Price: {{entity.price}}Ft</p>
                     <p>Size: {{entity.squareMeter}}sm</p>
-                    <button *ngIf="isAuthenticated()" class="btn btn-secondary" (click)="onEdit(entity.id)">Edit</button>
                     <button class="btn btn-secondary" (click)="onView(entity.id)">View</button>
-
+                    <button *ngIf="isAuthenticated() && showsOwn" class="btn btn-secondary" (click)="onEdit(entity.id)">Edit</button>
+                    <button *ngIf="isAuthenticated() && showsOwn" class="btn btn-danger" (click)="onDelete(entity.id)">Delete</button>
                 </mat-card-content>
             </mat-card>
         </div>
+        {{showsOwn}}
     </div>
 </div>

@@ -32,8 +32,8 @@ export class RealEstateService {
     return this.http.get<RealEstateDetails>(`${this.configUrl}/${id}`);
   }
 
-  getOwn(): Observable<RealEstate[]> {
-    return this.http.get<RealEstate[]>(`${this.configUrl}/ownrealestates`);
+  getOwn(page: number, offset: number): Observable<any> {
+    return this.http.get<any>(`${this.configUrl}/ownrealestates/?page=${page}&offset=${offset}`);
   }
 
   delete(id: number): Observable<void> {

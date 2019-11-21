@@ -29,7 +29,10 @@
     <div *ngIf="mode === FormMode.GET">
         <form [formGroup]="formReserve">
             <div *ngFor="let reservation of reservations">
-                <mat-radio-button formControlName="reservationId" [(ngModel)]="reservation.id" class="row"></mat-radio-button>
+                <mat-radio-button formControlName="reservationId"
+                                  [value]="reservation.id"
+                                  [checked]="formReserve.get('reservationId').value === reservation.id"
+                                  (change)="changeRadio($event)" class="row"></mat-radio-button>
                 From: <span>{{reservation.from}}</span>
                 To: <span>{{reservation.to}}</span>
             </div>

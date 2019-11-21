@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class RealEstateComponent implements OnInit {
   realEstates: RealEstate[];
+  showsOwn = false;
 
   constructor(
     private realEstateService: RealEstateService,
@@ -26,6 +27,7 @@ export class RealEstateComponent implements OnInit {
   load() {
     this.realEstateService.getAll(0, 20, null).subscribe(result => {
       this.realEstates = result.content;
+      this.showsOwn = false;
     });
   }
 
@@ -42,10 +44,19 @@ export class RealEstateComponent implements OnInit {
   }
 
   onDelete(id: number) {
-    this.realEstateService.delete(id).subscribe();
+    this.realEstateService.delete(id).subscribe(() => this.onMyRealEstates());
   }
 
   isAuthenticated() {
     return this.accountService.isAuthenticated();
+  }
+
+  onMyRealEstates() {
+    this.realEstateService.getOwn(0, 20).subscribe(result => {
+      this.realEstates = result.content;
+      this.showsOwn = true;
+      // eslint-disable-next-line no-console
+      console.log(this.showsOwn);
+    });
   }
 }

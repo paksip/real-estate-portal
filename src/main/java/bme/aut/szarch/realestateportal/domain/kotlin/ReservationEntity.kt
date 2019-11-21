@@ -9,10 +9,10 @@ import javax.validation.constraints.Pattern
 data class ReservationEntity(
 
     @Column(name = "reservation_from")
-    val from: String,
+    var from: String,
 
     @Column(name = "reservation_to")
-    val to: String,
+    var to: String,
 
     @Email
     var emailAddress: String?,

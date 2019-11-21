@@ -14,20 +14,20 @@ export class ImageHandlerComponent implements OnInit {
 
   _imageUrls: string[];
   @Input() set imageUrls(value: string[]) {
-    // TODO: URL alapján elérni a képeket
-    this._imageUrls = value;
+    value.forEach(v => this.downloadImage(v));
   }
 
-  get ImageUrls(): string[] {
+  get imageUrls(): string[] {
     return this._imageUrls;
   }
   @Input() realEstateId: number;
 
   chosenImageFile: File;
+  imagesToShow: any[];
 
   FormMode = FormMode;
 
-  constructor(private imageHandlerService: ImageHandlerService) {}
+  constructor(public imageHandlerService: ImageHandlerService) {}
 
   ngOnInit() {}
 
@@ -38,7 +38,10 @@ export class ImageHandlerComponent implements OnInit {
     if (!this.chosenImageFile) {
       return;
     }
-    this.imageHandlerService.upload(this.realEstateId, this.chosenImageFile).subscribe(() => {
+
+    const formData = new FormData();
+    formData.append('file', this.chosenImageFile);
+    this.imageHandlerService.upload(this.realEstateId, formData).subscribe(() => {
       this.imageUrlsChanged.emit();
     });
   }
@@ -58,6 +61,27 @@ export class ImageHandlerComponent implements OnInit {
   select() {
     if (this.file) {
       this.file.nativeElement.click();
+    }
+  }
+
+  downloadImage(imageUrl) {
+    this.imageHandlerService.download(imageUrl).subscribe(result => {
+      this.createImageFromBlob(result);
+    });
+  }
+
+  createImageFromBlob(image: Blob) {
+    const reader = new FileReader();
+    reader.addEventListener(
+      'load',
+      () => {
+        this.imagesToShow.push(reader.result);
+      },
+      false
+    );
+
+    if (image) {
+      reader.readAsDataURL(image);
     }
   }
 }

@@ -1,6 +1,6 @@
 <div class="container">
     <div class="d-flex">
-        <div *ngFor="let image of imageUrls" >
+        <div *ngFor="let image of imagesToShow" >
             <img [src]="image" class="image">
             <button *ngIf="mode === FormMode.UPDATE"
                     class="btn btn-danger ml-1" (click)="deleteImage(image)" >

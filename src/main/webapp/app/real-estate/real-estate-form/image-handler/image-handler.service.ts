@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RealEstateDetails } from 'app/real-estate/models/realEstateDetails';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +14,7 @@ export class ImageHandlerService {
     return this.http.get<any>(`${this.configUrl}/files/${fileName}`);
   }
 
-  upload(id: number, file: Blob): Observable<any> {
+  upload(id: number, file: any): Observable<any> {
     return this.http.post<any>(`${this.configUrl}/${id}/files`, file);
   }
 }

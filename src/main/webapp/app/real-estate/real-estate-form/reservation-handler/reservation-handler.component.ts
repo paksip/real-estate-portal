@@ -89,4 +89,8 @@ export class ReservationHandlerComponent implements OnInit {
   remove(reservation: Reservation) {
     this.reservationHandlerService.delete(this.realEstateId, reservation.id).subscribe(() => this.load());
   }
+
+  changeRadio(event) {
+    this.formReserve.get('reservationId').patchValue(event.value);
+  }
 }
