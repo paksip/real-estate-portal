@@ -9,7 +9,7 @@
                     <label>
                         Name
                     </label>
-                    <input type="text" formControlName="name" [disabled]="this.mode === FormMode.GET">
+                    <input type="text" formControlName="name" disabled="{{this.mode == FormMode.GET}}">
                 </div>
                 <div>
                     <label>

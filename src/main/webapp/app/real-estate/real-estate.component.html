@@ -9,7 +9,7 @@
     </div>
     <div class="row">
         <div *ngFor="let entity of realEstates" class="row my-1">
-            <mat-card (click)="onView(entity.id)">
+            <mat-card>
                 <mat-card-title>
                     {{entity.name}}
                 </mat-card-title>
@@ -17,7 +17,9 @@
                     <p>Number of rooms: {{entity.numberOfRooms}}</p>
                     <p>Price: {{entity.price}}Ft</p>
                     <p>Size: {{entity.squareMeter}}sm</p>
-                    <button class="btn btn-secondary" (click)="onEdit(entity.id)">Edit</button>
+                    <button *ngIf="isAuthenticated()" class="btn btn-secondary" (click)="onEdit(entity.id)">Edit</button>
+                    <button class="btn btn-secondary" (click)="onView(entity.id)">View</button>
+
                 </mat-card-content>
             </mat-card>
         </div>

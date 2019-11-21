@@ -58,8 +58,7 @@ open class RealEstateControllerImp(
         realEstateId: Long,
         availableReservationTime: AvailableReservationTimeDTO
     ): ResponseEntity<Void> {
-        var a = reservationService.createNewAvailableReservationTime(realEstateId, availableReservationTime)
-        return a
+        return reservationService.createNewAvailableReservationTime(realEstateId, availableReservationTime)
     }
 
     override fun deleteReservation(
@@ -86,14 +85,6 @@ open class RealEstateControllerImp(
         newReservation: NewReservationDTO
     ): ResponseEntity<Void> {
         return reservationService.makeNewReservation(realEstateId, reservationId, newReservation)
-    }
-
-    override fun updateReservation(
-        realEstateId: Long,
-        reservationId: Long,
-        availableReservationTime: AvailableReservationTimeDTO
-    ): ResponseEntity<Void> {
-        return reservationService.updateReservation(realEstateId, reservationId, availableReservationTime)
     }
 
     override fun uploadFiles(

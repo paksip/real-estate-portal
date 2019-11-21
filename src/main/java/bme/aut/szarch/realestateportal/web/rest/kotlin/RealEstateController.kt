@@ -94,13 +94,6 @@ interface RealEstateController {
     @RequestMapping(value = ["/{realEstateId}"], consumes = ["application/json"], method = [RequestMethod.PUT])
     fun updateRealEstate(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long, @ApiParam(value = "") @Valid @RequestBody newRealEstate: NewRealEstateDTO): ResponseEntity<Void>
 
-
-    @ApiOperation(value = "update a reservation", nickname = "updateReservation", notes = "Update an old reservation", tags = ["RESERVATION"])
-    @ApiResponses(value = [ApiResponse(code = 200, message = "OK"), ApiResponse(code = 403, message = "Forbidden"), ApiResponse(code = 500, message = "Internal Server Error")])
-    @RequestMapping(value = ["/{realEstateId}/reservations/{reservationId}"], consumes = ["application/json"], method = [RequestMethod.PUT])
-    fun updateReservation(@ApiParam(value = "", required = true) @PathVariable("realEstateId") realEstateId: Long, @ApiParam(value = "", required = true) @PathVariable("reservationId") reservationId: Long, @ApiParam(value = "") @Valid @RequestBody availableReservationTime: AvailableReservationTimeDTO): ResponseEntity<Void>
-
-
     @ApiOperation(value = "Upload files", nickname = "uploadFiles", notes = "Upload files", tags = ["REAL-ESTATE"])
     @ApiResponses(value = [ApiResponse(code = 201, message = "Created"), ApiResponse(code = 500, message = "Internal Server Error")])
     @RequestMapping(value = ["/{realEstateId}/files"], method = [RequestMethod.POST])

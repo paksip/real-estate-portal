@@ -48,15 +48,15 @@ export class RealEstateFormComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl('', Validators.required),
       category: new FormControl('', Validators.required),
-      description: new FormControl(''),
+      description: new FormControl('', Validators.required),
       squareMeter: new FormControl('', Validators.required),
       price: new FormControl('', Validators.required),
       numberOfRooms: new FormControl('', Validators.required),
       hasBalcony: new FormControl(false),
       hasAirCondition: new FormControl(false),
       ownerPhoneNumber: new FormControl('', Validators.required),
-      lon: new FormControl(''),
-      lat: new FormControl(''),
+      lon: new FormControl('', Validators.required),
+      lat: new FormControl('', Validators.required),
       locationName: new FormControl('', Validators.required)
     });
 
@@ -67,8 +67,8 @@ export class RealEstateFormComponent implements OnInit {
       this.form.get('squareMeter').patchValue(this.model.squareMeter);
       this.form.get('price').patchValue(this.model.price);
       this.form.get('numberOfRooms').patchValue(this.model.numberOfRooms);
-      this.form.get('hasBalcony').patchValue(this.model.hasBalcony);
-      this.form.get('hasAirCondition').patchValue(this.model.hasAirCondition);
+      this.form.get('hasBalcony').patchValue(this.model.hasBalcony === true);
+      this.form.get('hasAirCondition').patchValue(this.model.hasAirCondition === true);
       this.form.get('ownerPhoneNumber').patchValue(this.model.ownerPhoneNumber);
       this.form.get('lon').patchValue(this.model.location.lon);
       this.form.get('lat').patchValue(this.model.location.lat);
