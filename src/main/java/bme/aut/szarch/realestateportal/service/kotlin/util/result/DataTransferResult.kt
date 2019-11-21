@@ -20,13 +20,15 @@ sealed class DataTransferResult<out T : Any> {
 fun <T : Any> DataTransferResult<T>.toResponseEntity(): ResponseEntity<T> {
     return when (this) {
         is Success -> {
-            result?.let {
-                headers?.let {
+            if (result != null) {
+                if (headers != null) {
                     ResponseEntity.status(successCode).headers(headers).body(result)
+                } else {
+                    ResponseEntity.status(successCode).body(result)
                 }
-                ResponseEntity.status(successCode).body(result)
+            } else {
+                ResponseEntity.status(successCode).build()
             }
-            ResponseEntity.status(successCode).build()
         }
     }
 }
