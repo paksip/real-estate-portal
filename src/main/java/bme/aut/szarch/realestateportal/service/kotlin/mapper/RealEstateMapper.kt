@@ -8,8 +8,6 @@ import bme.aut.szarch.realestateportal.service.kotlin.dto.*
 
 
 //region realEstate
-
-
 internal fun RealEstateEntity.toRealEstateDTO(filPaths: List<String>): RealEstateDTO {
     return RealEstateDTO().also { realEstateDTO ->
         realEstateDTO.id = this.id
@@ -36,17 +34,15 @@ fun RealEstateEntity.toRealEstateDetailsDTO(filPaths: List<String>): RealEstateD
         realEstateDetailsDTO.hasAirCondition = this.hasAircondition
         realEstateDetailsDTO.ownerPhoneNumber = this.ownerPhoneNumber
         realEstateDetailsDTO.filePaths = filPaths
-        //TODO ezt megnézni!
-//        realEstateDetailsDTO.reservationDTOS = this.reservations.map(ReservationEntity::toReservationDTO)
     }
 }
 
 fun RealEstateEntity.incrementSpectatorsCount(): RealEstateEntity {
-    return this.apply { spectatorsCount += 1 }
+    spectatorsCount += 1
+    return this
 }
 
 fun RealEstateEntity.toUpdatedRealEstateEntity(newRealEstateDTO: NewRealEstateDTO): RealEstateEntity {
-    return this.apply {
         name = newRealEstateDTO.name
         description = newRealEstateDTO.description
         category = newRealEstateDTO.category
@@ -57,7 +53,7 @@ fun RealEstateEntity.toUpdatedRealEstateEntity(newRealEstateDTO: NewRealEstateDT
         hasBalcony = newRealEstateDTO.hasBalncony
         hasAircondition = newRealEstateDTO.hasBalncony
         ownerPhoneNumber = newRealEstateDTO.ownerPhoneNumber
-    }
+    return this
 }
 
 fun NewRealEstateDTO.toRealEstateEntity(user: User): RealEstateEntity {
@@ -122,13 +118,12 @@ fun ReservationEntity.toReservationDetailsDTO(): ReservationDetailsDTO {
 fun ReservationEntity.toReservedReservationEntity(
     newReservationDTO: NewReservationDTO
 ): ReservationEntity {
-    return this.apply {
         emailAddress = newReservationDTO.email
         phoneNumber = newReservationDTO.phoneNumber
         message = newReservationDTO.message
         userName = newReservationDTO.userName
         isFree = false
-    }
+    return this
 }
 
 fun AvailableReservationTimeDTO.toFreeReservationEntity(realEstateEntity: RealEstateEntity): ReservationEntity {
@@ -145,9 +140,8 @@ fun AvailableReservationTimeDTO.toFreeReservationEntity(realEstateEntity: RealEs
 }
 
 fun ReservationEntity.toUpdatedFreeReservationEntity(availableReservationTimeDTO: AvailableReservationTimeDTO): ReservationEntity {
-    return this.apply {
         from = availableReservationTimeDTO.from
         to = availableReservationTimeDTO.to
-    }
+    return this
 }
 //endregion

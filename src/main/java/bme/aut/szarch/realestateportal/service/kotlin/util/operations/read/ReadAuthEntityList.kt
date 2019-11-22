@@ -6,19 +6,20 @@ import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferRe
 import bme.aut.szarch.realestateportal.service.kotlin.util.result.toResponseEntity
 import bme.aut.szarch.realestateportal.service.kotlin.util.validation.checkAuthentication
 import bme.aut.szarch.realestateportal.service.kotlin.util.validation.checkAuthorization
+import bme.aut.szarch.realestateportal.service.kotlin.util.validation.checkEntityNotFound
 import org.springframework.data.domain.Page
 import org.springframework.http.ResponseEntity
 
-fun <EntityClass : Page<AuthEntityClass>, AuthEntityClass : AbstractUserRelatedEntity, DTOClass : Any> executeReadListWithAuthorization(
+inline fun <reified EntityClass : Page<AuthEntityClass>, AuthEntityClass : AbstractUserRelatedEntity, DTOClass : Any> executeReadListWithAuthorization(
     getUserCall: () -> User?,
     getEntityListCall: (Long) -> EntityClass,
-    validationCall: ((EntityClass) -> Unit)? = null,
+    noinline validationCall: ((EntityClass) -> Unit)? = null,
     mappingCall: (EntityClass) -> DTOClass,
     onSuccess: (DTOClass) -> DataTransferResult<DTOClass>
 ): ResponseEntity<DTOClass> {
     val user = getUserCall().checkAuthentication()
 
-    val callResult = getEntityListCall(user.id)
+    val callResult = getEntityListCall(user.id).checkEntityNotFound()
 
     if (callResult.content.isNotEmpty()) {
         val authEntity = callResult.content.first()
