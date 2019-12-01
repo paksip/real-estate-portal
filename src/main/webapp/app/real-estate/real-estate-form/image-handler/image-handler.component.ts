@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormMode } from 'app/real-estate/models/formMode';
 import { ImageHandlerService } from 'app/real-estate/real-estate-form/image-handler/image-handler.service';
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'jhi-image-handler',
@@ -14,7 +15,8 @@ export class ImageHandlerComponent implements OnInit {
 
   _imageUrls: string[];
   @Input() set imageUrls(value: string[]) {
-    value.forEach(v => this.downloadImage(v));
+    this._imageUrls = value;
+    // value.forEach(v => this.downloadImage(v));
   }
 
   get imageUrls(): string[] {
@@ -23,11 +25,10 @@ export class ImageHandlerComponent implements OnInit {
   @Input() realEstateId: number;
 
   chosenImageFile: File;
-  imagesToShow: any[];
 
   FormMode = FormMode;
 
-  constructor(public imageHandlerService: ImageHandlerService) {}
+  constructor(public imageHandlerService: ImageHandlerService, private sanitizer : DomSanitizer) {}
 
   ngOnInit() {}
 
@@ -50,38 +51,9 @@ export class ImageHandlerComponent implements OnInit {
     this.file.nativeElement.value = null;
   }
 
-  deleteImage(url: string): void {
-    // TODO
-    // this.imageHandlerService.delete(this.realEstateId, url).subscribe(
-    //   () => {
-    //      this.imageUrlsChanged.emit();
-    //   });
-  }
-
   select() {
     if (this.file) {
       this.file.nativeElement.click();
-    }
-  }
-
-  downloadImage(imageUrl) {
-    this.imageHandlerService.download(imageUrl).subscribe(result => {
-      this.createImageFromBlob(result);
-    });
-  }
-
-  createImageFromBlob(image: Blob) {
-    const reader = new FileReader();
-    reader.addEventListener(
-      'load',
-      () => {
-        this.imagesToShow.push(reader.result);
-      },
-      false
-    );
-
-    if (image) {
-      reader.readAsDataURL(image);
     }
   }
 }

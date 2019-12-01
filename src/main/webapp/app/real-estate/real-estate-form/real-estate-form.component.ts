@@ -1,12 +1,12 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { RealEstateService } from 'app/real-estate/real-estate.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { FormMode } from 'app/real-estate/models/formMode';
-import { CategoryEnum } from 'app/real-estate/models/category';
-import { RealEstateDetails } from 'app/real-estate/models/realEstateDetails';
-import { MapLocation } from 'app/real-estate/models/mapLocation';
-import { NewRealEstate } from 'app/real-estate/models/newRealEstate';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {RealEstateService} from 'app/real-estate/real-estate.service';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormMode} from 'app/real-estate/models/formMode';
+import {CategoryEnum} from 'app/real-estate/models/category';
+import {RealEstateDetails} from 'app/real-estate/models/realEstateDetails';
+import {MapLocation} from 'app/real-estate/models/mapLocation';
+import {NewRealEstate} from 'app/real-estate/models/newRealEstate';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'jhi-real-estate-form',
@@ -46,18 +46,18 @@ export class RealEstateFormComponent implements OnInit {
 
   initForm() {
     this.form = new FormGroup({
-      name: new FormControl('', Validators.required),
-      category: new FormControl('', Validators.required),
-      description: new FormControl('', Validators.required),
-      squareMeter: new FormControl('', Validators.required),
-      price: new FormControl('', Validators.required),
-      numberOfRooms: new FormControl('', Validators.required),
-      hasBalcony: new FormControl(false),
-      hasAirCondition: new FormControl(false),
-      ownerPhoneNumber: new FormControl('', Validators.required),
-      lon: new FormControl('', Validators.required),
-      lat: new FormControl('', Validators.required),
-      locationName: new FormControl('', Validators.required)
+      name: new FormControl({value: '', disabled: this.mode === FormMode.GET}, Validators.required),
+      category: new FormControl({value: '', disabled: this.mode === FormMode.GET}, Validators.required),
+      description: new FormControl({value: '', disabled: this.mode === FormMode.GET}, Validators.required),
+      squareMeter: new FormControl({value: '', disabled: this.mode === FormMode.GET}, Validators.required),
+      price: new FormControl({value: '', disabled: this.mode === FormMode.GET}, Validators.required),
+      numberOfRooms: new FormControl({value: '', disabled: this.mode === FormMode.GET}, Validators.required),
+      hasBalcony: new FormControl({value: false, disabled: this.mode === FormMode.GET}),
+      hasAirCondition: new FormControl({value: false, disabled: this.mode === FormMode.GET}),
+      ownerPhoneNumber: new FormControl({value: '', disabled: this.mode === FormMode.GET}, Validators.required),
+      lon: new FormControl({value: '', disabled: this.mode === FormMode.GET}, Validators.required),
+      lat: new FormControl({value: '', disabled: this.mode === FormMode.GET}, Validators.required),
+      locationName: new FormControl({value: '', disabled: this.mode === FormMode.GET}, Validators.required)
     });
 
     if (this.model) {
@@ -74,10 +74,6 @@ export class RealEstateFormComponent implements OnInit {
       this.form.get('lat').patchValue(this.model.location.lat);
       this.form.get('locationName').patchValue(this.model.location.locationName);
     }
-  }
-
-  categoryKeys(): Array<string> {
-    return Object.keys(this.CategoryEnum);
   }
 
   onSubmit() {

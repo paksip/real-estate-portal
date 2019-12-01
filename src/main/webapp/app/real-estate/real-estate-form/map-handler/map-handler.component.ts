@@ -10,8 +10,6 @@ export class MapHandlerComponent implements OnInit {
   _location: MapLocation;
 
   @Input() set location(value) {
-    // eslint-disable-next-line no-console
-    console.log(value);
     if (value) {
       this._location = value;
     }

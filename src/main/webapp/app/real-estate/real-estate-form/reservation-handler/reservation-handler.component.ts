@@ -11,7 +11,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class ReservationHandlerComponent implements OnInit {
   _mode: FormMode;
-  reservations: Reservation[];
+  reservations: any[];
   FormMode = FormMode;
   formCreate: FormGroup;
   formReserve: FormGroup;
@@ -54,6 +54,7 @@ export class ReservationHandlerComponent implements OnInit {
   load() {
     this.reservationHandlerService.getAll(this.realEstateId).subscribe(result => {
       this.reservations = this.mode === FormMode.GET ? result.filter(r => r.isFree) : result;
+      this.reservations.forEach(r => this.getDetail(r.id));
     });
   }
 
@@ -69,6 +70,12 @@ export class ReservationHandlerComponent implements OnInit {
         this.load();
         this.formCreate.reset();
       });
+  }
+
+  getDetail(id: number){
+    this.reservationHandlerService.get(this.realEstateId, id).subscribe(result => {
+      this.reservations[this.reservations.findIndex(r => r.id === id)] = Object.assign({id}, result);
+    });
   }
 
   onReserve() {

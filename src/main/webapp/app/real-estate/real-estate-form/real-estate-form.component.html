@@ -9,7 +9,7 @@
                     <label>
                         Name
                     </label>
-                    <input type="text" formControlName="name" disabled="{{this.mode == FormMode.GET}}">
+                    <input type="text" formControlName="name">
                 </div>
                 <div>
                     <label>
@@ -83,8 +83,8 @@
                 </div>
                 <jhi-map-handler [location]="modelId ? model.location : location"></jhi-map-handler>
                 <div *ngIf="mode !== FormMode.CREATE">
-                    <jhi-image-handler [mode]="mode" [imageUrls]="model.filePaths" [realEstateId]="modelId" (imageUrlsChanged)="getData()"></jhi-image-handler>
-                    <jhi-reservation-handler [mode]="mode" [realEstateId]="modelId"></jhi-reservation-handler>
+                    <jhi-image-handler  class="my-3" [mode]="mode" [imageUrls]="model.filePaths" [realEstateId]="modelId" (imageUrlsChanged)="getData()"></jhi-image-handler>
+                    <jhi-reservation-handler class="my-3" [mode]="mode" [realEstateId]="modelId"></jhi-reservation-handler>
                 </div>
                 <div *ngIf="mode !== FormMode.GET">
                     <button type="submit" class="btn btn btn-info" (click)="onSubmit()">

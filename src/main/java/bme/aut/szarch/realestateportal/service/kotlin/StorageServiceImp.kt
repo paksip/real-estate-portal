@@ -25,7 +25,7 @@ import bme.aut.szarch.realestateportal.service.kotlin.util.result.DataTransferRe
 @Transactional
 open class StorageServiceImp : StorageService {
     val log = LoggerFactory.getLogger(this::class.java)
-    private val rootLocation = Paths.get("filestorage")
+    private val rootLocation = Paths.get("src/main/webapp/content/images")
 
     override fun uploadFiles(realEstateId: Long, file: MultipartFile) = executeCreateOperation(
         operationCall = { Files.copy(file.inputStream, rootLocation.resolve(file.originalFilename!!.addIdentifier(realEstateId.toString()))) }

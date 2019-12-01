@@ -1,62 +1,103 @@
 <div class="container" *ngIf="reservations && reservations.length || mode === FormMode.UPDATE">
+    <h3>Reservations</h3>
     <div *ngIf="mode === FormMode.UPDATE">
-        <div *ngFor="let reservation of reservations" class="row">
-            From: <span>{{reservation.from}}</span>
-            To: <span>{{reservation.to}}</span>
-            isFree: <span>{{reservation.isFree}}</span>
-            <span><button class="btn btn-group btn-danger" (click)="remove(reservation)">Delete</button></span>
+        <div class="row">
+            <div *ngFor="let reservation of reservations" class="col-3 my-2">
+                <mat-card>
+                    <mat-card-content>
+                        <div>
+                            From: {{reservation.from | date:'short'}}
+                        </div>
+                        <div>
+                            To: {{reservation.to | date:'short'}}
+                        </div>
+                        <div>
+                            Status: {{reservation.isFree ? 'Free' : 'Reserved'}}
+                        </div>
+                        <div class="row" *ngIf="!reservation.isFree">
+                            <div class="col-12">
+                                Email: {{reservation.emailAddress}}
+                            </div>
+                            <div class="col-12">
+                                Phone number: {{reservation.phoneNumber}}
+                            </div>
+                            <div class="col-12">
+                                Message: {{reservation.message}}
+                            </div>
+                            <div class="col-12">
+                                Username: {{reservation.userName}}
+                            </div>
+                        </div>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button *ngIf="reservation.isFree" class="btn btn-group btn-danger" (click)="remove(reservation)">Delete</button>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
         </div>
-        <div *ngIf="formCreate">
+        <div *ngIf="formCreate" class="my-2 row">
             <form [formGroup]="formCreate">
-                <div class="row">
+                <div class="col-12 mb-1">
                     <label>
                         From:
                         <input type="datetime-local" formControlName="from">
                     </label>
                 </div>
-                <div class="row">
+                <div class="col-12 mb-1">
                     <label>
                         To:
                         <input type="datetime-local" formControlName="to">
                     </label>
                 </div>
-                <button type="submit" class="btn btn-group btn-primary" (click)="onCreate()">
-                    Add new reservation
-                </button>
+                <div class="col-12 mb-1">
+                    <button type="submit" class="btn btn-group btn-primary" (click)="onCreate()">
+                        Add new reservation
+                    </button>
+                </div>
             </form>
         </div>
     </div>
     <div *ngIf="mode === FormMode.GET">
-        <form [formGroup]="formReserve">
-            <div *ngFor="let reservation of reservations">
+        <form [formGroup]="formReserve" class="row">
+            <div *ngFor="let reservation of reservations" class="col-12 d-flex align-content-center">
                 <mat-radio-button formControlName="reservationId"
                                   [value]="reservation.id"
                                   [checked]="formReserve.get('reservationId').value === reservation.id"
-                                  (change)="changeRadio($event)" class="row"></mat-radio-button>
-                From: <span>{{reservation.from}}</span>
-                To: <span>{{reservation.to}}</span>
+                                  (change)="changeRadio($event)" class="mr-2"></mat-radio-button>
+                From: <span class="mr-2">{{reservation.from | date:'short'}}</span>
+                To: <span>{{reservation.to | date:'short'}}</span>
             </div>
             <div class="row">
-                <label>
-                    Email:
-                    <input type="text" formControlName="email">
-                </label>
-                <label>
-                    Phone Number:
-                    <input type="text" formControlName="phoneNumber">
-                </label>
-                <label>
-                    Message:
-                    <input type="text" formControlName="message">
-                </label>
-                <label>
-                    Username:
-                    <input type="text" formControlName="userName">
-                </label>
+                <div class="col-6">
+                    <label>
+                        Email:
+                        <input type="text" formControlName="email">
+                    </label>
+                </div>
+                <div class="col-6">
+                    <label>
+                        Phone Number:
+                        <input type="text" formControlName="phoneNumber">
+                    </label>
+                </div>
+                <div class="col-6">
+                    <label>
+                        Message:
+                        <input type="text" formControlName="message">
+                    </label>
+                </div>
+                <div class="col-6">
+                    <label>
+                        Username:
+                        <input type="text" formControlName="userName">
+                    </label>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-group btn-primary" (click)="onReserve()">
+                        Reserve
+                    </button>
+                </div>
             </div>
-            <button type="submit" class="btn btn-group btn-primary" (click)="onReserve()">
-                Reserve
-            </button>
         </form>
     </div>
 </div>
