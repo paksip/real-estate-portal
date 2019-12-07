@@ -1,7 +1,6 @@
 package bme.aut.szarch.realestateportal.web.rest.kotlin
 
 
-import bme.aut.szarch.realestateportal.domain.kotlin.RealEstateEntity
 import bme.aut.szarch.realestateportal.service.kotlin.RealEstateService
 import bme.aut.szarch.realestateportal.service.kotlin.ReservationService
 import bme.aut.szarch.realestateportal.service.kotlin.StorageServiceImp
@@ -9,7 +8,6 @@ import bme.aut.szarch.realestateportal.service.kotlin.dto.*
 import org.springframework.core.io.Resource
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
-import org.springframework.data.jpa.domain.Specification
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile
@@ -22,10 +20,9 @@ open class RealEstateControllerImp(
 ) : RealEstateController {
     override fun getAllRealEstates(
         page: Int?,
-        offset: Int?,
-        specs: Specification<RealEstateEntity>
+        offset: Int?
     ): ResponseEntity<Page<RealEstateDTO>> {
-        return realEstateService.getAllRealEstates(specs, PageRequest.of(page ?: 0, offset ?: 1))
+        return realEstateService.getAllRealEstates(PageRequest.of(page ?: 0, offset ?: 1))
     }
 
     override fun createNewRealEstate(newRealEstate: NewRealEstateDTO): ResponseEntity<Void> {

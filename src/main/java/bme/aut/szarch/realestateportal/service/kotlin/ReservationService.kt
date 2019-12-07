@@ -2,7 +2,7 @@ package bme.aut.szarch.realestateportal.service.kotlin
 
 import bme.aut.szarch.realestateportal.repository.kotlin.RealEstateRepository
 import bme.aut.szarch.realestateportal.repository.kotlin.ReservationRepository
-import bme.aut.szarch.realestateportal.service.UserService
+import bme.aut.szarch.realestateportal.service.MockUserService
 import bme.aut.szarch.realestateportal.service.kotlin.dto.AvailableReservationTimeDTO
 import bme.aut.szarch.realestateportal.service.kotlin.dto.NewReservationDTO
 import bme.aut.szarch.realestateportal.service.kotlin.extensions.orNull
@@ -21,19 +21,19 @@ import org.springframework.stereotype.Service
 open class ReservationService(
     private val realEstateRepository: RealEstateRepository,
     private val reservationRepository: ReservationRepository,
-    private val userService: UserService
+    private val userService: MockUserService
 ) {
     open fun createNewAvailableReservationTime(
         realEstateId: Long,
         availableReservationTimeDTO: AvailableReservationTimeDTO
     ) = executeCreateWithAutParent(
-        getUserCall = { userService.userWithAuthorities.orNull() },
+        getUserCall = { userService.userWithAuthorities().orNull() },
         getParentEntityCall = { realEstateRepository.findById(realEstateId).orNull() },
         operationCall = { realEstate -> reservationRepository.save(availableReservationTimeDTO.toFreeReservationEntity(realEstate)) }
     )
 
     open fun deleteReservation(realEstateId: Long, reservationId: Long) = executeUpdateOrDeleteWithAuthParent(
-        getUserCall = { userService.userWithAuthorities.orNull() },
+        getUserCall = { userService.userWithAuthorities().orNull() },
         getUserRelatedParentEntityCalls = listOf { realEstateRepository.findById(realEstateId).orNull() },
         getTargetEntityCall = { reservationRepository.findByIdAndRealEstateId(reservationId, realEstateId) },
         operationCall = { reservation -> reservationRepository.delete(reservation) },
@@ -47,7 +47,7 @@ open class ReservationService(
     )
 
     open fun getReservationDetails(realEstateId: Long, reservationId: Long) = executeReadWithAuthParent(
-        getUserCall = { userService.userWithAuthorities.orNull() },
+        getUserCall = { userService.userWithAuthorities().orNull() },
         getUserRelatedParentEntityCalls = listOf { realEstateRepository.findById(realEstateId).orNull() },
         getTargetEntity = { reservationRepository.findByIdAndRealEstateId(reservationId, realEstateId) },
         validationCall = { reservation -> check(reservation.isFree.not()) { "The reservation is free! Thus that does not contain any Details" } },
@@ -62,7 +62,7 @@ open class ReservationService(
     )
 
     open fun updateReservation(realEstateId: Long, reservationId: Long, availableReservationTimeDTO: AvailableReservationTimeDTO) = executeUpdateOrDeleteWithAuthParent(
-        getUserCall = { userService.userWithAuthorities.orNull() },
+        getUserCall = { userService.userWithAuthorities().orNull() },
         getUserRelatedParentEntityCalls = listOf { realEstateRepository.findById(realEstateId).orNull() },
         getTargetEntityCall = { reservationRepository.findByIdAndRealEstateId(reservationId, realEstateId) },
         operationCall = { reservationRepository.save(it.toUpdatedFreeReservationEntity(availableReservationTimeDTO)) },

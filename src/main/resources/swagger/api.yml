@@ -7,7 +7,7 @@ info:
     name: Nagy-Gyorgy Kristof
     email: nagygyorgykristof@gmail.com
 servers:
-  - url: 'http://localhost:8080'
+  - url: 'http://localhost:8080/api'
 paths:
   /realestates:
     get:
@@ -29,20 +29,22 @@ paths:
       parameters:
         - schema:
             type: string
-            pattern: "(\\w+?)(:|<|>)(\\w+?),"
           in: query
           name: search
         - schema:
             type: integer
+            default: 0
           in: query
           name: page
           required: true
         - schema:
             type: integer
+            default: 20
           in: query
           name: offset
           required: true
       operationId: getAllRealEstates
+  '/realestates/':
     post:
       summary: Create new real-estate
       responses:
@@ -120,24 +122,6 @@ paths:
         name: reservationId
         in: path
         required: true
-    put:
-      summary: update a reservation
-      responses:
-        '200':
-          description: OK
-        '403':
-          description: Forbidden
-        '500':
-          description: Internal Server Error
-      description: Update an old reservation
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/availableReservationTime'
-      tags:
-        - RESERVATION
-      operationId: updateReservation
     delete:
       summary: Delete a reservation
       responses:
@@ -168,12 +152,12 @@ paths:
       tags:
         - RESERVATION
       operationId: getReservationDetails
-    patch:
-      summary: Make a new reservation
+    put:
+      summary: Reserve an available reservation time.
       responses:
         '200':
           description: OK
-      description: A customer create a new reservation.
+      description: Reserve an available reservation time.
       requestBody:
         content:
           application/json:
@@ -181,10 +165,10 @@ paths:
               $ref: '#/components/schemas/NewReservation'
       operationId: newReservation
       tags:
-        - REAL-ESTATE
+        - RESERVATION
   '/realestates/{realEstateId}/reservations':
     post:
-      summary: Create a new reservation
+      summary: Create a new available reservation time.
       tags:
         - RESERVATION
       responses:
@@ -192,7 +176,7 @@ paths:
           description: Created
         '500':
           description: Internal Server Error
-      description: Create a new reservation
+      description: Create a new available reservation time.
       requestBody:
         content:
           application/json:
@@ -420,7 +404,7 @@ components:
       title: availableReservationTime
       type: object
       properties:
-        'from ':
+        from:
           type: string
           description: The start of the available interval.
           format: date-time
@@ -429,7 +413,7 @@ components:
           description: The start of the available interval.
           format: date-time
       required:
-        - 'from '
+        - from
         - to
     RealEstateDetails:
       title: RealEstateDetails
