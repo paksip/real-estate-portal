@@ -11,7 +11,7 @@ abstract class StateContext() {
         currentState = initState()
     }
 
-    fun triggerTranzition(tranzition: Tranzition) {
+    fun triggerTransition(tranzition: Tranzition) {
         currentState.handleEvent(this, tranzition)
     }
 
@@ -66,7 +66,7 @@ class ErsteGetTokenVisitor() : Visitor() {
 
     //A Vizitor Mindig tudj, hogy mit vár, ha nem az jön azt tudja detektálni!
     override fun visit(tranzition: Tranzition) {
-        if ((tranzition is DemoTranzition)) {
+        if ((tranzition is DemoTransition)) {
             println("Erste get token by ${tranzition.name}")
         } else {
             println("error")
@@ -82,7 +82,7 @@ class ErsteGetAccountsVisitor() : Visitor() {
 
 
     override fun visit(tranzition: Tranzition) {
-        if ((tranzition is DemoTranzition)) {
+        if ((tranzition is DemoTransition)) {
             println("Erste get accounts by ${tranzition.name}")
         } else {
             println("error")
@@ -99,7 +99,7 @@ class ErsteInitPaymentVisitor() : Visitor() {
 
 
     override fun visit(tranzition: Tranzition) {
-        if ((tranzition is DemoTranzition)) {
+        if ((tranzition is DemoTransition)) {
             println("Erste init payment by ${tranzition.name}")
         } else {
             println("error")
@@ -116,7 +116,7 @@ class ErsteFinishPaymentVisitor() : Visitor() {
 
 
     override fun visit(tranzition: Tranzition) {
-        if ((tranzition is DemoTranzition)) {
+        if ((tranzition is DemoTransition)) {
             println("Erste finish payment by ${tranzition.name}")
         } else {
             println("error")
@@ -131,7 +131,7 @@ class ErsteCheckStatusVisitor() : Visitor() {
 
 
     override fun visit(tranzition: Tranzition) {
-        if ((tranzition is DemoTranzition)) {
+        if ((tranzition is DemoTransition)) {
             println("Erste check status by ${tranzition.name}")
         } else {
             println("error")
@@ -153,7 +153,7 @@ fun main() {
     val ersteStateMachine = ErsteStateMachine()
 
     for (i in 0..10) {
-        ersteStateMachine.triggerTranzition(DemoTranzition("Kristof"))
+        ersteStateMachine.triggerTransition(DemoTransition("Kristof"))
     }
 }
 
@@ -161,7 +161,7 @@ fun main() {
 // ötlet observable minta a kliensek beregisztrálnaka state machinenél, és a tranzitionban van egy request, és egy responseType(konkrét visszatérési típus)
 open class Tranzition()
 
-class DemoTranzition(val name: String) : Tranzition()
+class DemoTransition(val name: String) : Tranzition()
 
 
 
